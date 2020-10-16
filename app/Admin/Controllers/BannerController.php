@@ -73,7 +73,7 @@ class BannerController extends Controller
        // print_r((new Banner())->type()->get());die;
         $grid->type()->name_ar('type');
         $grid->html('HTML')->display(function ($text) {
-            return htmlentities($text);
+           return htmlentities($text);
         })->style('max-width:200px;word-break:break-all;');
         $grid->status(trans('language.admin.status'))->switch();
         $grid->sort(trans('language.admin.sort'))->sortable();
