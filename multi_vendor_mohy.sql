@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2020 at 09:27 AM
+-- Generation Time: Oct 17, 2020 at 05:25 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -132,9 +132,12 @@ INSERT INTO `admin_menu` (`id`, `parent_id`, `order`, `title`, `icon`, `uri`, `p
 (106, 31, 27, 'Customers Category', 'fa-user-md', 'shop_customer', NULL, 1, '2018-01-13 08:27:55', '2019-02-09 10:33:31'),
 (107, 15, 47, 'units', 'fa fa-cog', 'item_units', NULL, 1, '2018-09-19 13:51:31', '2019-03-23 08:28:54'),
 (108, 0, 54, 'companies', 'fa-building', 'company', NULL, 1, '2018-11-07 23:01:21', '2019-03-23 08:28:54'),
-(110, 0, 54, 'activities', 'fa fa-cubes', 'activities', NULL, 1, '2018-11-07 23:01:21', '2019-03-23 08:28:54'),
+(110, 0, 55, 'activities', 'fa fa-cubes', 'activities', NULL, 1, '2018-11-07 23:01:21', '2019-03-23 08:28:54'),
 (112, 15, 48, 'PriceList', 'fa fa-cubes', 'product_price_list', NULL, 1, '2018-09-19 13:51:31', '2019-03-23 08:28:54'),
-(113, 0, 55, 'PaymentTerm', 'fas fa-align-justify', NULL, NULL, 1, '2018-11-07 23:01:21', '2019-03-23 08:28:54');
+(113, 0, 54, 'PaymentPlans', 'fas fa-align-justify', NULL, NULL, 1, '2018-11-07 23:01:21', '2019-03-23 08:28:54'),
+(120, 113, 55, 'PaymentTerm', 'fas fa-align-justify', 'payment_term', NULL, 1, '2018-11-07 23:01:21', '2019-03-23 08:28:54'),
+(121, 113, 55, 'PaymentCustomerTerm', 'fas fa-align-justify', 'customer_payment_term', NULL, 1, '2018-11-07 23:01:21', '2019-03-23 08:28:54'),
+(122, 113, 56, 'PaymentCustomerTerm', 'fas fa-align-justify', 'customer_payment_term', NULL, 1, '2018-11-07 23:01:21', '2019-03-23 08:28:54');
 
 -- --------------------------------------------------------
 
@@ -7270,7 +7273,235 @@ INSERT INTO `admin_operation_log` (`id`, `company_id`, `user_id`, `path`, `metho
 (7086, NULL, 5, 'system_admin/shop_category/create', 'GET', '127.0.0.1', '[]', '2020-09-12 16:40:36', '2020-09-12 16:40:36'),
 (7087, NULL, 5, 'system_admin/banner', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-12 16:44:38', '2020-09-12 16:44:38'),
 (7088, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-12 17:02:43', '2020-09-12 17:02:43'),
-(7089, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-12 17:02:49', '2020-09-12 17:02:49');
+(7089, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-12 17:02:49', '2020-09-12 17:02:49'),
+(7090, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-23 02:32:03', '2020-09-23 02:32:03'),
+(7091, NULL, 5, 'system_admin/activities', 'GET', '127.0.0.1', '[]', '2020-09-23 02:32:15', '2020-09-23 02:32:15'),
+(7092, NULL, 5, 'system_admin/activities/10/edit', 'GET', '127.0.0.1', '[]', '2020-09-23 02:32:19', '2020-09-23 02:32:19'),
+(7093, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 02:32:30', '2020-09-23 02:32:30'),
+(7094, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 02:40:43', '2020-09-23 02:40:43'),
+(7095, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '[]', '2020-09-23 02:47:33', '2020-09-23 02:47:33'),
+(7096, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '[]', '2020-09-23 02:52:03', '2020-09-23 02:52:03'),
+(7097, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '[]', '2020-09-23 02:52:24', '2020-09-23 02:52:24'),
+(7098, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '[]', '2020-09-23 02:53:37', '2020-09-23 02:53:37'),
+(7099, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '[]', '2020-09-23 02:55:10', '2020-09-23 02:55:10'),
+(7100, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '[]', '2020-09-23 02:56:10', '2020-09-23 02:56:10'),
+(7101, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 02:56:17', '2020-09-23 02:56:17'),
+(7102, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '[]', '2020-09-23 03:01:41', '2020-09-23 03:01:41'),
+(7103, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '[]', '2020-09-23 03:02:05', '2020-09-23 03:02:05'),
+(7104, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '[]', '2020-09-23 03:02:50', '2020-09-23 03:02:50'),
+(7105, NULL, 5, 'system_admin/auth/users', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 03:15:41', '2020-09-23 03:15:41'),
+(7106, NULL, 5, 'system_admin/auth/roles', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 03:15:43', '2020-09-23 03:15:43'),
+(7107, NULL, 5, 'system_admin/banner', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 03:56:48', '2020-09-23 03:56:48'),
+(7108, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-23 20:51:10', '2020-09-23 20:51:10'),
+(7109, NULL, 5, 'system_admin/process/productImport', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 20:51:37', '2020-09-23 20:51:37'),
+(7110, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 20:56:04', '2020-09-23 20:56:04'),
+(7111, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 20:56:11', '2020-09-23 20:56:11'),
+(7112, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 20:56:13', '2020-09-23 20:56:13'),
+(7113, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 20:56:15', '2020-09-23 20:56:15'),
+(7114, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 20:56:20', '2020-09-23 20:56:20'),
+(7115, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 20:57:30', '2020-09-23 20:57:30'),
+(7116, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 20:59:24', '2020-09-23 20:59:24'),
+(7117, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 21:05:25', '2020-09-23 21:05:25'),
+(7118, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 21:05:54', '2020-09-23 21:05:54'),
+(7119, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 21:06:21', '2020-09-23 21:06:21'),
+(7120, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 21:06:24', '2020-09-23 21:06:24'),
+(7121, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 21:06:45', '2020-09-23 21:06:45'),
+(7122, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 21:06:47', '2020-09-23 21:06:47'),
+(7123, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 21:06:48', '2020-09-23 21:06:48'),
+(7124, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 21:06:48', '2020-09-23 21:06:48');
+INSERT INTO `admin_operation_log` (`id`, `company_id`, `user_id`, `path`, `method`, `ip`, `input`, `created_at`, `updated_at`) VALUES
+(7125, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 21:07:34', '2020-09-23 21:07:34'),
+(7126, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 21:07:42', '2020-09-23 21:07:42'),
+(7127, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 21:07:43', '2020-09-23 21:07:43'),
+(7128, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-23 21:07:45', '2020-09-23 21:07:45'),
+(7129, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-23 21:07:49', '2020-09-23 21:07:49'),
+(7130, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-23 21:08:05', '2020-09-23 21:08:05'),
+(7131, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-23 21:08:11', '2020-09-23 21:08:11'),
+(7132, NULL, 5, 'system_admin/payment_term', 'POST', '127.0.0.1', '{\"name\":null,\"rate\":\"0888ddd\",\"sort\":\"0\",\"_token\":\"BXNWewkkbDXkHyoBW5ht3ZEycm1gVlNg5lB1XJE8\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\"}', '2020-09-23 21:08:19', '2020-09-23 21:08:19'),
+(7133, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-23 21:08:20', '2020-09-23 21:08:20'),
+(7134, NULL, 5, 'system_admin/payment_term', 'POST', '127.0.0.1', '{\"name\":\"\\u062f\\u0641\\u0639 \\u0627\\u0633\\u0628\\u0648\\u0639\",\"rate\":\"5.5\",\"sort\":\"0\",\"_token\":\"BXNWewkkbDXkHyoBW5ht3ZEycm1gVlNg5lB1XJE8\"}', '2020-09-23 21:09:04', '2020-09-23 21:09:04'),
+(7135, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-23 21:09:04', '2020-09-23 21:09:04'),
+(7136, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 02:28:06', '2020-09-24 02:28:06'),
+(7137, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 02:29:01', '2020-09-24 02:29:01'),
+(7138, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 02:29:33', '2020-09-24 02:29:33'),
+(7139, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 02:30:17', '2020-09-24 02:30:17'),
+(7140, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 02:30:36', '2020-09-24 02:30:36'),
+(7141, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 02:30:51', '2020-09-24 02:30:51'),
+(7142, NULL, 5, 'system_admin/payment_term', 'POST', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"1\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\"}', '2020-09-24 02:32:27', '2020-09-24 02:32:27'),
+(7143, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 02:32:27', '2020-09-24 02:32:27'),
+(7144, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 02:33:32', '2020-09-24 02:33:32'),
+(7145, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 02:33:59', '2020-09-24 02:33:59'),
+(7146, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:34:02', '2020-09-24 02:34:02'),
+(7147, NULL, 5, 'system_admin/payment_term/1', 'PUT', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"2\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\"}', '2020-09-24 02:34:07', '2020-09-24 02:34:07'),
+(7148, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 02:34:07', '2020-09-24 02:34:07'),
+(7149, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 02:48:56', '2020-09-24 02:48:56'),
+(7150, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:48:59', '2020-09-24 02:48:59'),
+(7151, NULL, 5, 'system_admin/payment_term/1', 'PUT', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"20\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\"}', '2020-09-24 02:49:03', '2020-09-24 02:49:03'),
+(7152, NULL, 5, 'system_admin/payment_term/1', 'GET', '127.0.0.1', '[]', '2020-09-24 02:49:04', '2020-09-24 02:49:04'),
+(7153, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 02:49:08', '2020-09-24 02:49:08'),
+(7154, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:51:40', '2020-09-24 02:51:40'),
+(7155, NULL, 5, 'system_admin/payment_term/1', 'PUT', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"20.50\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\"}', '2020-09-24 02:51:48', '2020-09-24 02:51:48'),
+(7156, NULL, 5, 'system_admin/payment_term/1', 'GET', '127.0.0.1', '[]', '2020-09-24 02:51:49', '2020-09-24 02:51:49'),
+(7157, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:51:54', '2020-09-24 02:51:54'),
+(7158, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 02:51:57', '2020-09-24 02:51:57'),
+(7159, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:52:20', '2020-09-24 02:52:20'),
+(7160, NULL, 5, 'system_admin/payment_term/1', 'PUT', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"20.15\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\"}', '2020-09-24 02:52:25', '2020-09-24 02:52:25'),
+(7161, NULL, 5, 'system_admin/payment_term/1', 'GET', '127.0.0.1', '[]', '2020-09-24 02:52:25', '2020-09-24 02:52:25'),
+(7162, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:52:50', '2020-09-24 02:52:50'),
+(7163, NULL, 5, 'system_admin/payment_term/1', 'PUT', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"20.16\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\\/1\"}', '2020-09-24 02:53:03', '2020-09-24 02:53:03'),
+(7164, NULL, 5, 'system_admin/payment_term/1', 'GET', '127.0.0.1', '[]', '2020-09-24 02:53:03', '2020-09-24 02:53:03'),
+(7165, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:53:31', '2020-09-24 02:53:31'),
+(7166, NULL, 5, 'system_admin/payment_term/1', 'PUT', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"20.17\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\\/1\"}', '2020-09-24 02:53:35', '2020-09-24 02:53:35'),
+(7167, NULL, 5, 'system_admin/payment_term/1', 'GET', '127.0.0.1', '[]', '2020-09-24 02:53:35', '2020-09-24 02:53:35'),
+(7168, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:54:02', '2020-09-24 02:54:02'),
+(7169, NULL, 5, 'system_admin/payment_term/1', 'PUT', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"20.18\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\\/1\"}', '2020-09-24 02:54:07', '2020-09-24 02:54:07'),
+(7170, NULL, 5, 'system_admin/payment_term/1', 'GET', '127.0.0.1', '[]', '2020-09-24 02:54:08', '2020-09-24 02:54:08'),
+(7171, NULL, 5, 'system_admin/payment_term/1/edit', 'GET', '127.0.0.1', '[]', '2020-09-24 02:56:19', '2020-09-24 02:56:19'),
+(7172, NULL, 5, 'system_admin/payment_term/1', 'PUT', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 45\",\"rate\":\"20.19\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\\/1\"}', '2020-09-24 02:56:23', '2020-09-24 02:56:23'),
+(7173, NULL, 5, 'system_admin/payment_term/1', 'GET', '127.0.0.1', '[]', '2020-09-24 02:56:23', '2020-09-24 02:56:23'),
+(7174, NULL, 5, 'system_admin/payment_term/1', 'GET', '127.0.0.1', '[]', '2020-09-24 03:41:17', '2020-09-24 03:41:17'),
+(7175, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 03:41:20', '2020-09-24 03:41:20'),
+(7176, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-24 03:41:27', '2020-09-24 03:41:27'),
+(7177, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-24 03:41:29', '2020-09-24 03:41:29'),
+(7178, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-24 03:42:06', '2020-09-24 03:42:06'),
+(7179, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 04:04:07', '2020-09-24 04:04:07'),
+(7180, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 04:04:18', '2020-09-24 04:04:18'),
+(7181, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 04:04:40', '2020-09-24 04:04:40'),
+(7182, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 04:11:53', '2020-09-24 04:11:53'),
+(7183, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 04:13:08', '2020-09-24 04:13:08'),
+(7184, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 04:14:20', '2020-09-24 04:14:20'),
+(7185, NULL, 5, 'system_admin/customer_payment_term', 'POST', '127.0.0.1', '{\"user_id\":\"3\",\"payment_term_id\":\"1\",\"rate\":\"16.5\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\"}', '2020-09-24 04:15:46', '2020-09-24 04:15:46'),
+(7186, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 04:15:47', '2020-09-24 04:15:47'),
+(7187, NULL, 5, 'system_admin/customer_payment_term', 'POST', '127.0.0.1', '{\"user_id\":\"3\",\"payment_term_id\":\"1\",\"rate\":\"16.5\",\"_token\":\"Ygs3BtC5bsVROHYQfwi8POtXeSGAoMpZwGWdBzbh\"}', '2020-09-24 04:16:42', '2020-09-24 04:16:42'),
+(7188, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 04:16:42', '2020-09-24 04:16:42'),
+(7189, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 04:17:34', '2020-09-24 04:17:34'),
+(7190, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 04:17:47', '2020-09-24 04:17:47'),
+(7191, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 04:18:46', '2020-09-24 04:18:46'),
+(7192, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-24 18:00:45', '2020-09-24 18:00:45'),
+(7193, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-24 18:00:55', '2020-09-24 18:00:55'),
+(7194, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-24 18:00:59', '2020-09-24 18:00:59'),
+(7195, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 18:02:03', '2020-09-24 18:02:03'),
+(7196, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 18:02:31', '2020-09-24 18:02:31'),
+(7197, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-24 18:02:42', '2020-09-24 18:02:42'),
+(7198, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-24 18:02:43', '2020-09-24 18:02:43'),
+(7199, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-24 20:40:37', '2020-09-24 20:40:37'),
+(7200, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-24 20:45:31', '2020-09-24 20:45:31'),
+(7201, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-24 20:45:44', '2020-09-24 20:45:44'),
+(7202, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-24 20:45:48', '2020-09-24 20:45:48'),
+(7203, NULL, 5, 'system_admin/customer_payment_term', 'POST', '127.0.0.1', '{\"user_id\":\"5\",\"payment_term_id\":\"1\",\"rate\":\"5.5\",\"_token\":\"hjxa611omcIXsWOsRqmyKvwfQ7ozBgpT3bJyAH2v\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/customer_payment_term\"}', '2020-09-24 20:46:02', '2020-09-24 20:46:02'),
+(7204, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-24 20:46:02', '2020-09-24 20:46:02'),
+(7205, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-25 00:00:03', '2020-09-25 00:00:03'),
+(7206, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-25 00:00:20', '2020-09-25 00:00:20'),
+(7207, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-25 00:00:32', '2020-09-25 00:00:32'),
+(7208, NULL, 5, 'system_admin/payment_term', 'POST', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 90 \\u064a\\u0648\\u0645\",\"rate\":\"10.5\",\"_token\":\"xXsAIk4xMnpDnHJh8HuU0rpsan36eYyTl6rUBIhb\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\"}', '2020-09-25 00:01:17', '2020-09-25 00:01:17'),
+(7209, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-25 00:01:18', '2020-09-25 00:01:18'),
+(7210, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-25 00:01:31', '2020-09-25 00:01:31'),
+(7211, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-25 00:01:38', '2020-09-25 00:01:38'),
+(7212, NULL, 5, 'system_admin/customer_payment_term', 'POST', '127.0.0.1', '{\"user_id\":\"5\",\"payment_term_id\":\"2\",\"rate\":\"2.5\",\"_token\":\"xXsAIk4xMnpDnHJh8HuU0rpsan36eYyTl6rUBIhb\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/customer_payment_term\"}', '2020-09-25 00:02:04', '2020-09-25 00:02:04'),
+(7213, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-25 00:02:04', '2020-09-25 00:02:04'),
+(7214, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-26 00:23:54', '2020-09-26 00:23:54'),
+(7215, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-26 00:24:00', '2020-09-26 00:24:00'),
+(7216, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-26 00:24:38', '2020-09-26 00:24:38'),
+(7217, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-26 22:59:46', '2020-09-26 22:59:46'),
+(7218, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '[]', '2020-09-26 22:59:49', '2020-09-26 22:59:49'),
+(7219, NULL, 5, 'system_admin/shop_order_edit/58', 'GET', '127.0.0.1', '[]', '2020-09-26 22:59:57', '2020-09-26 22:59:57'),
+(7220, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-26 23:26:18', '2020-09-26 23:26:18'),
+(7221, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-27 01:16:21', '2020-09-27 01:16:21'),
+(7222, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:16:39', '2020-09-27 01:16:39'),
+(7223, NULL, 5, 'system_admin/payment_term/2/edit', 'GET', '127.0.0.1', '[]', '2020-09-27 01:17:40', '2020-09-27 01:17:40'),
+(7224, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-27 01:17:59', '2020-09-27 01:17:59'),
+(7225, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:18:59', '2020-09-27 01:18:59'),
+(7226, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-27 01:19:19', '2020-09-27 01:19:19'),
+(7227, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:19:22', '2020-09-27 01:19:22'),
+(7228, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:19:30', '2020-09-27 01:19:30'),
+(7229, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:19:45', '2020-09-27 01:19:45'),
+(7230, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:19:47', '2020-09-27 01:19:47'),
+(7231, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:21:01', '2020-09-27 01:21:01'),
+(7232, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:21:13', '2020-09-27 01:21:13'),
+(7233, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:21:17', '2020-09-27 01:21:17'),
+(7234, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:22:06', '2020-09-27 01:22:06'),
+(7235, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:22:08', '2020-09-27 01:22:08'),
+(7236, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:22:10', '2020-09-27 01:22:10'),
+(7237, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:22:12', '2020-09-27 01:22:12'),
+(7238, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:22:29', '2020-09-27 01:22:29'),
+(7239, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:22:36', '2020-09-27 01:22:36'),
+(7240, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:22:38', '2020-09-27 01:22:38'),
+(7241, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-27 01:23:27', '2020-09-27 01:23:27'),
+(7242, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:23:32', '2020-09-27 01:23:32'),
+(7243, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:27:40', '2020-09-27 01:27:40'),
+(7244, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:27:51', '2020-09-27 01:27:51'),
+(7245, NULL, 5, 'system_admin/payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:27:53', '2020-09-27 01:27:53'),
+(7246, NULL, 5, 'system_admin/payment_term', 'POST', '127.0.0.1', '{\"name\":\"\\u0646\\u0638\\u0627\\u0645 \\u062f\\u0641\\u0639 \\u0627\\u0633\\u0628\\u0648\\u0639\",\"rate\":\"0\",\"_token\":\"6KQOF8DzGtsiai9NRCs2QIYaJrOVLRa2vLclPgIq\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/payment_term\"}', '2020-09-27 01:28:20', '2020-09-27 01:28:20'),
+(7247, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '[]', '2020-09-27 01:28:20', '2020-09-27 01:28:20'),
+(7248, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:28:28', '2020-09-27 01:28:28'),
+(7249, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:28:34', '2020-09-27 01:28:34'),
+(7250, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-27 01:28:38', '2020-09-27 01:28:38'),
+(7251, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:29:30', '2020-09-27 01:29:30'),
+(7252, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:29:54', '2020-09-27 01:29:54'),
+(7253, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:29:56', '2020-09-27 01:29:56'),
+(7254, NULL, 5, 'system_admin/customer_payment_term/create', 'GET', '127.0.0.1', '[]', '2020-09-27 01:30:05', '2020-09-27 01:30:05'),
+(7255, NULL, 5, 'system_admin/customer_payment_term', 'POST', '127.0.0.1', '{\"user_id\":\"5\",\"payment_term_id\":\"3\",\"rate\":\"0\",\"_token\":\"6KQOF8DzGtsiai9NRCs2QIYaJrOVLRa2vLclPgIq\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/customer_payment_term\"}', '2020-09-27 01:32:04', '2020-09-27 01:32:04'),
+(7256, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-09-27 01:32:04', '2020-09-27 01:32:04'),
+(7257, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:33:18', '2020-09-27 01:33:18'),
+(7258, NULL, 5, 'system_admin/process/productImport', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:41:36', '2020-09-27 01:41:36'),
+(7259, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-09-27 01:47:25', '2020-09-27 01:47:25'),
+(7260, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-09-27 01:49:04', '2020-09-27 01:49:04'),
+(7261, NULL, 5, 'system_admin/shop_order_edit/59', 'GET', '127.0.0.1', '[]', '2020-09-27 01:49:07', '2020-09-27 01:49:07'),
+(7262, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-10-03 23:40:11', '2020-10-03 23:40:11'),
+(7263, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-03 23:40:25', '2020-10-03 23:40:25'),
+(7264, NULL, 5, 'system_admin/shop_order_edit/59', 'GET', '127.0.0.1', '[]', '2020-10-03 23:40:32', '2020-10-03 23:40:32'),
+(7265, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-03 23:41:09', '2020-10-03 23:41:09'),
+(7266, NULL, 5, 'system_admin/shop_order_edit/59', 'GET', '127.0.0.1', '[]', '2020-10-03 23:41:21', '2020-10-03 23:41:21'),
+(7267, NULL, 5, 'system_admin/shop_order_edit/shop_order_update', 'PUT', '127.0.0.1', '{\"name\":\"status\",\"value\":\"4\",\"pk\":\"59\",\"_token\":\"jfodqJ6eytk4GiLn75ARxqKuRg55rS1DUroLTx0I\",\"_editable\":\"1\",\"_method\":\"PUT\"}', '2020-10-03 23:41:44', '2020-10-03 23:41:44'),
+(7268, NULL, 5, 'system_admin/item_units', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-03 23:43:26', '2020-10-03 23:43:26'),
+(7269, NULL, 5, 'system_admin/item_units', 'GET', '127.0.0.1', '[]', '2020-10-03 23:43:43', '2020-10-03 23:43:43'),
+(7270, NULL, 5, 'system_admin/item_units/4/edit', 'GET', '127.0.0.1', '[]', '2020-10-03 23:43:47', '2020-10-03 23:43:47'),
+(7271, NULL, 5, 'system_admin/item_units/4/edit', 'GET', '127.0.0.1', '[]', '2020-10-03 23:45:17', '2020-10-03 23:45:17'),
+(7272, NULL, 5, 'system_admin/company', 'GET', '127.0.0.1', '[]', '2020-10-03 23:45:23', '2020-10-03 23:45:23'),
+(7273, NULL, 5, 'system_admin/company/2/edit', 'GET', '127.0.0.1', '[]', '2020-10-03 23:45:31', '2020-10-03 23:45:31'),
+(7274, NULL, 5, 'system_admin/company', 'GET', '127.0.0.1', '[]', '2020-10-03 23:45:48', '2020-10-03 23:45:48'),
+(7275, NULL, 5, 'system_admin/company/3', 'PUT', '127.0.0.1', '{\"seller\":\"on\",\"_token\":\"jfodqJ6eytk4GiLn75ARxqKuRg55rS1DUroLTx0I\",\"_method\":\"PUT\"}', '2020-10-03 23:47:01', '2020-10-03 23:47:01'),
+(7276, NULL, 5, 'system_admin/company/11', 'PUT', '127.0.0.1', '{\"seller\":\"off\",\"_token\":\"jfodqJ6eytk4GiLn75ARxqKuRg55rS1DUroLTx0I\",\"_method\":\"PUT\"}', '2020-10-03 23:47:04', '2020-10-03 23:47:04'),
+(7277, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-03 23:47:26', '2020-10-03 23:47:26'),
+(7278, NULL, 5, 'system_admin/payment_term/3/edit', 'GET', '127.0.0.1', '[]', '2020-10-03 23:47:32', '2020-10-03 23:47:32'),
+(7279, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-03 23:47:48', '2020-10-03 23:47:48'),
+(7280, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '[]', '2020-10-03 23:48:54', '2020-10-03 23:48:54'),
+(7281, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-10-13 04:26:39', '2020-10-13 04:26:39'),
+(7282, NULL, 5, 'system_admin/company', 'GET', '127.0.0.1', '[]', '2020-10-13 04:28:22', '2020-10-13 04:28:22'),
+(7283, NULL, 5, 'system_admin/company/3', 'PUT', '127.0.0.1', '{\"seller\":\"on\",\"_token\":\"EGB81RqBPncuvHVCrPTuuf3DEj5Kmkpg1ldzOXRH\",\"_method\":\"PUT\"}', '2020-10-13 04:31:36', '2020-10-13 04:31:36'),
+(7284, NULL, 5, 'system_admin/company', 'GET', '127.0.0.1', '[]', '2020-10-13 04:31:39', '2020-10-13 04:31:39'),
+(7285, NULL, 5, 'system_admin/company/3', 'PUT', '127.0.0.1', '{\"active\":\"off\",\"_token\":\"EGB81RqBPncuvHVCrPTuuf3DEj5Kmkpg1ldzOXRH\",\"_method\":\"PUT\"}', '2020-10-13 04:32:06', '2020-10-13 04:32:06'),
+(7286, NULL, 5, 'system_admin/company/3', 'PUT', '127.0.0.1', '{\"active\":\"on\",\"_token\":\"EGB81RqBPncuvHVCrPTuuf3DEj5Kmkpg1ldzOXRH\",\"_method\":\"PUT\"}', '2020-10-13 04:32:07', '2020-10-13 04:32:07'),
+(7287, NULL, 5, 'system_admin/shop_order', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:34:16', '2020-10-13 04:34:16'),
+(7288, NULL, 5, 'system_admin/shop_order_edit/59', 'GET', '127.0.0.1', '[]', '2020-10-13 04:34:46', '2020-10-13 04:34:46'),
+(7289, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-10-13 04:35:04', '2020-10-13 04:35:04'),
+(7290, NULL, 5, 'system_admin/auth/users', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:35:49', '2020-10-13 04:35:49'),
+(7291, NULL, 5, 'system_admin/auth/permissions', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:36:02', '2020-10-13 04:36:02'),
+(7292, NULL, 5, 'system_admin/activities', 'GET', '127.0.0.1', '[]', '2020-10-13 04:36:52', '2020-10-13 04:36:52'),
+(7293, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:37:20', '2020-10-13 04:37:20'),
+(7294, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:37:24', '2020-10-13 04:37:24'),
+(7295, NULL, 5, 'system_admin/payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:37:28', '2020-10-13 04:37:28'),
+(7296, NULL, 5, 'system_admin/banner', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:39:11', '2020-10-13 04:39:11'),
+(7297, NULL, 5, 'system_admin/banner/create', 'GET', '127.0.0.1', '[]', '2020-10-13 04:39:39', '2020-10-13 04:39:39'),
+(7298, NULL, 5, 'system_admin/banner', 'POST', '127.0.0.1', '{\"html\":null,\"url\":\"https:\\/\\/www.youtube.com\\/watch?v=dJyazRjDYRm\",\"type_id\":\"2\",\"status\":\"on\",\"sort\":\"0\",\"_token\":\"EGB81RqBPncuvHVCrPTuuf3DEj5Kmkpg1ldzOXRH\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/system_admin\\/banner\"}', '2020-10-13 04:40:15', '2020-10-13 04:40:15'),
+(7299, NULL, 5, 'system_admin/banner', 'GET', '127.0.0.1', '[]', '2020-10-13 04:40:15', '2020-10-13 04:40:15'),
+(7300, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-10-13 04:40:38', '2020-10-13 04:40:38'),
+(7301, NULL, 5, 'system_admin/shop_category', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:43:38', '2020-10-13 04:43:38'),
+(7302, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:43:51', '2020-10-13 04:43:51'),
+(7303, NULL, 5, 'system_admin/shop_special_price', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:44:07', '2020-10-13 04:44:07'),
+(7304, NULL, 5, 'system_admin/shop_brand', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:44:19', '2020-10-13 04:44:19'),
+(7305, NULL, 5, 'system_admin/shop_vendor', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:44:21', '2020-10-13 04:44:21'),
+(7306, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:44:25', '2020-10-13 04:44:25'),
+(7307, NULL, 5, 'system_admin/shop_brand', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:44:27', '2020-10-13 04:44:27'),
+(7308, NULL, 5, 'system_admin/shop_vendor', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:44:29', '2020-10-13 04:44:29'),
+(7309, NULL, 5, 'system_admin/process/productImport', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:44:40', '2020-10-13 04:44:40'),
+(7310, NULL, 5, 'system_admin/shop_attribute_group', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:44:47', '2020-10-13 04:44:47'),
+(7311, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:45:00', '2020-10-13 04:45:00'),
+(7312, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-13 04:45:02', '2020-10-13 04:45:02'),
+(7313, NULL, 5, 'system_admin/shop_product/54/edit', 'GET', '127.0.0.1', '[]', '2020-10-13 04:45:04', '2020-10-13 04:45:04'),
+(7314, NULL, 5, 'system_admin/shop_product', 'GET', '127.0.0.1', '[]', '2020-10-13 04:45:14', '2020-10-13 04:45:14'),
+(7315, NULL, 5, 'system_admin', 'GET', '127.0.0.1', '[]', '2020-10-17 20:23:02', '2020-10-17 20:23:02'),
+(7316, NULL, 5, 'system_admin/customer_payment_term', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2020-10-17 20:23:19', '2020-10-17 20:23:19');
 
 -- --------------------------------------------------------
 
@@ -7420,6 +7651,7 @@ CREATE TABLE `admin_users` (
   `path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `superuser` int(11) NOT NULL DEFAULT 0,
   `seller_type` smallint(6) NOT NULL DEFAULT 0,
+  `active` tinyint(4) NOT NULL DEFAULT 1,
   `mobile` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `country` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `city` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -7435,13 +7667,13 @@ CREATE TABLE `admin_users` (
 -- Dumping data for table `admin_users`
 --
 
-INSERT INTO `admin_users` (`id`, `username`, `password`, `company_id`, `name`, `lname`, `avatar`, `path`, `superuser`, `seller_type`, `mobile`, `country`, `city`, `street`, `remember_token`, `api_token`, `email`, `created_at`, `updated_at`) VALUES
-(1, 'admin', '$2y$10$XisO29cFPf1fJQp1toGt7uYSy7lQMGj67ceC/x6x0JJ9Wbn7KLL7e', 1, 'Administrator', NULL, NULL, NULL, 0, 1, NULL, '0', '0', '0', 'Ol3ZqomrDiawz16wCs7jCVjJHJ5Chhe97yFDdq9p2kKZs4WZSBr97YtxVd3H', NULL, 'admin@adminco.com', '2018-01-12 10:27:40', '2019-03-31 01:59:05'),
-(3, 'test', '$2y$10$Ao7Uey2z5jPFta/rZG51XuG1OZiWdlbdf3QSgsAjKn9Hfpcp14Ami', NULL, 'User', NULL, NULL, NULL, 0, 0, NULL, '0', '0', '0', '5JS9Sgy0dX24uyOwFjR5w5rCgimd7B2Y1DLvxQgnZ2w0IJY7nNO9vqTg2AOl', NULL, NULL, '2018-01-12 11:05:28', '2018-09-23 11:56:26'),
-(4, 'mahmoud', '$2y$10$ZIWhkat2JRBesEk4VrS.P.75KgmeIjvHiSi2orh5UEwRlnHcV/F9i', 2, 'mahmoud', NULL, NULL, NULL, 0, 1, NULL, '0', '0', '0', NULL, NULL, 'mahmoud@mahmoudco.com', '2019-05-02 20:23:08', '2019-05-02 20:23:08'),
-(5, 'superadmin@admin.com', '$2y$10$XisO29cFPf1fJQp1toGt7uYSy7lQMGj67ceC/x6x0JJ9Wbn7KLL7e', 3, 'Administrator', NULL, 'profileImageCustomer/2337cb50954bc3d40495dd7286a336c6.jpg', 'http://127.0.0.1:8000/documents/website/', 1, 1, '01065331143', 'egypt', 'cairo', NULL, 'oMih89RGa60gQPleA1asPebfdZXkqr4FxVjQU6wM2GHcUAjPrfjgAsP4n0Dc', 'v4iTFGr2XPakVur91gB08FtTp0pUMpDiSKmg84ge', 'superadmin@admin.com', '2018-01-12 10:27:40', '2020-08-14 14:06:17'),
-(6, 'mahmoud8_x', '$2y$10$jNg5VCm8CQwCN2qXsLtkdeeGhDzZklGcRDmPvZ1op9ffRS5t90zni', NULL, 'mahmoud9', 'x', 'ImgProfile/e0e99a077ae55d84fe39fcb2fb5d43b0.jpeg', 'http://127.0.0.1:8000/documents/website/', 0, 0, NULL, '0', '0', '0', 'X2Xjiqr4z5iez21AA26QIu4mydF2D9itexbEDWpGadlZa6TN3VqaDrchoSdU', NULL, 'test2@test2.com', '2020-02-21 14:37:50', '2020-07-24 21:53:18'),
-(7, 'mahmoud gamal', '$2y$10$XisO29cFPf1fJQp1toGt7uYSy7lQMGj67ceC/x6x0JJ9Wbn7KLL7e', 11, 'mahmoud', 'gamal', NULL, NULL, 0, 1, NULL, '0', '0', '0', '2Sj7aS1PUJOk1Nj0yBrLI2aMgyOO4NPmpWI5alQV35bPA9sJHQbUu2TiNvuA', NULL, 'ms_ms725490@yahoo.com', '2020-05-06 04:41:33', '2020-05-06 04:41:33');
+INSERT INTO `admin_users` (`id`, `username`, `password`, `company_id`, `name`, `lname`, `avatar`, `path`, `superuser`, `seller_type`, `active`, `mobile`, `country`, `city`, `street`, `remember_token`, `api_token`, `email`, `created_at`, `updated_at`) VALUES
+(1, 'admin', '$2y$10$XisO29cFPf1fJQp1toGt7uYSy7lQMGj67ceC/x6x0JJ9Wbn7KLL7e', 1, 'Administrator', NULL, NULL, NULL, 0, 1, 1, NULL, '0', '0', '0', 'Ol3ZqomrDiawz16wCs7jCVjJHJ5Chhe97yFDdq9p2kKZs4WZSBr97YtxVd3H', NULL, 'admin@adminco.com', '2018-01-12 10:27:40', '2019-03-31 01:59:05'),
+(3, 'test', '$2y$10$Ao7Uey2z5jPFta/rZG51XuG1OZiWdlbdf3QSgsAjKn9Hfpcp14Ami', NULL, 'User', NULL, NULL, NULL, 0, 0, 1, NULL, '0', '0', '0', '5JS9Sgy0dX24uyOwFjR5w5rCgimd7B2Y1DLvxQgnZ2w0IJY7nNO9vqTg2AOl', NULL, NULL, '2018-01-12 11:05:28', '2018-09-23 11:56:26'),
+(4, 'mahmoud', '$2y$10$ZIWhkat2JRBesEk4VrS.P.75KgmeIjvHiSi2orh5UEwRlnHcV/F9i', 2, 'mahmoud', NULL, NULL, NULL, 0, 1, 1, NULL, '0', '0', '0', NULL, NULL, 'mahmoud@mahmoudco.com', '2019-05-02 20:23:08', '2019-05-02 20:23:08'),
+(5, 'superadmin@admin.com', '$2y$10$XisO29cFPf1fJQp1toGt7uYSy7lQMGj67ceC/x6x0JJ9Wbn7KLL7e', 3, 'Administrator', NULL, 'profileImageCustomer/2337cb50954bc3d40495dd7286a336c6.jpg', 'http://127.0.0.1:8000/documents/website/', 1, 1, 1, '01065331143', 'egypt', 'cairo', NULL, 'n9HpxfYKkCtTIiTPfRPFjqIz2egiaNtBGkgA7TwVpud6d8Ez6yTo9Fve0f2p', 'v4iTFGr2XPakVur91gB08FtTp0pUMpDiSKmg84ge', 'superadmin@admin.com', '2018-01-12 10:27:40', '2020-08-14 14:06:17'),
+(6, 'mahmoud8_x', '$2y$10$jNg5VCm8CQwCN2qXsLtkdeeGhDzZklGcRDmPvZ1op9ffRS5t90zni', NULL, 'mahmoud9', 'x', 'ImgProfile/e0e99a077ae55d84fe39fcb2fb5d43b0.jpeg', 'http://127.0.0.1:8000/documents/website/', 0, 0, 1, NULL, '0', '0', '0', 'X2Xjiqr4z5iez21AA26QIu4mydF2D9itexbEDWpGadlZa6TN3VqaDrchoSdU', NULL, 'test2@test2.com', '2020-02-21 14:37:50', '2020-07-24 21:53:18'),
+(7, 'mahmoud gamal', '$2y$10$XisO29cFPf1fJQp1toGt7uYSy7lQMGj67ceC/x6x0JJ9Wbn7KLL7e', 11, 'mahmoud', 'gamal', NULL, NULL, 0, 1, 1, NULL, '0', '0', '0', '2Sj7aS1PUJOk1Nj0yBrLI2aMgyOO4NPmpWI5alQV35bPA9sJHQbUu2TiNvuA', NULL, 'ms_ms725490@yahoo.com', '2020-05-06 04:41:33', '2020-05-06 04:41:33');
 
 -- --------------------------------------------------------
 
@@ -7520,7 +7752,8 @@ INSERT INTO `banner` (`id`, `company_id`, `image`, `url`, `path`, `html`, `statu
 (18, 2, 'banner/2ea7d739563e08e8e19d0336dc5f761e.jpg', NULL, 'http://127.0.0.1:8000/documents/website/', NULL, 1, 0, 0, 2, '2020-05-15 19:07:05', '2020-08-12 01:05:27'),
 (19, NULL, 'banner/da9f53d2f8417885658ad86d2247a522.png', NULL, 'http://127.0.0.1:8000/documents/website/', NULL, 1, 0, 0, 2, '2020-05-15 19:31:22', '2020-05-15 19:50:19'),
 (20, NULL, 'banner/c58a59fee0cccd31309a966dd78fdc35.jpg', NULL, 'http://127.0.0.1:8000/documents/website/', NULL, 1, 0, 0, 1, '2020-05-15 19:32:57', '2020-05-15 19:32:57'),
-(24, NULL, 'banner/e61b66e1c0881ee4583ec433a4ce15f2.PNG', NULL, 'http://127.0.0.1:8000/documents/website/', 'sdsdsd', 1, 0, 0, 1, '2020-06-20 05:24:14', '2020-08-13 02:02:33');
+(24, NULL, 'banner/e61b66e1c0881ee4583ec433a4ce15f2.PNG', NULL, 'http://127.0.0.1:8000/documents/website/', 'sdsdsd', 1, 0, 0, 1, '2020-06-20 05:24:14', '2020-08-13 02:02:33'),
+(25, NULL, 'banner/151d80f728008f62e47217228e3739ab.jpg', 'https://www.youtube.com/watch?v=dJyazRjDYRm', 'http://127.0.0.1:8000/documents/website/', NULL, 1, 0, 0, 2, '2020-10-13 04:40:15', '2020-10-13 04:40:15');
 
 -- --------------------------------------------------------
 
@@ -7865,9 +8098,20 @@ CREATE TABLE `customer_payment_term` (
   `user_id` int(11) NOT NULL,
   `payment_term_id` int(11) NOT NULL,
   `rate` decimal(10,3) DEFAULT NULL,
-  `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL
+  `company_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `customer_payment_term`
+--
+
+INSERT INTO `customer_payment_term` (`id`, `user_id`, `payment_term_id`, `rate`, `company_id`, `created_at`, `updated_at`) VALUES
+(1, 3, 1, '16.500', 3, '2020-09-24 04:16:42', '2020-09-24 04:16:42'),
+(2, 5, 1, '5.500', 3, '2020-09-24 20:46:02', '2020-09-24 20:46:02'),
+(3, 5, 2, '2.500', 3, '2020-09-25 00:02:04', '2020-09-25 00:02:04'),
+(4, 5, 3, '0.000', 3, '2020-09-27 01:32:04', '2020-09-27 01:32:04');
 
 -- --------------------------------------------------------
 
@@ -8312,10 +8556,20 @@ CREATE TABLE `password_resets` (
 CREATE TABLE `payment_terms` (
   `id` int(11) NOT NULL,
   `name` varchar(250) NOT NULL,
+  `company_id` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL,
   `rate` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment_terms`
+--
+
+INSERT INTO `payment_terms` (`id`, `name`, `company_id`, `created_at`, `updated_at`, `rate`) VALUES
+(1, 'نظام دفع 45', 3, '2020-09-24 02:32:27', '2020-09-24 02:56:23', '20.19'),
+(2, 'نظام دفع 90 يوم', 3, '2020-09-25 00:01:18', '2020-09-25 00:01:18', '10.50'),
+(3, 'نظام دفع اسبوع', 3, '2020-09-27 01:28:20', '2020-09-27 01:28:20', '0.00');
 
 -- --------------------------------------------------------
 
@@ -8673,7 +8927,7 @@ CREATE TABLE `shop_currency` (
 INSERT INTO `shop_currency` (`id`, `name`, `company_id`, `order_default`, `code`, `symbol`, `exchange_rate`, `precision`, `symbol_first`, `thousands`, `status`, `sort`) VALUES
 (1, 'EGP pound', 1, 0, 'EGP', 'ج', 1, 0, 1, ',', 1, 0),
 (2, 'VietNam Dong', NULL, 0, 'VND', '₫', 20, 0, 0, ',', 1, 1),
-(3, 'Dinar', 1, 1, 'KD', 'KD', 1, 2, 0, ',', 0, 0);
+(3, 'Dinar', 1, 1, 'Dinar', 'KD', 1, 2, 0, ',', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -8749,6 +9003,7 @@ CREATE TABLE `shop_order` (
   `address_id` int(11) DEFAULT NULL,
   `comment` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL,
   `payment_method` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `payment_term_id` int(11) DEFAULT NULL,
   `transaction` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -8758,33 +9013,35 @@ CREATE TABLE `shop_order` (
 -- Dumping data for table `shop_order`
 --
 
-INSERT INTO `shop_order` (`id`, `company_id`, `user_id`, `subtotal`, `shipping`, `discount`, `payment_status`, `shipping_status`, `status`, `tax`, `total`, `currency`, `exchange_rate`, `received`, `balance`, `toname`, `address1`, `address2`, `s_address_id`, `country`, `phone`, `email`, `address_id`, `comment`, `payment_method`, `transaction`, `created_at`, `updated_at`) VALUES
-(1, 1, 0, 400000, 0, 0, 0, 1, 1, 0, 400000, 'USD', 1, 0, 400000, 'mahmod', 'caru egt', 'j', 0, NULL, '01142931228', 'ms_ms25490@yahoo.com', 0, NULL, 'Cash', NULL, '2019-04-17 04:15:47', '2019-05-09 02:17:09'),
-(3, 2, 0, 5210000, 0, 0, 0, 0, 1, 0, 5210000, 'USD', 1, 0, 5210000, 'max', 'caru egt', 'address2', 0, NULL, '01142931228', 'ms_ms20@yahoo.com', 0, NULL, 'Cash', NULL, '2019-04-20 02:53:58', '2019-05-20 03:22:14'),
-(4, 1, 1, 2207, 0, 0, 0, 1, 1, 0, 2207, 'EGP', 1, 0, 2207, 'mahmoud', 'caru egt', NULL, 0, NULL, '1142931228_', 'ms_ms25490@yahoo.com', 0, 'test', NULL, NULL, '2019-05-08 01:43:09', '2020-03-30 23:38:34'),
-(6, 1, 2, 800, 10, 120, 0, 0, 0, 0, 930, 'Dinar', 1, 0, 930, 'Administrator', 'asyuit1', NULL, 0, NULL, '0165331143', 'superadmin@admin.com', 0, NULL, NULL, NULL, '2020-03-31 03:44:43', '2020-04-12 02:40:57'),
-(7, 1, 5, 250000, 0, 0, 0, 0, 0, 0, 250000, 'EGP', 1, 0, 250000, 'Administrator', 'egypt-cairo-', '', 0, NULL, '01065331143', 'superadmin@admin.com', 0, '', 'cash', NULL, '2020-06-07 01:51:31', NULL),
-(8, NULL, 5, 330000, 0, 0, 0, 0, 0, 0, 330000, 'EGP', 1, 0, 330000, 'Administrator', 'egypt-cairo-', '', 0, NULL, '01065331143', 'superadmin@admin.com', 0, '', 'cash', NULL, '2020-06-07 23:05:33', NULL),
-(9, NULL, 5, 235000, 0, 0, 0, 0, 3, 0, 235000, 'EGP', 1, 0, 235000, 'Administrator', 'egypt-cairo-', '', 0, NULL, '01065331143', 'superadmin@admin.com', 0, '', 'cash', NULL, '2020-06-10 23:22:46', '2020-06-12 23:19:19'),
-(12, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:27:58', '2020-07-29 00:27:59'),
-(13, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:35:58', '2020-07-29 00:35:58'),
-(14, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:36:36', '2020-07-29 00:36:36'),
-(15, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:37:13', '2020-07-29 00:37:13'),
-(21, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:45:57', '2020-07-29 00:45:57'),
-(22, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:46:39', '2020-07-29 00:46:39'),
-(23, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:46:50', '2020-07-29 00:46:50'),
-(24, 1, 5, 2000, 0, 0, 0, 0, 1, 0, 2000, 'Dinar', 1, 0, 2000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:47:16', '2020-07-29 00:47:16'),
-(25, NULL, 5, 3800000, 0, 0, 0, 0, 1, 0, 3800000, 'Dinar', 1, 0, 3800000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:47:16', '2020-07-29 00:47:16'),
-(26, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 00:47:35', '2020-07-29 00:47:36'),
-(30, 1, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 01:26:17', '2020-07-29 01:26:17'),
-(32, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 01:56:17', '2020-07-29 01:56:17'),
-(33, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 02:51:50', '2020-07-29 02:51:50'),
-(34, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 05:45:43', '2020-07-29 05:45:43'),
-(41, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 05:56:20', '2020-07-29 05:56:20'),
-(42, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 07:29:22', '2020-07-29 07:29:23'),
-(53, NULL, 5, 2810000, 0, 15, 0, 0, 0, 0, 2810015, 'Dinar', 1, 0, 2810015, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 07:54:33', '2020-07-29 07:54:34'),
-(55, NULL, 5, 2550000, 0, 15, 0, 0, 0, 0, 2550015, 'Dinar', 1, 0, 2550015, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, '2020-07-29 13:14:38', '2020-07-29 13:14:38'),
-(57, NULL, 5, 2620000, 0, 15, 0, 0, 0, 0, 2620015, 'Dinar', 1, 0, 2620015, NULL, 'hjhkhhlhlk test', NULL, NULL, NULL, NULL, 'superadmin@admin.com', NULL, NULL, NULL, NULL, '2020-08-14 14:06:54', '2020-08-14 14:06:54');
+INSERT INTO `shop_order` (`id`, `company_id`, `user_id`, `subtotal`, `shipping`, `discount`, `payment_status`, `shipping_status`, `status`, `tax`, `total`, `currency`, `exchange_rate`, `received`, `balance`, `toname`, `address1`, `address2`, `s_address_id`, `country`, `phone`, `email`, `address_id`, `comment`, `payment_method`, `payment_term_id`, `transaction`, `created_at`, `updated_at`) VALUES
+(1, 1, 0, 400000, 0, 0, 0, 1, 1, 0, 400000, 'USD', 1, 0, 400000, 'mahmod', 'caru egt', 'j', 0, NULL, '01142931228', 'ms_ms25490@yahoo.com', 0, NULL, 'Cash', NULL, NULL, '2019-04-17 04:15:47', '2019-05-09 02:17:09'),
+(3, 2, 0, 5210000, 0, 0, 0, 0, 1, 0, 5210000, 'USD', 1, 0, 5210000, 'max', 'caru egt', 'address2', 0, NULL, '01142931228', 'ms_ms20@yahoo.com', 0, NULL, 'Cash', NULL, NULL, '2019-04-20 02:53:58', '2019-05-20 03:22:14'),
+(4, 1, 1, 2207, 0, 0, 0, 1, 1, 0, 2207, 'EGP', 1, 0, 2207, 'mahmoud', 'caru egt', NULL, 0, NULL, '1142931228_', 'ms_ms25490@yahoo.com', 0, 'test', NULL, NULL, NULL, '2019-05-08 01:43:09', '2020-03-30 23:38:34'),
+(6, 1, 2, 800, 10, 120, 0, 0, 0, 0, 930, 'Dinar', 1, 0, 930, 'Administrator', 'asyuit1', NULL, 0, NULL, '0165331143', 'superadmin@admin.com', 0, NULL, NULL, NULL, NULL, '2020-03-31 03:44:43', '2020-04-12 02:40:57'),
+(7, 1, 5, 250000, 0, 0, 0, 0, 0, 0, 250000, 'EGP', 1, 0, 250000, 'Administrator', 'egypt-cairo-', '', 0, NULL, '01065331143', 'superadmin@admin.com', 0, '', 'cash', NULL, NULL, '2020-06-07 01:51:31', NULL),
+(8, NULL, 5, 330000, 0, 0, 0, 0, 0, 0, 330000, 'EGP', 1, 0, 330000, 'Administrator', 'egypt-cairo-', '', 0, NULL, '01065331143', 'superadmin@admin.com', 0, '', 'cash', NULL, NULL, '2020-06-07 23:05:33', NULL),
+(9, NULL, 5, 235000, 0, 0, 0, 0, 3, 0, 235000, 'EGP', 1, 0, 235000, 'Administrator', 'egypt-cairo-', '', 0, NULL, '01065331143', 'superadmin@admin.com', 0, '', 'cash', NULL, NULL, '2020-06-10 23:22:46', '2020-06-12 23:19:19'),
+(12, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:27:58', '2020-07-29 00:27:59'),
+(13, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:35:58', '2020-07-29 00:35:58'),
+(14, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:36:36', '2020-07-29 00:36:36'),
+(15, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:37:13', '2020-07-29 00:37:13'),
+(21, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:45:57', '2020-07-29 00:45:57'),
+(22, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:46:39', '2020-07-29 00:46:39'),
+(23, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:46:50', '2020-07-29 00:46:50'),
+(24, 1, 5, 2000, 0, 0, 0, 0, 1, 0, 2000, 'Dinar', 1, 0, 2000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:47:16', '2020-07-29 00:47:16'),
+(25, NULL, 5, 3800000, 0, 0, 0, 0, 1, 0, 3800000, 'Dinar', 1, 0, 3800000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:47:16', '2020-07-29 00:47:16'),
+(26, NULL, 5, 8000000, 0, 0, 0, 0, 1, 0, 8000000, 'Dinar', 1, 0, 8000000, 'first second', 'cairo sedna alhusuin region', NULL, 0, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 00:47:35', '2020-07-29 00:47:36'),
+(30, 1, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 01:26:17', '2020-07-29 01:26:17'),
+(32, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 01:56:17', '2020-07-29 01:56:17'),
+(33, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 02:51:50', '2020-07-29 02:51:50'),
+(34, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 05:45:43', '2020-07-29 05:45:43'),
+(41, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 05:56:20', '2020-07-29 05:56:20'),
+(42, NULL, 5, 800000, 0, 0, 0, 0, 0, 0, 800000, 'Dinar', 1, 0, 800000, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 07:29:22', '2020-07-29 07:29:23'),
+(53, NULL, 5, 2810000, 0, 15, 0, 0, 0, 0, 2810015, 'Dinar', 1, 0, 2810015, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 07:54:33', '2020-07-29 07:54:34'),
+(55, NULL, 5, 2550000, 0, 15, 0, 0, 0, 0, 2550015, 'Dinar', 1, 0, 2550015, 'first second', 'cairo sedna alhusuin region', NULL, 5, NULL, '', '', 1, NULL, NULL, NULL, NULL, '2020-07-29 13:14:38', '2020-07-29 13:14:38'),
+(57, NULL, 5, 2620000, 0, 15, 0, 0, 0, 0, 2620015, 'Dinar', 1, 0, 2620015, NULL, 'hjhkhhlhlk test', NULL, NULL, NULL, NULL, 'superadmin@admin.com', NULL, NULL, NULL, NULL, NULL, '2020-08-14 14:06:54', '2020-08-14 14:06:54'),
+(58, NULL, 5, 30000, 0, 0, 0, 0, 0, 0, 30000, 'EGP', 1, 0, 30000, 'Administrator', 'egypt-cairo-', '', NULL, NULL, '01065331143', 'superadmin@admin.com', NULL, '', 'cash', NULL, NULL, '2020-09-26 22:59:12', NULL),
+(59, NULL, 5, 15000, 0, 0, 0, 0, 4, 0, 15000, 'EGP', 1, 0, 15000, 'Administrator', 'egypt-cairo-', '', NULL, NULL, '01065331143', 'superadmin@admin.com', NULL, '', 'cash', NULL, NULL, '2020-09-27 01:33:11', '2020-10-03 23:41:44');
 
 -- --------------------------------------------------------
 
@@ -8875,7 +9132,10 @@ INSERT INTO `shop_order_detail` (`id`, `company_id`, `order_id`, `product_id`, `
 (105, NULL, 55, 7, 'Easy Polo Black Edition 7', 320000, 1, 320000, 'CLOCKFAN3', 0, NULL, NULL, NULL, NULL, '2020-07-29 13:14:38', NULL),
 (106, NULL, 55, 8, 'Easy Polo Black Edition 8', 220000, 1, 220000, 'TMC2208', 0, NULL, NULL, NULL, NULL, '2020-07-29 13:14:38', NULL),
 (109, NULL, 57, 5, 'Easy Polo Black Edition 5', 420000, 1, 420000, 'CLOCKFAN1', 0, NULL, NULL, NULL, NULL, '2020-08-14 14:06:54', NULL),
-(110, NULL, 57, 6, 'Easy Polo Black Edition 6', 380000, 1, 380000, 'CLOCKFAN2', 0, NULL, NULL, NULL, NULL, '2020-08-14 14:06:54', NULL);
+(110, NULL, 57, 6, 'Easy Polo Black Edition 6', 380000, 1, 380000, 'CLOCKFAN2', 0, NULL, NULL, NULL, NULL, '2020-08-14 14:06:54', NULL),
+(111, NULL, 58, 48, 'Easy Polo Black Edition 48', 15000, 1, 15000, 'BX-5UT', 0, NULL, NULL, NULL, NULL, '2020-09-26 22:59:12', NULL),
+(112, NULL, 58, 42, 'Easy Polo Black Edition 42', 15000, 1, 15000, 'P10-IB', 0, NULL, NULL, NULL, NULL, '2020-09-26 22:59:12', NULL),
+(113, NULL, 59, 20, 'Easy Polo Black Edition 20', 15000, 1, 15000, 'SS495A', 0, NULL, NULL, NULL, NULL, '2020-09-27 01:33:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -8960,7 +9220,10 @@ INSERT INTO `shop_order_history` (`id`, `company_id`, `order_id`, `content`, `ad
 (68, NULL, 42, 'New order', 0, 5, '2020-07-29 07:29:22'),
 (69, NULL, 53, 'New order', 0, 5, '2020-07-29 07:54:33'),
 (71, NULL, 55, 'New order', 0, 5, '2020-07-29 13:14:38'),
-(73, NULL, 57, 'New order', 0, 5, '2020-08-14 14:06:54');
+(73, NULL, 57, 'New order', 0, 5, '2020-08-14 14:06:54'),
+(74, NULL, 58, 'New order', 0, 5, '2020-09-26 22:59:12'),
+(75, NULL, 59, 'New order', 0, 5, '2020-09-27 01:33:11'),
+(76, NULL, 59, 'Change <b>status</b> from <span style=\"color:blue\">\'0\'</span> to <span style=\"color:red\">\'4\'</span>', 5, 0, '2020-10-03 23:41:44');
 
 -- --------------------------------------------------------
 
@@ -9141,7 +9404,15 @@ INSERT INTO `shop_order_total` (`id`, `company_id`, `order_id`, `title`, `code`,
 (241, NULL, 57, 'Discount', 'discount', 15, NULL, 20, NULL, '2020-08-14 14:06:54'),
 (242, NULL, 57, 'install-item', 'installation', 0, NULL, 20, NULL, NULL),
 (243, NULL, 57, 'Total', 'total', 2620015, NULL, 100, NULL, '2020-08-14 14:06:54'),
-(244, NULL, 57, 'Received', 'received', 0, NULL, 200, NULL, NULL);
+(244, NULL, 57, 'Received', 'received', 0, NULL, 200, NULL, NULL),
+(245, NULL, 58, 'Sub Total', 'subtotal', 30000, 'ج30,000', 1, '2020-09-26 22:59:12', NULL),
+(246, NULL, 58, 'Discount', 'discount', 0, 'ج0', 20, '2020-09-26 22:59:12', NULL),
+(247, NULL, 58, 'الاجمالي الكلي', 'total', 30000, 'ج30,000', 100, '2020-09-26 22:59:12', NULL),
+(248, NULL, 58, 'Received', 'received', 0, 'ج0', 200, '2020-09-26 22:59:12', NULL),
+(249, NULL, 59, 'Sub Total', 'subtotal', 15000, 'ج15,000', 1, '2020-09-27 01:33:11', NULL),
+(250, NULL, 59, 'Discount', 'discount', 0, 'ج0', 20, '2020-09-27 01:33:11', NULL),
+(251, NULL, 59, 'الاجمالي الكلي', 'total', 15000, 'ج15,000', 100, '2020-09-27 01:33:11', NULL),
+(252, NULL, 59, 'Received', 'received', 0, 'ج0', 200, '2020-09-27 01:33:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -9270,7 +9541,7 @@ CREATE TABLE `shop_product` (
 --
 
 INSERT INTO `shop_product` (`id`, `company_id`, `sku`, `image`, `brand_id`, `vendor_id`, `category_id`, `category_other`, `price`, `cost`, `stock`, `path`, `sold`, `type`, `option`, `sort`, `status`, `view`, `date_lastview`, `date_available`, `created_at`, `updated_at`) VALUES
-(3, 1, 'MEGA2560', 'product/f2d9505d28f1b10f949cec466cada01e.jpeg', 1, 1, 7, NULL, '220000.00', 150000, 98, 'http://127.0.0.1:8000/documents/website/', 2, 0, NULL, 0, 1, 155, '2020-06-12 23:24:42', NULL, '2018-01-15 07:57:31', '2020-07-07 00:06:01'),
+(3, 1, 'MEGA2560', 'product/f2d9505d28f1b10f949cec466cada01e.jpeg', 1, 1, 7, NULL, '220000.00', 150000, 98, 'http://127.0.0.1:8000/documents/website/', 2, 0, NULL, 0, 1, 156, '2020-09-27 01:37:05', NULL, '2018-01-15 07:57:31', '2020-09-27 01:37:05'),
 (4, 3, 'LEDFAN1', 'product/95349d3747fdaf79d391fdc98e083701.jpg', 1, 1, 6, NULL, '190000.00', 100000, 99, NULL, 1, 1, NULL, 0, 1, 123, '2020-01-26 03:18:52', NULL, '2018-01-16 06:03:54', '2020-01-26 03:18:52'),
 (5, NULL, 'CLOCKFAN1', 'product/15aa6b1f31b53a0177d7653761a45274.jpeg', 1, 1, 13, NULL, '420000.00', 320000, 99, NULL, 88, 1, NULL, 0, 1, 201, '2020-05-08 19:51:12', NULL, '2018-01-16 06:04:41', '2020-08-14 14:06:54'),
 (6, NULL, 'CLOCKFAN2', 'product/0e1416d509af3712bd801404ca928702.jpeg', 1, 1, 13, NULL, '380000.00', 250000, 99, NULL, 101, 1, NULL, 0, 1, 203, '2020-06-13 05:29:05', NULL, '2018-02-02 07:52:50', '2020-08-14 14:06:54'),
@@ -9280,7 +9551,7 @@ INSERT INTO `shop_product` (`id`, `company_id`, `sku`, `image`, `brand_id`, `ven
 (10, NULL, 'A4988', 'product/820283598735f98a9b23960821da438b.jpeg', 2, 1, 11, NULL, '39000.00', 20000, 100, NULL, 0, 0, NULL, 1, 1, 88, '2019-03-23 13:37:07', NULL, '2018-02-02 07:53:30', '2019-03-23 13:37:07'),
 (11, NULL, 'ANYCUBIC-P', 'product/d63af407fa92299e163696a585566dc7.jpeg', 2, 1, 10, NULL, '4990000.00', 3500000, 99, NULL, 1, 0, NULL, 0, 1, 137, '2020-06-12 23:10:37', NULL, '2018-01-15 07:57:31', '2020-06-12 23:10:37'),
 (12, NULL, '3DHLFD', 'product/95349d3747fdaf79d391fdc98e083701.jpg', 2, 1, 12, NULL, '7990000.00', 5200000, 100, NULL, 0, 1, NULL, 0, 1, 129, '2020-06-26 18:04:21', NULL, '2018-01-15 07:57:31', '2020-06-26 18:04:21'),
-(20, NULL, 'SS495A', 'product/95349d3747fdaf79d391fdc98e083701.jpg', 3, 1, 14, NULL, '15000.00', 7000, 100, NULL, 0, 1, NULL, 0, 1, 169, '2019-03-30 10:48:54', NULL, '2018-01-15 07:57:31', '2019-03-30 10:48:54'),
+(20, NULL, 'SS495A', 'product/95349d3747fdaf79d391fdc98e083701.jpg', 3, 1, 14, NULL, '15000.00', 7000, 99, NULL, 1, 1, NULL, 0, 1, 183, '2020-09-27 01:32:40', NULL, '2018-01-15 07:57:31', '2020-09-27 01:33:11'),
 (21, NULL, '3D-CARBON1.75', 'product/d05966a529efdd8d7b41ed9b687859b6.jpeg', 3, 1, 15, NULL, '390000.00', 15000, 100, NULL, 0, 1, NULL, 1, 1, 147, '2019-03-31 01:34:44', NULL, '2018-02-02 07:53:30', '2019-03-31 01:34:44'),
 (22, NULL, '3D-GOLD1.75', 'product/eedfd153bf368919a134da17f22c8de7.jpeg', 3, 1, 15, NULL, '500000.00', 15000, 100, NULL, 0, 1, NULL, 1, 1, 192, '2019-03-30 15:41:07', NULL, '2018-04-12 08:05:37', '2019-03-30 15:41:07'),
 (23, NULL, 'LCD12864-3D', 'product/a7a315526ecf7594731448d792714a11.jpeg', 3, 1, 11, NULL, '220000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 73, '2020-06-15 01:12:24', NULL, '2018-08-11 06:33:37', '2020-06-15 01:12:24'),
@@ -9288,32 +9559,32 @@ INSERT INTO `shop_product` (`id`, `company_id`, `sku`, `image`, `brand_id`, `ven
 (25, NULL, 'RAMPS1.5-3D', 'product/1d6cdd4473603c7a4d162067713b8da8.jpg', 3, 1, 11, NULL, '120000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 94, '2020-06-09 00:14:25', NULL, '2018-08-11 06:41:25', '2020-06-09 00:14:25'),
 (26, NULL, 'EFULL-3D', 'product/07e79f6546499878cba383dd5bfe977e.jpeg', 3, 1, 11, NULL, '890000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 81, '2020-06-27 17:41:27', NULL, '2018-08-11 06:50:25', '2020-06-27 17:41:27'),
 (27, NULL, 'ANYCUBIC-I3M', 'product/ea88b7078652909f3d6c5d445aa05f59.jpeg', 3, 1, 10, NULL, '7990000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 163, '2020-06-26 02:21:10', NULL, '2018-08-22 09:26:00', '2020-06-26 02:21:10'),
-(28, NULL, '3DNOZZLE', 'product/c25c81c852823f5ea8ba4250978217a5.jpeg', 3, 1, 11, NULL, '10000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 77, '2019-03-30 07:03:17', NULL, '2018-08-23 21:21:48', '2019-03-30 07:03:17'),
+(28, NULL, '3DNOZZLE', 'product/c25c81c852823f5ea8ba4250978217a5.jpeg', 3, 1, 11, NULL, '10000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 82, '2020-09-25 19:36:43', NULL, '2018-08-23 21:21:48', '2020-09-25 19:36:43'),
 (29, NULL, '3D-TEFLONLOCK', 'product/8e28f51184f0a96970c05185b1412fa1.jpeg', 3, 1, 12, NULL, '10000.00', 15000, 99, NULL, 1, 0, NULL, 0, 1, 115, '2019-03-30 07:49:35', NULL, '2018-08-23 21:32:48', '2019-03-30 07:49:35'),
-(30, NULL, '3D-BELT-GT2', 'product/8f795b2335d42cdb7c7eafcfaf714cb2.jpeg', 4, 1, 11, NULL, '20000.00', 15000, 93, NULL, 7, 1, NULL, 0, 1, 155, '2020-09-12 16:36:56', NULL, '2018-08-23 21:35:39', '2020-09-12 16:36:56'),
-(31, NULL, '3D-TEFLONLOCK-M10', 'product/0e1416d509af3712bd801404ca928702.jpeg', 4, 1, 11, NULL, '10000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 86, '2020-06-27 23:07:33', NULL, '2018-08-23 21:39:03', '2020-06-27 23:07:33'),
-(32, NULL, '3D-HOTWIRE1240', 'product/efd9fb910ba539c125b7c431a1ccc563.jpg', 4, 1, 11, NULL, '20000.00', 15000, 90, NULL, 10, 1, NULL, 0, 1, 176, '2020-07-03 01:14:53', NULL, '2018-08-23 21:40:54', '2020-07-03 01:14:53'),
+(30, NULL, '3D-BELT-GT2', 'product/8f795b2335d42cdb7c7eafcfaf714cb2.jpeg', 4, 1, 11, NULL, '20000.00', 15000, 93, NULL, 7, 1, NULL, 0, 1, 158, '2020-10-17 20:22:12', NULL, '2018-08-23 21:35:39', '2020-10-17 20:22:12'),
+(31, NULL, '3D-TEFLONLOCK-M10', 'product/0e1416d509af3712bd801404ca928702.jpeg', 4, 1, 11, NULL, '10000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 92, '2020-09-27 20:00:27', NULL, '2018-08-23 21:39:03', '2020-09-27 20:00:27'),
+(32, NULL, '3D-HOTWIRE1240', 'product/efd9fb910ba539c125b7c431a1ccc563.jpg', 4, 1, 11, NULL, '20000.00', 15000, 90, NULL, 10, 1, NULL, 0, 1, 241, '2020-10-13 04:22:21', NULL, '2018-08-23 21:40:54', '2020-10-13 04:22:21'),
 (33, NULL, '3D-TEFTLON-24', 'product/a635cc2bdf5485ccb2c0cc9d186968b2.jpeg', 4, 1, 16, NULL, '15000.00', 15000, 100, NULL, 0, 0, NULL, 1, 1, 119, '2019-03-26 16:41:29', NULL, '2018-08-23 21:44:04', '2019-03-26 16:41:29'),
-(34, NULL, '3D-TEFTLON-W24', 'product/a32f12e009ebf0d24ab264706ecbc15e.jpeg', 4, 1, 11, NULL, '20000.00', 15000, 100, NULL, 0, 1, NULL, 0, 1, 149, '2020-06-08 23:47:50', NULL, '2018-08-23 22:09:34', '2020-06-08 23:47:50'),
+(34, NULL, '3D-TEFTLON-W24', 'product/a32f12e009ebf0d24ab264706ecbc15e.jpeg', 4, 1, 11, NULL, '20000.00', 15000, 100, NULL, 0, 1, NULL, 0, 1, 151, '2020-09-26 22:04:12', NULL, '2018-08-23 22:09:34', '2020-09-26 22:04:12'),
 (35, NULL, '3D-SENSOR-NTC 100K', 'product/41c8f0d0111cd5a3f0538604233cbed8.jpeg', 4, 1, 10, NULL, '15000.00', 15000, 100, NULL, 0, 1, NULL, 0, 1, 214, '2020-05-28 20:28:02', NULL, '2018-08-23 22:13:58', '2020-05-28 20:28:02'),
 (36, NULL, 'nRLF24L01+2.4HZ', 'product/820283598735f98a9b23960821da438b.jpeg', 4, 1, 11, NULL, '25000.00', 15000, 98, NULL, 2, 0, NULL, 0, 1, 139, '2020-06-08 05:00:10', NULL, '2018-08-23 23:07:15', '2020-06-08 05:00:10'),
-(37, NULL, 'ARDUINO-NANO', 'product/da687e60e54bd7fc7eab5c76e7ec3754.jpeg', 4, 1, 17, NULL, '100000.00', 15000, 99, NULL, 1, 0, NULL, 0, 1, 176, '2020-04-24 20:49:45', NULL, '2018-08-23 23:25:48', '2020-04-24 20:49:45'),
+(37, NULL, 'ARDUINO-NANO', 'product/da687e60e54bd7fc7eab5c76e7ec3754.jpeg', 4, 1, 17, NULL, '100000.00', 15000, 99, NULL, 1, 0, NULL, 0, 1, 180, '2020-09-25 01:18:50', NULL, '2018-08-23 23:25:48', '2020-09-25 01:18:50'),
 (38, NULL, 'LEDSTRIP-5050RGB', 'product/61559578baf403e03565e73a14f845ce.jpeg', 4, 1, 9, NULL, '15000.00', 15000, 99, NULL, 1, 1, NULL, 0, 1, 205, '2020-06-27 23:16:29', NULL, '2018-08-23 23:33:31', '2020-06-27 23:16:29'),
 (39, NULL, 'LEDSTRIP-S', 'product/c400aecd5c6d87782ac9af33dd7a5980.jpg', 4, 1, 12, NULL, '15000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 93, '2019-03-28 09:48:06', NULL, '2018-08-24 01:46:21', '2019-03-28 09:48:06'),
 (40, NULL, 'P10-IR', 'product/830d640cd17eba0bf186dc649d5c3053.jpeg', 5, 1, 12, NULL, '15000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 83, '2019-03-28 21:01:21', NULL, '2018-08-24 01:49:49', '2019-03-28 21:01:21'),
 (41, NULL, 'P10-IG', 'product/9d9aab8be8634708c9cf5b690fee74a4.jpeg', 5, 1, 10, NULL, '15000.00', 15000, 98, NULL, 2, 1, NULL, 0, 1, 123, '2020-06-27 23:03:15', NULL, '2018-08-24 01:51:11', '2020-06-27 23:03:15'),
-(42, NULL, 'P10-IB', 'product/98fafb9da683cd9ee854598f3f3a3bd5.jpeg', 5, 1, 11, NULL, '15000.00', 15000, 100, NULL, 0, 0, NULL, 0, 1, 98, '2019-03-28 17:25:25', NULL, '2018-08-24 01:52:58', '2019-03-28 17:25:25'),
+(42, NULL, 'P10-IB', 'product/98fafb9da683cd9ee854598f3f3a3bd5.jpeg', 5, 1, 11, NULL, '15000.00', 15000, 99, NULL, 1, 0, NULL, 0, 1, 98, '2019-03-28 17:25:25', NULL, '2018-08-24 01:52:58', '2020-09-26 22:59:12'),
 (43, NULL, 'P10-IRGB', 'product/a111c060ebb6ffbbd2d34ae278501789.jpg', 5, 1, 6, NULL, '15000.00', 15000, 99, NULL, 1, 0, NULL, 0, 1, 124, '2019-03-30 16:51:34', NULL, '2018-08-24 01:54:45', '2019-03-30 16:51:34'),
 (44, NULL, 'P10-IRG', 'product/95349d3747fdaf79d391fdc98e083701.jpg', 5, 1, 11, NULL, '15000.00', 15000, 100, NULL, 0, 1, NULL, 0, 1, 174, '2020-06-06 17:53:54', NULL, '2018-08-24 01:56:02', '2020-06-06 17:53:54'),
 (45, NULL, 'LFF', 'product/3c8f613d30b4e487ef95a5e4cdea634c.jpeg', 5, 1, 6, NULL, '15000.00', 15000, 94, NULL, 6, 0, NULL, 0, 1, 238, '2019-03-29 11:49:10', NULL, '2018-08-24 01:58:42', '2019-03-29 11:49:10'),
 (46, NULL, 'P25-I', 'product/949fa36ebd56593445fb61d141fd2a81.jpeg', 5, 1, 10, NULL, '15000.00', 15000, 94, NULL, 6, 0, NULL, 0, 1, 233, '2020-06-26 18:44:53', NULL, '2018-08-24 02:23:07', '2020-06-26 18:44:53'),
 (47, NULL, 'BX-5U0', 'product/cd7aa3394c35330ed7f9e4095c6adb65.jpeg', 5, 1, 12, NULL, '15000.00', 15000, 93, NULL, 7, 0, NULL, 0, 1, 266, '2019-03-30 15:30:39', NULL, '2018-08-24 02:48:31', '2019-03-30 15:30:39'),
-(48, NULL, 'BX-5UT', 'product/b0d947f6ddd37e9684055c6cd45cd40d.jpg', 5, 1, 11, NULL, '15000.00', 15000, 84, NULL, 16, 0, NULL, 0, 1, 502, '2020-06-12 23:25:12', NULL, '2018-08-24 02:52:15', '2020-06-12 23:25:12'),
+(48, NULL, 'BX-5UT', 'product/b0d947f6ddd37e9684055c6cd45cd40d.jpg', 5, 1, 11, NULL, '15000.00', 15000, 83, NULL, 17, 0, NULL, 0, 1, 502, '2020-06-12 23:25:12', NULL, '2018-08-24 02:52:15', '2020-09-26 22:59:12'),
 (49, 3, 'BX-5UTbnv', 'product/42eb3619452dfabb8ea09f64cff290c6.jpeg', 4, 2, 12, NULL, '150008.00', 131151, 75, NULL, 26, 1, NULL, 0, 1, 459, '2020-02-02 21:53:02', '2019-03-29 17:00:00', '2018-09-03 01:05:59', '2020-03-21 21:41:47'),
 (50, 1, 'prod1', 'productImage_1/537ac83b90da67b98d2c6dfaf8565bd0.jpg', 0, 0, 19, NULL, '200.00', 120, 5, 'http://127.0.0.1:8000/documents/website/', 3, 0, NULL, 1, 1, 4, '2020-06-01 02:15:55', NULL, '2019-05-05 01:20:50', '2020-07-29 00:47:16'),
 (51, NULL, 'prod9', NULL, 3, 2, 1, NULL, '250.00', 225, 258, NULL, 0, 0, NULL, 1, 1, 0, NULL, NULL, '2020-01-23 18:41:11', '2020-01-23 18:41:11'),
 (53, 1, 'prod123456789', 'product/49d18551e3a1fea40dcc7e3f298aa54c.PNG', 3, 2, 19, NULL, '25.00', 21, 25, NULL, 0, 0, NULL, 0, 1, 1, '2020-03-14 00:59:57', NULL, '2020-01-24 06:14:47', '2020-03-14 00:59:57'),
-(54, 2, 'prod2', NULL, 2, 1, 6, NULL, '258.00', 201, 10, 'http://127.0.0.1:8000/documents/website/', 0, 2, NULL, 2, 1, 2, '2020-09-12 16:17:00', '2020-03-10 22:00:00', '2020-03-07 03:00:19', '2020-09-12 16:17:00');
+(54, 2, 'prod2', NULL, 2, 1, 6, NULL, '258.00', 201, 10, 'http://127.0.0.1:8000/documents/website/', 0, 2, NULL, 2, 1, 7, '2020-10-03 23:23:47', '2020-03-10 22:00:00', '2020-03-07 03:00:19', '2020-10-03 23:23:47');
 
 -- --------------------------------------------------------
 
@@ -9996,6 +10267,12 @@ ALTER TABLE `customer_group`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `customer_payment_term`
+--
+ALTER TABLE `customer_payment_term`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
@@ -10368,13 +10645,13 @@ ALTER TABLE `activitylist`
 -- AUTO_INCREMENT for table `admin_menu`
 --
 ALTER TABLE `admin_menu`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT for table `admin_operation_log`
 --
 ALTER TABLE `admin_operation_log`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7090;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7317;
 
 --
 -- AUTO_INCREMENT for table `admin_permissions`
@@ -10410,7 +10687,7 @@ ALTER TABLE `article_like`
 -- AUTO_INCREMENT for table `banner`
 --
 ALTER TABLE `banner`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `banner_type`
@@ -10465,6 +10742,12 @@ ALTER TABLE `coupon_order`
 --
 ALTER TABLE `customer_group`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `customer_payment_term`
+--
+ALTER TABLE `customer_payment_term`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -10566,7 +10849,7 @@ ALTER TABLE `order_to_address`
 -- AUTO_INCREMENT for table `payment_terms`
 --
 ALTER TABLE `payment_terms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `paypal`
@@ -10644,19 +10927,19 @@ ALTER TABLE `shop_discount`
 -- AUTO_INCREMENT for table `shop_order`
 --
 ALTER TABLE `shop_order`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `shop_order_detail`
 --
 ALTER TABLE `shop_order_detail`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT for table `shop_order_history`
 --
 ALTER TABLE `shop_order_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `shop_order_status`
@@ -10668,7 +10951,7 @@ ALTER TABLE `shop_order_status`
 -- AUTO_INCREMENT for table `shop_order_total`
 --
 ALTER TABLE `shop_order_total`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=245;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
 
 --
 -- AUTO_INCREMENT for table `shop_page`
