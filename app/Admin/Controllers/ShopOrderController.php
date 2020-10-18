@@ -102,9 +102,13 @@ class ShopOrderController extends Controller
      */
     protected function grid($keyword)
     {
+        
         return Admin::grid(ShopOrder::class, function (Grid $grid) use ($keyword) {
 
             $grid->id('ID')->sortable();
+            if($this->checkSuperUser()){
+                $grid->company()->name(trans('admin.company')); //sprint 1
+                }
             $grid->email('Email')->display(function ($email) {
                 return empty($email) ? 'N/A' : '<div style="max-width:150px; overflow:auto;word-wrap: break-word;">' . $email . '</div>';
             });
@@ -379,6 +383,8 @@ JS;
                 'attributesGroup' => ShopAttributeGroup::pluck('name', 'id')->all(),
                 'paymentMethod'   => $paymentMethod,
                 'shippingMethod'  => $shippingMethod,
+                'company'  => $company,
+
             ]
         )->render();
     }

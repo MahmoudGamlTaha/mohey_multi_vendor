@@ -262,7 +262,7 @@ class ShopCategory extends Model
                 }
             }
         } else {
-            return 'images/no-image.jpg';
+            return '/images/no-image.jpg';
         }
 
     }

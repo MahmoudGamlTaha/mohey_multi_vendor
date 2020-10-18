@@ -1,17 +1,36 @@
 @extends($theme.'.shop_layout')
 @php
     $banner = \App\Models\Banner::where('status', 1)->where('type_id', 1)->sort()->first();
+    $productCategory = $product->category()->get()->first();
+    $arr = array();
+    $cond = true;
+do{     
+  
+   $arr[] = $productCategory;
+      $productCategory = \App\Models\ShopCategory::where("id", $productCategory->parent)->get()->first();
+      
+      if($productCategory != null){
+      $cond = !($productCategory->parent == 0 || $productCategory->parent == null);
+      }else{
+        $cond = false;
+      }
+    }while($cond);
+    $flag=true;
+
   @endphp
 @section('center')
 <div class="row">
     <ul class="page-addressbar">
+
+      @foreach($arr as $key => $value)
       <li class="page-addressbar-head"><a href="#">الرئيسية</a></li>
       <li> > </li>
-      <li class="page-addressbar-item"><a href="#">التصنيف الاول</a> </li>
-      <li> > </li>
-      <li class="page-addressbar-item"><a href="#">التنصنيف الثانى</a> </li>
-      <li> > </li>
       <li class="page-addressbar-tail"><a href="#">{{$title}}</a></li>
+      <li> < </li>
+         <li class="page-addressbar-item"><a href="#">{{$value->name}}</a> </li>
+     
+     @endforeach
+    
     </ul>
 </div>
 <br/>

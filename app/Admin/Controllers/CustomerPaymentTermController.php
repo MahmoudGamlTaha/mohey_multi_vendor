@@ -100,9 +100,9 @@ class CustomerPaymentTermController extends Controller
     protected function form()
     {
         return Admin::form(CustomerPaymentTerm::class, function (Form $form) {
-            $users = User::where('active', 1)->pluck("username", "id");
+            $users = User::where('active', 1)->pluck("name", "id");
             $paymentTerm = PaymentTerm::pluck("name", "id");   
-            $form->select('user_id', trans('language.admin.name'))->options($users)->rules('required');
+            $form->select('company_id', trans('language.admin.name'))->options($users)->rules('required');
             $form->select('payment_term_id', trans('language.payments.payment_term'))->options($paymentTerm)->rules('required');;
             $form->text('rate', trans('language.payments.benefit'));
             $form->model()->company_id = $this->getUserCompany()[0]->id;

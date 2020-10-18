@@ -165,7 +165,7 @@ return [
         'parent_category'                   => 'Parent category',
         'page_name'                         => 'Page name',
         'title'                             => 'Title',
-        'name'                              => 'العميل',
+        'name'                              => 'الشركة',
         'email'                             => 'Email',
         'phone'                             => 'Phone',
         'address'                           => 'Address',
@@ -228,6 +228,7 @@ return [
         'success'               => 'Order success',
         'currency'              => 'Currency',
         'exchange_rate'         => 'Exchange rate',
+        'company'         => 'company name',
         'payment_method'        => 'Payment method',
         'email'                 => [
             'title'     => 'Email',

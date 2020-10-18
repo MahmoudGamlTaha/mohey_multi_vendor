@@ -47,7 +47,6 @@
                   <td class="td-title">{{ trans('language.order.shipping_address1') }}:</td><td><a href="#" class="updateInfoRequired" data-name="address1" data-type="text" data-pk="{{ $order->id }}" data-url="{{ route("order_update") }}" data-title="Địa chỉ 1" >{{ $order->address1 }}</a></td>
                 </tr>
                         <tr>
-                  <td class="td-title">{{ trans('language.order.shipping_address2') }}:</td><td><a href="#" class="updateInfoRequired" data-name="address2" data-type="text" data-pk="{{ $order->id }}" data-url="{{ route("order_update") }}" data-title="Địa chỉ 2" >{{ $order->address2 }}</a></td>
                 </tr>
             </table>
         </div>
@@ -56,6 +55,7 @@
                 <tr><td  class="td-title">{{ trans('language.order.order_status') }}:</td><td><a href="#" class="updateStatus" data-name="status" data-type="select" data-source ="{{ json_encode($statusOrder2) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->status }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.order_status') }}">{{ $statusOrder[$order->status] }}</a></td></tr>
                 <tr><td>{{ trans('language.order.order_shipping_status') }}:</td><td><a href="#" class="updateStatus" data-name="shipping_status" data-type="select" data-source ="{{ json_encode($statusShipping2) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->shipping_status }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.order_shipping_status') }}">{{ $statusShipping[$order->shipping_status] }}</a></td></tr>
                 <tr><td>{{ trans('language.order.payment_method') }}:</td><td><a href="#" class="updateStatus" data-name="payment_method" data-type="select" data-source ="{{ json_encode($paymentMethod) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->payment_method }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.payment_method') }}">{{ $order->payment_method }}</a></td></tr>
+                <tr><td>{{ trans('language.order.company') }}:</td><td><a href="#" class="updateStatus" data-name="company" data-type="select" data-source ="{{ json_encode($company) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->company }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.company') }}">{{ $order->company }}</a></td></tr>            
               </table>
              <table class="table box table-bordered">
                 <tr>

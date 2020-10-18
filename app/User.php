@@ -15,7 +15,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $table    = 'admin_users';
+    protected $table    = 'companies';
    /* protected $fillable = [
         'username', 'email', 'password', 'phone',
     ];*/
@@ -35,7 +35,7 @@ class User extends Authenticatable
 
     public function orders()
     {
-        return $this->hasMany('App\Models\ShopOrder', 'user_id', 'id');
+        return $this->hasMany('App\Models\ShopOrder', 'company_id', 'id');
     }
 
     public function ordersAmount()
@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function likes()
     {
-        return $this->hasMany('App\Models\ShopProductLike', 'users_id', 'id');
+        return $this->hasMany('App\Models\ShopProductLike', 'company_id', 'id');
     }
 
     public function getOrderTotalAttribute()
@@ -83,7 +83,7 @@ class User extends Authenticatable
     }
     public function paymentTerm()
     {
-        return $this->hasMany(CustomerPaymentTerm::class, "user_id", "id");
+        return $this->hasMany(CustomerPaymentTerm::class, "company_id", "id");
     }
     
 }
