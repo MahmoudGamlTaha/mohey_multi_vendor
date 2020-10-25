@@ -116,37 +116,35 @@
 }
 
   </style>
-  <header id="header"><!--header-->
-    <div class="header_top topbar"><!--header_top-->
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="contactinfo">
-              <ul class="nav nav-pills">
-              <li><a href="{{ route('wishlist') }}"><span  class="cart-qty shopping-wishlist top-head-forecolor" id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span><i class="glyphicon glyphicon-heart"></i> {{ trans('language.wishlist') }}</a></li>
-            <!--  <li><a href="{{ route('compare') }}"><span  class="cart-qty shopping-compare" id="shopping-compare">{{ Cart::instance('compare')->count() }}</span><i class="fa fa-crosshairs"></i> {{ trans('language.compare') }}</a></li> -->
-              <li><a href="{{ route('cart') }}"><span class="cart-qty shopping-cart" id="shopping-cart">{{ $carts['count'] }}</span><i class="fa fa-shopping-cart"></i> {{ trans('language.cart_title') }}</a>
-              </ul>
-            </div>
-            <div class="has-search">
- <!-- Another variation with a button -->
-                   <input type="text" class="form-control radius22" placeholder="Search">
 
-                        <button class="btn btn-secondary zindex2" type="button">
-                             <i class="fa fa-search"></i>
-                        </button>
-                   </div>
+  <header id="header"><!--header-->
+    <div class="first_header">
+      <div class="container" >
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="social">
+            <a class="twitter" href="#" title="twitter"> <span class="fa fa-twitter"><span></a>
+            <a class="google"  href="#" title="google"> <span class="fa fa-google-plus"><span></a>
+            <a class="youtube"  href="#" title="youtube"> <span class="fa fa-youtube"><span></a>
+            <a class="facebook" href="#" title="facebook"> <span class="fa fa-facebook"><span></a>
+
+
           </div>
-          <div class="col-sm-6">
+        </div>
+        <div class="col-sm-6" id="lang">
             <div class="btn-group pull-right">
               <div class="btn-group locale">
                 @if (count($languages)>1)
-                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown"><img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 20px;">
-                  <span class="caret"></span>
+                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
+                  <span class="caret" style="margin-left: 3px" ></span>
+                  <span>Arabic  <span>
+                    <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;"> 
                 </button>
                 <ul class="dropdown-menu">
                   @foreach ($languages as $key => $language)
-                    <li><a href="{{ url('locale/'.$key) }}"><img src="{{ asset($path_file.'/'.$language['icon']) }}" style="height: 20px;"></a></li>
+                    <li><a href="{{ url('locale/'.$key) }}">
+                      <span>{{$key}} <span>
+                        <img src="{{ asset($path_file.'/'.$language['icon']) }}" style="height: 12px; margin: 5px;"></a></li>
                   @endforeach
                 </ul>
                 @endif
@@ -154,8 +152,8 @@
               @if (count($currencies)>1)
                <div class="btn-group locale">
                 <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                  {{ \Helper::getCurrency()['name'] }}
                   <span class="caret"></span>
+                  {{ \Helper::getCurrency()['name'] }}
                 </button>
                 <ul class="dropdown-menu">
                   @foreach ($currencies as $key => $currency)
@@ -165,16 +163,79 @@
               </div>
               @endif
             </div>
+
+          
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="header_top topbar" style="height: 50px ; padding: 10px"><!--header_top-->
+      <div class="container">
+        <div class="row">
+
+          <div class="col-sm-1"></div>
+          <div class="col-sm-3">
+            <div class="contactinfo">
+              <ul class="nav nav-pills">
+
+                <h4 style="color: white;float: left; width:-3px">{{ "EGP " . $carts['count'] }}</h4>
+
+                <li>
+                  <a  style="margin-left: 15px" href="{{ route('cart') }}" title=" {{ trans('language.cart_title') }}">
+                  <i class="fa fa-shopping-cart">
+                    <span  class=" badge " id="shopping-cart" >{{ $carts['count'] }}</span>
+                  </i></a>
+
+                 </li>
+
+                <li><a href="{{ route('wishlist') }}" title=" {{ trans('language.wishlist') }}">
+                  <i class="fa fa-heart">
+                    <span  class=" badge " id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span>
+                  </i>
+                </a></li>
+                
+              
+
+              {{-- <li><a href="{{ route('wishlist') }}">
+                <span  class="cart-qty shopping-wishlist top-head-forecolor" id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span>
+                <i class="glyphicon glyphicon-heart"></i> {{ trans('language.wishlist') }}
+              </a></li> --}}
+            <!--  <li><a href="{{ route('compare') }}"><span  class="cart-qty shopping-compare" id="shopping-compare">{{ Cart::instance('compare')->count() }}</span><i class="fa fa-crosshairs"></i> {{ trans('language.compare') }}</a></li> -->
+              {{-- <li><a href="{{ route('cart') }}"><span class="cart-qty shopping-cart" id="shopping-cart">
+                {{ $carts['count'] }}</span><i class="fa fa-shopping-cart"></i> {{ trans('language.cart_title') }}</a> </li> --}}
+              </ul>
+            </div>
           </div>
+
+          <div class="col-sm-6">
+                  <div class="dropdown ">
+                  
+                    <select class="js-example-placeholder-single js-states form-control">
+                      <option></option>
+                      @foreach($categoryTop as $key => $category)
+                      <option>{{$category->name}}</option>
+                      @endforeach
+                    </select>
+                          <button class="btn btn-secondary zindex" type="button" >
+                              <i class="fa fa-search"></i>
+                          </button> 
+                    </div>
+
+          </div>
+          
+          
+
+
         </div>
       </div>
     </div><!--/header_top-->
     <div class="header-middle"><!--header-middle-->
       <div class="container">
         <div class="row">
-          <div class="col-sm-4">
-            <div class="logo pull-left">
-              <a href="{{ route('home') }}"><img style="width: 150px;" src="{{ asset($logo) }}" alt="" /></a>
+          <div class="col-sm-12">
+            <div class="logo  pull-right">
+              <a href="{{ route('home') }}"><img style="width: 200px;" src="{{ asset($logo) }}" alt="" /></a>
             </div>
           </div>
           <div class="col-sm-8">
@@ -208,7 +269,7 @@
     <div class="collapse navbar-collapse js-navbar-collapse">
       <ul class="nav navbar-nav">
       <li class="dropdown mega-dropdown">
-          <a href="#" class="dropdown-toggle orange-bk" data-toggle="dropdown"  style="color:white">&nbsp;{{ trans('language.all_categories') }}<span class="glyphicon glyphicon-align-justify pull-right" style="color:white"></span></a>
+          <a href="#" class="dropdown-toggle orange-bk" data-toggle="dropdown"  style="color:#10243f">&nbsp;{{ trans('language.all_categories') }}<span class="fa fa-bars pull-right" style="color:#10243f ; margin-top:3px"></span></a>
           <ul class="dropdown-menu mega-dropdown-menu row">
             <li class="col-sm-3">
               <ul>
@@ -289,3 +350,6 @@
       </div>
     </div><!--/header-bottom-->
   </header><!--/header-->
+
+
+ 

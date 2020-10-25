@@ -13,9 +13,10 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 @endphp
 @if(isset($products))
 <div class="row">
-    <div class="col-md-6 col-md-offset-2" style="height: 70px">
-        <div class="carousel slide" id="myCarouse2" style="height: 70px">
-            <div class="carousel-inner" style="height: 70px">
+    <div class="col-md-2"></div>
+    <div class="col-md-8" style="height: 80px ; padding: 15px; border: 1px solid #dad6d6;">
+        <div class="carousel slide" id="myCarouse2" >
+            <div class="carousel-inner" style="height: 80px ;" >
                 @php
                 $index = 0;
                 @endphp
@@ -23,8 +24,8 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
                 @if(($index) % 4 == 0)
                 <div class="{{ ($key)?'item':'item active' }}">
                     @endif
-                    <div class="col-xs-3"><a href="{{$brand->getUrl()}}"><img src="{{$brand->getImage()}}"
-                                style="height: 50px; width:60px;border:1px solid black;"></a></div>
+                    <div class="col-xs-3"><a href="{{$brand->getUrl()}}" style="float: left ; margin-left:40px;"><img src="{{$brand->getImage()}}"
+                                style="width:100px;"></a></div>
                     @if(($index + 1) % 4 == 0)
                 </div>
                 @endif
@@ -37,12 +38,18 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
         </div>
         @endif
     </div>
+    <div class="col-md-2"></div>
+
     <a class="left carousel-control" href="#myCarouse2" data-slide="prev"><i
             class="glyphicon glyphicon-chevron-left"></i></a>
     <a class="right carousel-control" href="#myCarouse2" data-slide="next"><i
             class="glyphicon glyphicon-chevron-right"></i></a>
 </div>
 </div>
+
+
+<hr>
+<!-- Contenttttt-->
 <div class="col-sm-10">
 
     @foreach($products as $item)
@@ -55,16 +62,15 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
     $counter++;
     @endphp
     <div class="col-sm-2 home-top-row-ads">
-        <div class="product-image-wrapper product-single">
-            <div class="single-products product-box-{{ $item->id }}">
-                <a href="{{ $item->getUrl() }}"> <img src="{{ asset( $item->getThumb()) }}"
-                        style="width:100%;height:150px;" alt="" /></a>
+        <div class="thumbnail product-image-wrapper product-single">
+            <div class=" single-products product-box-{{ $item->id }}">
+                <a href="{{ $item->getUrl() }}"> <img src="{{ asset( $item->getThumb()) }}" style="width:100%;height:150px;" alt="" /></a>
                      {!! $item->showPrice() !!}
-                <ul class="nav nav-pills nav-justified">
-                    <li> <a class="btn btn-default add-to-cart"
-                            onClick="addToCart('{{ $item->id }}','default',$(this))"><i
-                                class="fa fa-shopping-cart"></i>{{trans('language.add_to_cart')}}</a></li>
-                    <li> <a class="btn btn-default add-to-cart"
+                <ul class="nav nav-pills nav-justified" >
+                    <li class="cart1"> <a class="btn btn-default add-to-cart" 
+                            onClick="addToCart('{{ $item->id }}','default',$(this))">
+                           {{trans('language.add_to_cart')}}  <i class="fa fa-shopping-cart"></i> </a></li>
+                    <li class="fav"> <a class="btn btn-default add-to-cart"  
                             onClick="addToCart('{{ $item->id }}','wishlist',$(this))"><i class="fa fa-heart"></i></a>
                     </li>
                 </ul>
@@ -73,20 +79,22 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
         </div>
     </div>
     @endforeach
+
+      
 </div>
 <div class="col-sm-2 home-top-row-ads">
-    <div class="product-image-wrapper product-single">
+    <div class="product-image-wrapper product-single" style="height:442px">
 
         @if(isset($firstBest))
         <div class="single-products product-box-{{$firstBest->id }}">
             <a href="{{ $firstBest->getUrl() }}"> <img src="{{ asset( $firstBest->getThumb()) }}"
-                    style="width:100%;height:310px;" alt="" /></a>
+                    style="width:100%;height:380px;" alt="" /></a>
                    {!! $firstBest->showPrice() !!}
             <ul class="nav nav-pills nav-justified">
-                <li> <a class="btn btn-default add-to-cart"
-                        onClick="addToCart('{{ $firstBest->id }}','default',$(this))"><i
-                            class="fa fa-shopping-cart"></i>{{trans('language.add_to_cart')}}</a></li>
-                <li> <a class="btn btn-default add-to-cart"
+                <li class="cart1"> <a class="btn btn-default add-to-cart"
+                        onClick="addToCart('{{ $firstBest->id }}','default',$(this))">
+                        {{trans('language.add_to_cart')}} <i class="fa fa-shopping-cart"></i> </a></li>
+                <li class="fav"> <a class="btn btn-default add-to-cart"
                         onClick="addToCart('{{ $firstBest->id }}','wishlist',$(this))"><i class="fa fa-heart"></i></a>
                 </li>
             </ul>
@@ -100,8 +108,10 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 </div>
 @endif
 @endforeach
-<br />
-<div class=" row features_items">
+<hr>
+
+
+<div class=" row features_items" style="">
     <!--features_items-->
     @foreach($categories as $key => $value)
     @php
@@ -112,37 +122,53 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
     $bestPrice = null;
     $countBest = 0;
     @endphp
-    <div class="row">
-    <div class="col-md-4">
-      <h2 class="title text-center center-block padding-right-200"> الاكثر مبيعا </h2>
-      </div> 
-    <div class="col-md-4">
+    {{-- <div class="row"  style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
+        <div class="col-md-2">
+        <h2 class="title text-center center-block " style="color: white"> الاكثر مبيعا </h2>
+        </div> 
+
+        <div class="col-md-8" style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
         <a href="{{$value[0]->getUrl() }}">
-            <h2 class="title text-center center-block">{{ $value[0]->name }}</h2>
+            <h2 class="title text-center center-block"  style="color: white">{{ $value[0]->name }}</h2>
         </a>
-      </div>
-      <div class="col-md-4">
-      <h2 class="title text-center center-block padding-left-200"> افضل عرض </h2>
-      </div> 
-    
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <!--<h3 class="text-center">الاكثر مبيعا</h3> -->
-            @for($i = 0; $i < count($products_most); $i++) @if($products_most[$i]->category_id == $value[0]->id &&
-                $countBest < 4) <div class="col-sm-6" style="padding:2px;">
-                    <a href="{{ $products_most[$i]->getUrl() }}">
-                        <img src="{{ asset($products_most[$i]->getThumb()) }}" style="width:100%;height:100%;"
-                            alt="" /></a>
         </div>
-        @elseif($counter < 4) <div class="col-sm-6" style="padding:2px;">
-            <img src="{{ asset($path_file.'') }}/default/default_1.jpg" style="width:70%;height:120px;"></img>
+
+        <div class="col-md-2" style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
+        <h2 class="title text-center center-block "  style="color: white"> افضل عرض </h2>
+        </div> 
+    </div> --}}
+
+    <div class="row" >
+        <div class="col-sm-2" style="padding:0">
+            <div  style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
+                <h2 class="title text-center center-block " style="color: white"> الاكثر مبيعا </h2>
+            </div> 
+            @for($i = 0; $i < count($products_most); $i++) @if($products_most[$i]->category_id == $value[0]->id && $countBest < 4)
+                <div class="col-sm-5" style="border: 1px solid #eee; margin: 5px 8px; padding: 0">
+                    <a href="{{ $products_most[$i]->getUrl() }}">
+                        <img src="{{ asset($products_most[$i]->getThumb()) }}" style="width:87px; height:100px;"   alt="" />
+                    </a>
+                 </div>
+            @elseif($counter < 4)
+         <div class="col-sm-5" style="border: 1px solid #eee; margin: 5px 8px; padding: 0">
+            <img src="{{ asset($path_file.'') }}/default/default_1.jpg" style="width:87px;height:100px;">
+         </div>
+            @php $countBest++ @endphp
+            @endif
+            @endfor
+        </div>
+
+
+
+
+<div class="col-sm-8"  style=" " >
+
+    <div style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 15px;">
+        <a href="{{$value[0]->getUrl() }}">
+            <h2 class="title text-center center-block"  style="color: white">{{ $value[0]->name }}</h2>
+        </a>
     </div>
-    @php $countBest++ @endphp
-    @endif
-    @endfor
-</div>
-<div class="col-sm-8">
+
     @foreach ($products as $key => $product)
     @php
 
@@ -165,10 +191,10 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
                         <p>{{ $product->name }}</p>
                     </a>
                     <ul class="nav nav-pills nav-justified">
-                        <li> <a class="btn btn-default add-to-cart"
-                                onClick="addToCart('{{ $product->id }}','default',$(this))"><i
-                                    class="fa fa-shopping-cart"></i>{{trans('language.add_to_cart')}}</a></li>
-                        <li> <a class="btn btn-default add-to-cart"
+                        <li class="cart1"> <a class="btn btn-default add-to-cart"
+                                onClick="addToCart('{{ $product->id }}','default',$(this))">
+                                {{trans('language.add_to_cart')}} <i class="fa fa-shopping-cart"></i> </a></li>
+                        <li class="fav"> <a class="btn btn-default add-to-cart"
                                 onClick="addToCart('{{ $product->id }}','wishlist',$(this))"><i
                                     class="fa fa-heart"></i></a></li>
                     </ul>
@@ -192,32 +218,41 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
     @endforeach
 
 </div>
-<div class="col-sm-2">
-    <!--<h3 class="text-center">افضل عرض</h3> -->
-    @if(isset($bestPrice))
-    <div class="product-image-wrapper product-single">
+
+
+<div class="col-sm-2" style="padding: 0">
+    <div  style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
+        <h2 class="title text-center center-block "  style="color: white"> افضل عرض </h2>
+        </div> 
+
+        @if(isset($bestPrice))
+    <div class="product-image-wrapper product-single" style="margin : 0">
         <div class="single-products product-box-{{ $bestPrice->id }}">
             <a href="{{ $bestPrice->getUrl() }}"><img src="{{ asset($bestPrice->getThumb()) }}"
                     style="width:100%;height:auto;" alt="" /></a>
-                    {!! $bestPrice->showPrice() !!} 
+                   
+                    <p style="text-align: center"> {!! $bestPrice->showPrice() !!} </p>
+            
             <ul class="nav nav-pills nav-justified">
-                <li> <a class="btn btn-default add-to-cart"
-                        onClick="addToCart('{{ $bestPrice->id }}','default',$(this))"><i
-                            class="fa fa-shopping-cart"></i>{{trans('language.add_to_cart')}}</a></li>
-                <li> <a class="btn btn-default add-to-cart"
+                <li class="cart1"> <a class="btn btn-default add-to-cart"
+                        onClick="addToCart('{{ $bestPrice->id }}','default',$(this))">
+                            {{trans('language.add_to_cart')}} <i class="fa fa-shopping-cart"></i> </a></li>
+                <li class="fav"> <a class="btn btn-default add-to-cart"
                         onClick="addToCart('{{ $bestPrice->id }}','wishlist',$(this))"><i class="fa fa-heart"></i></a>
                 </li>
             </ul>
         </div>
     </div>
         @else
-        <img src="{{ asset($path_file.'') }}/default/default_1.jpg" style="width:100%;height:320px;"></img>
+        <img src="{{ asset($path_file.'') }}/default/default_1.jpg" style="width:100%;height:320px;">
         @endif
     </div>
 </div>
 @endforeach
 </div>
-<!--features_items-->
+
+
+<!--features_items  - الاقسام المميزة-->
 @include('blockView/featured_category')
 
 
