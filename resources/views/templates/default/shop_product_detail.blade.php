@@ -4,14 +4,20 @@
   @endphp
 @section('center')
 <div class="row">
+    @php
+        $category = $product->category()->first();
+        $productCategories = \App\Models\ShopCategoryDescription::where('shop_category_id', $category->parent)->get();
+    @endphp
     <ul class="page-addressbar">
-      <li class="page-addressbar-head"><a href="#">الرئيسية</a></li>
-      <li> > </li>
-      <li class="page-addressbar-item"><a href="#">التصنيف الاول</a> </li>
-      <li> > </li>
-      <li class="page-addressbar-item"><a href="#">التنصنيف الثانى</a> </li>
-      <li> > </li>
-      <li class="page-addressbar-tail"><a href="#">{{$title}}</a></li>
+        <li class="page-addressbar-head"><a href="{{ env('APP_URL') }}">الرئيسية</a></li>
+        <li> > </li>
+        <li class="page-addressbar-tail"><a href="#">{{$title}}</a></li>
+        <li> < </li>
+        <li class="page-addressbar-item"><a href="{{env('APP_URL').'/category/'.strtolower($category->name).'_'.$category->id}}">{{$category->name}}</a> </li>
+        @foreach($productCategories as $productCategory)
+            <li> < </li>
+            <li class="page-addressbar-item"><a href="{{env('APP_URL').'/category/'.strtolower($productCategory->name).'_'.$productCategory->shop_category_id}}">{{$productCategory->name}}</a> </li>
+        @endforeach
     </ul>
 </div>
 <br/>
