@@ -172,7 +172,9 @@ return [
      'others'              =>    'اخرى',
      'paymentterm'         =>    'شروط الدفع',
      'units'                 => 'الوحدات',
-
+     'paymentplans'          => 'خطط الدفع',
+     'paymentterm'           => 'شروط الدفع',
+     'paymentcustomerterm'   => 'شروط الدفع للعميل',
 
 	],
 ];
