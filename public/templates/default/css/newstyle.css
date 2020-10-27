@@ -95,7 +95,7 @@
 
 
 .contactinfo i{
-font-size: 30px;
+font-size: 25px;
 }
 .badge {
     display: inline-block;
@@ -188,6 +188,13 @@ h2.title {
     height: 100px;
 }
 
+.carousel-indicators {
+    bottom: -10px;
+}
+
+.carousel-control.left , .carousel-control.right{
+    margin-top: -20px;
+}
 
 .home-bottom-row-fdep {
     text-align: center;
@@ -200,6 +207,32 @@ h2.title {
     border: 1px solid #eee;
 }
 
+
+.product-right-list-head , .product-right-list-item{
+    border: 1px solid #efefef;
+
+}
+
+.btn:hover, .btn:focus {
+    outline: none;
+    box-shadow: none;
+    background: #10243fed;
+    color: white;
+}
+
+
+.product_details li {
+    list-style: disc;
+    font-size: 16px;
+}
+
+.nav-tabs li a {
+    color: #10243f;
+}
+
+.progress-bar-warning {
+    background-color: #f69620;
+}
 
 
 

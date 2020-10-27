@@ -112,7 +112,7 @@ Route::get('/vendor/{name}_{id}', 'ShopFront@productToVendor')
 
 //Product
 Route::get('/products.html', 'ShopFront@allProducts')->name('products');
-Route::get('/product/{name}_{id}.html', 'ShopFront@productDetail')
+Route::get('/product/{name}_{id}', 'ShopFront@productDetail')
     ->where(['id' => '[0-9]+'])->name('product');
 //End product
 

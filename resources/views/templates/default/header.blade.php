@@ -194,6 +194,11 @@
                     <span  class=" badge " id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span>
                   </i>
                 </a></li>
+
+                <li><a href="#" title="">
+                  <i class="fa fa-refresh">
+                  </i>
+                </a></li>
                 
               
 

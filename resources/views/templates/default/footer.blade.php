@@ -119,7 +119,7 @@
       </div>
     </div>
 
-    <div class="footer-bottom" style="background-color: #000">
+    <div class="footer-bottom" style="background-color: #10243f">
       <div class="container">
         <div class="row">
           <p class="pull-left"> Copyright © 2019 
