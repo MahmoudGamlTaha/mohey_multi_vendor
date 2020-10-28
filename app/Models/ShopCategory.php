@@ -262,7 +262,7 @@ class ShopCategory extends Model
                 }
             }
         } else {
-            return 'images/no-image.jpg';
+            return '/images/no-image.jpg';
         }
 
     }
@@ -276,12 +276,12 @@ class ShopCategory extends Model
         if ($this->image) {
             $path_file = config('filesystems.disks.path_file', '');
             if (!file_exists($path_file . '/' . $this->image)) {
-                return 'images/no-image.jpg';
+                return '/images/no-image.jpg';
             } else {
                 return $path_file . '/' . $this->image;
             }
         } else {
-            return 'images/no-image.jpg';
+            return '/images/no-image.jpg';
         }
 
     }

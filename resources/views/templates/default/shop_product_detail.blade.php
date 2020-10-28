@@ -4,14 +4,31 @@
   @endphp
 @section('center')
 <div class="row">
+    @php
+        $category = $product->category()->first();
+        $cat_id = $category->id;
+        $lang = App\Models\Language::where('code', app()->getLocale())->first();
+        $categories = DB::select(DB::raw("WITH RECURSIVE cte AS (SELECT id, parent FROM shop_category WHERE id = ?
+            UNION ALL
+            SELECT d.id, d.parent
+            FROM shop_category d
+            INNER JOIN cte
+            ON  d.id = cte.parent
+        ) SELECT * FROM cte "), [$cat_id]);
+    @endphp
     <ul class="page-addressbar">
-      <li class="page-addressbar-head"><a href="#">الرئيسية</a></li>
-      <li> > </li>
-      <li class="page-addressbar-item"><a href="#">التصنيف الاول</a> </li>
-      <li> > </li>
-      <li class="page-addressbar-item"><a href="#">التنصنيف الثانى</a> </li>
-      <li> > </li>
-      <li class="page-addressbar-tail"><a href="#">{{$title}}</a></li>
+        <li class="page-addressbar-head"><a href="{{ env('APP_URL') }}">الرئيسية</a></li>
+        <li> > </li>
+        <li class="page-addressbar-tail"><a href="#">{{$title}}</a></li>
+        @foreach($categories as $value)
+            @php
+                $productCategories = \App\Models\ShopCategoryDescription::where('shop_category_id', $value->id)->where('lang_id', $lang->id)->get();
+            @endphp
+            @foreach ($productCategories as $productCategory)
+                <li> < </li>
+                <li class="page-addressbar-item"><a href="{{env('APP_URL').'/category/'.strtolower($productCategory->name).'_'.$productCategory->shop_category_id}}">{{$productCategory->name}}</a> </li>
+            @endforeach
+        @endforeach
     </ul>
 </div>
 <br/>
