@@ -68,7 +68,7 @@ Route::get('/getcompanybyCode/{code}','ShopFront@getCompanyName');
 //========Cart
 Route::get('/wishlist.html', 'ShopCart@wishlist')->name('wishlist');
 Route::get('/compare.html', 'ShopCart@compare')->name('compare');
-Route::get('/cart.html', 'ShopCart@getCart')->name('cart');
+Route::get('/cart', 'ShopCart@getCart')->name('cart');
 Route::post('/cart.html', 'ShopCart@postCart')->name('postCart');
 Route::get('/checkout.html', 'ShopCart@getCheckout')->name('checkout');
 Route::post('/checkout.html', 'ShopCart@processCart')->name('processCart');

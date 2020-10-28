@@ -85,13 +85,19 @@
               </div>
           </div>
          <!-- // -->
-          <div  id="paymentTermModal" class="modal fade" role="dailog" aria-hidden="true" tabindex="-1">
+
+         
+          <div  id="paymentTermModal" class="modal fade" role="dailog" aria-hidden="true" tabindex="-1" style="overflow:auto">
               <div class="modal-dialog" role="document">
                    <div class="modal-content">
-                       <div class="modal-header">
-                             <h5>select Available Payment Term</h5>
+                        <div class="modal-header" style="height: 60px;">
+                          <h5 class="modal-title" style="text-align: left;width: 80%;float: left; color:#10243f;font-size: 16px;
+                          text-transform: capitalize;">select Available Payment Term</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
                         </div>
-                <div class="model-body">
+                <div class="model-body" style="padding: 20px 10px 5px 10px">
                   <ul>
                  <form action="{{ route('postCart') }}" method="post">
                    @if($paymentTerms != null) 
@@ -115,7 +121,7 @@
                           </div>
                         </form>
                           <div class="col-md-2">
-                          <button class="btn btn-default" onclick="closeModal()">الغاء</button>
+                          <button class="btn btn-default btn-default1"  onclick="closeModal()">الغاء</button>
                           </div>
                   </div>
                 </div>
@@ -130,8 +136,8 @@
             <div class="col-sm-12" style="padding:0px;">
             @if ($product->images->count())
                        @foreach ($product->images as $key=>$image)
-                <div class="col-sm-3"style="padding:0px;">
-                  <img src="{{ asset($image->getImage()) }}" alt="" style="width:100%;height:100px;" class="block-center"/>
+                <div class="col-sm-3"style="padding:0px;"> 
+                  <img src="{{ asset($image->getImage()) }}" alt="" style="width:100%;height:100px;margin-top: 2px; border:1px solid #eee"  class="block-center"/>
                 </div>
                 @endforeach
             @endif
@@ -279,6 +285,8 @@
        
 
           <div class="col-sm-12">
+
+        
           </div>
 
 

@@ -8,9 +8,9 @@
         </div>
         <div class="col-sm-10">
         <div class="col-sm-12">
-          <h4>{{ $title }}</h4>
+          <h4 style="color: #10243f;">{{ $title }}</h4>
         </div>
-        <div class="col-sm-12 table-responsive">
+        <div class="col-sm-12 table-responsive"  style="border: 1px solid #eee; padding: 19px 5px; margin-bottom: 5px;">
         @if(isset($cart) && sizeof($cart) > 0)
         <table class="table table-striped">
             <thead>
@@ -42,20 +42,20 @@
                   <span>{{count($product->company()->get()) == 0? 'Dokkani' : $product->company()->first()->name }}</span>
                   <br/>
                   <br/>
-                 <a style="cursor: pointer;color:#F29811" onClick="addToCart('{{ $product->id }}','wishlist',$(this))"><i class="fa fa-heart-o"></i>{{trans('language.add_to_wishlist')}}</a>
+                 <a style="cursor: pointer;color:#00f" onClick="addToCart('{{ $product->id }}','wishlist',$(this))"><i class="fa fa-heart-o"></i> {{trans('language.add_to_wishlist')}}</a>
                   &nbsp;&nbsp;&nbsp;&nbsp;
-                  <a style="cursor: pointer;color:#F29811" onClick="return confirm('Confirm?')" title="Remove Item" alt="Remove Item" class="cart_quantity_delete" href="{{route("removeItem",['id'=>$item->rowId])}}"><i class="fa fa-trash-o"></i> حذف</a>
+                  <a style="cursor: pointer;color:#f00" onClick="return confirm('Confirm?')" title="Remove Item" alt="Remove Item" class="cart_quantity_delete" href="{{route("removeItem",['id'=>$item->rowId])}}"><i class="fa fa-trash-o"></i> حذف</a>
                   </td>
-                <td>
+                <td style="padding: 33px;">
                   <span class="cart-total-span">{!! html_entity_decode($product->showPrice()) !!}</span>
                 </td>
-                <td style="width: 15%;text-align:center;">
-                  <button name="decrease" style="border:none; height:28px;width:30px"  id="decrease" onClick="decreseAmount('{{$item->rowId}}', {{ $item->id }});">-</button>
-                  <input type="text" id="item-{{$item->id}}" onChange="updateCart('{{$item->rowId}}', {{ $item->id }});" class="item-qty" value="{{$item->qty}}" name="qty-{{$item->id}}" style="width:30px;text-align:center; margin:-3px">
-                  <button style="border:none; height:28px;width:30px" name="increase" id="increase" onClick="increaseAmount('{{$item->rowId}}', {{ $item->id }});">+</button>
+                <td style="width: 15%;text-align:center;padding: 33px;">
+                  <button name="decrease" style="border:none; height:28px;width:30px;border: 1px solid #dad9d9"  id="decrease" onClick="decreseAmount('{{$item->rowId}}', {{ $item->id }});">-</button>
+                  <input type="text" id="item-{{$item->id}}" onChange="updateCart('{{$item->rowId}}', {{ $item->id }});" class="item-qty" value="{{$item->qty}}" name="qty-{{$item->id}}" style="width:30px;text-align:center; margin:-3px ;height:28px;border:1px solid #dad9d9">
+                  <button style="border:none; height:28px;width:30px; border:1px solid #dad9d9" name="increase" id="increase" onClick="increaseAmount('{{$item->rowId}}', {{ $item->id }});">+</button>
                 </td>
                 <td>
-                  <span style="color:#81C4E6;width: 12%;text-align:center;"><b>{{\Helper::currencyRender($item->subtotal)}}</b></span>
+                  <span style="color:#10243f;width: 12%;text-align:center; font-size: 16px;line-height: 5;"><b>{{\Helper::currencyRender($item->subtotal)}}</b></span>
                 </td>
                 @if($payment_term != null)
                 <td>
@@ -91,32 +91,60 @@
             </tfoot>
           </table>
         </div>
-        <div class="col-sm-4">
+
+     
+
+        <div class="col-sm-3">
         </div>
-        <div class="col-sm-4">
-          <form id="form-order" role="form" method="POST" action="{{ route('processCart') }}">
-          {{ csrf_field() }}
-            <h4 style="padding: 5px;background-color:#F5F5F5;">كود الخصم</h4>
+        <div class="col-sm-6">
+
+          <div class="panel-group">
+            <div class="panel panel-default">
+          
+          <form id="form-order" role="form" method="POST" action="{{ route('processCart') }}" style="margin-bottom: 0">
+          {{ csrf_field() }}           
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse1" style="color:#10243f ; font-size:18px">
+                   <i  onclick="myFunction(this)" class="fa fa-angle-up" style="float: left "></i> الاجمالى  </a>
+              </h4>
+            </div>
+
+            <div id="collapse1" class="panel-collapse collapse in" style="height: auto;text-align: center;">
+            
             @foreach ($dataTotal as $key => $element)
                     @if ($element['value'] !=0)
             @if($element['code']=='total')
-            <span style="width:100%;text-align:center">الاجمالى<b> {{$element['text'] }}</b></span>
+            <div style="margin-top: 12px; margin-bottom: -5px;">
+              <span style="text-align:center; color: #c1c1c1; margin: 20px;">  الاجمالى : </span>
+              <span style="text-align:center; color: #000;">   {{$element['text'] }}</span>
+            </div>
             <hr/>
-            <span style="width:100%;text-align:center">{!! $element['title'] !!}<b> {{$element['text'] }}</b></span>
+            
+            <div style="margin-top: -8px; margin-bottom: 15px;">
+              <span style="text-align:center; color: #c1c1c1; margin: 4px;">  {!! $element['title'] !!} :  </span>
+              <span style="text-align:center; color: #000;">   {{$element['text'] }}</span>
+            </div>
             @endif
             @else
                         <tr class="showTotal">
             @endif
             @endforeach
-            <input style="width:100%;color:white;background-color:#10243F;border-radius:5px;padding:5px;font-size:12pt;" value="{{trans('language.purchase')}}" type="submit" id="submit-order"></input>
+            <input style="width:98%;color:white;background-color:#10243F;border-radius:5px;padding:5px;font-size:12pt;margin-bottom: 5px;" value="{{trans('language.purchase')}}" type="submit" id="submit-order"></input>
             @endif
+
+      
+             </div>
           </form>
+
+        </div>
+      </div>
 
         </div>
       </div>
       </div>
       <br/>
-      <div class="row" style="border-top:3px solid #F5F5F5;border-right:10px solid #C1C1C1;padding-left:30px;padding-right:30px;">
+      <div class="row" style="border-top:3px solid #F5F5F5;border-right:10px solid #C1C1C1;padding-left:30px;padding-right:30px; ">
         <div class="row">
           <div class="col-sm-4">
           </div>
@@ -318,3 +346,10 @@ $('#submit-order').click(function(){
 
 </script>
 @endpush
+
+
+<script>
+  function myFunction(x) {
+    x.classList.toggle("fa-angle-down");
+  }
+  </script>
