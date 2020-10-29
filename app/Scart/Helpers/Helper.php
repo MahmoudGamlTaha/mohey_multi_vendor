@@ -4,6 +4,7 @@ namespace App\Scart;
 use App\Models\Config;
 use App\Models\ConfigGlobal;
 use App\Models\ShopCurrency;
+use Illuminate\Support\Facades\Auth;
 
 class Helper
 {
@@ -131,6 +132,18 @@ class Helper
         }
 
         return $arrCart;
+    }
+    public static function checkSuperUser()
+    {
+        $user =  Auth::guard('admin')->user();
+        if($user != null)
+        {
+            if($user->superuser == 1)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

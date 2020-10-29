@@ -180,7 +180,7 @@ class RegisterController extends Controller
         $userModel = new $userClass();
      try {
         DB::beginTransaction();
-        dd($request->data);
+        //dd($request->data);
         if(!$this->validatorMerchant($request->data)) {
             return;
         }
@@ -188,7 +188,7 @@ class RegisterController extends Controller
         //company shop
         $checkExist =  Company::where('code',$request->data['companycode'])->first();
         if(!$checkExist) {
-            dd($request->data);
+            //dd($request->data);
         $company->name = $request->data['marketname'];
         $company->code = $request->data['companycode'];
         $company->active = 1;
@@ -197,7 +197,7 @@ class RegisterController extends Controller
         $company->general_manger = trim($request->data['firstname'] .' '.$request->data['familyname']);
         $company->save();
         }
-        dd(10);
+        //dd(10);
         //user   
         $userModel->name = $request->data['firstname'];
         $userModel->lname = $request->data['familyname'];
