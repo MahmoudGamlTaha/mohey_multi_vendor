@@ -105,10 +105,11 @@ class ShopOrderController extends Controller
         return Admin::grid(ShopOrder::class, function (Grid $grid) use ($keyword) {
 
             $grid->id('ID')->sortable();
-            $grid->email('Email')->display(function ($email) {
-                return empty($email) ? 'N/A' : '<div style="max-width:150px; overflow:auto;word-wrap: break-word;">' . $email . '</div>';
-            });
-            
+            if($this->checkSuperUser()) {
+                $grid->email('Email')->display(function ($email) {
+                    return empty($email) ? 'N/A' : '<div style="max-width:150px; overflow:auto;word-wrap: break-word;">' . $email . '</div>';
+                });
+            }
             $grid->subtotal(trans('language.order.sub_total'))->display(function ($price) {
                 return empty($price) ? 0 : '<div style="max-width:100px; overflow:auto;word-wrap: break-word;">' . \Helper::currencyOnlyRender($price, $this->currency) . '</div>';
             });

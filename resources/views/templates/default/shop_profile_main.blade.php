@@ -116,8 +116,8 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
                       </tr>
                 </thead>
                 <tbody>
-                
-              
+
+
                   @foreach($orders as $key => $order)
                   <tr>
                     <td style="text-align:center;">
@@ -126,7 +126,7 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
                     <td>
                       <span class="cart-product-span">رقم الاوردر: {{$order->order_id}}</span>
                       <br/>
-                      <span class="cart-product-span">اسم المنتح: {{$order->product()->first()->name}}</span>
+                      <span class="cart-product-span">اسم المنتح: {{$order->product()->first()->name ?? 'none'}}</span>
                       <br/>
                       <span>البائع:</span>
                       <br/>
@@ -222,7 +222,7 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
                     <a href="{{ $product->getUrl() }}"><img width="100" src="{{asset($product->getImage())}}" alt=""></a>
                     </td>
                     <td>
-                      <span class="cart-product-span"> المنتج: {{$product->name}}</span>
+                      <span class="cart-product-span"> المنتج: {{$product->name ?? 'none'}}</span>
                       <br/>
                       <span>البائع:</span>
                       <br/>
@@ -261,7 +261,7 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
                     <br/>
                      <div class="input-group"> 
                      <span  class= "input-group-addon transparent form-addon-left"> الاسم <i class="glyphicon glyphicon-user"></i> </span>
-                    <input type="text" value="{{$user->name}}" class="form-control form-addon-right" ></input>  
+                    <input type="text" value="{{$user->name ?? 'none'}}" class="form-control form-addon-right" ></input>
                    
                   </div>
                   <br/>  
@@ -287,13 +287,13 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
                      <br/>
                       <div class="input-group"> 
                     <span class="input-group-addon transparent form-addon-left">الايميل <i class="fa fa-envelope" aria-hidden="true"></i> </span>
-                    <input type="text" value="{{$user->username}}" class="form-control form-addon-right" ></input>
+                    <input type="text" value="{{$user->username ?? 'none'}}" class="form-control form-addon-right" ></input>
                       </div>
                     @if($user->company() != null)
                     <br/>
                     <div class="input-group">
                     <span class="input-group-addon transparent form-addon-left">الشركة <i class="fas fas-building" aria-hidden="true"></i></span>
-                       <input type="text" value="{{$user->company()->first()->name}}" class="form-control form-addon-right"></input>
+                       <input type="text" value="{{$user->company()->first()->name ?? 'none'}}" class="form-control form-addon-right"></input>
                      </div>
                      @endif 
                     </div> 
