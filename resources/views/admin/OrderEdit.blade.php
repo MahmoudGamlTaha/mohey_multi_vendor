@@ -83,54 +83,53 @@
     }
 @endphp
   <div class="row">
-      @if(\App\Scart\Helper::checkSuperUser())
-          <div class="col-sm-6">
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th style="width: 100px;">{{ trans('language.product.sku') }}</th>
-                        <th>{{ trans('language.product.name') }}</th>
-                        <th>{{ trans('language.product.price') }}</th>
-                        <th style="width: 100px;">{{ trans('language.product.quantity') }}</th>
-                        <th>{{ trans('language.product.total_price') }}</th>
-                        <th>{{ trans('admin.action') }}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($order->details as $item)
-                              <tr>
-                                <span style="display: none;"  class="item_{{ $item->id }}_id">{{ $item->id }}</span>
-                                <td><span class="item_{{ $item->id }}_sku">{{ $item->sku }}</span></td>
-                                <td><span class="item_{{ $item->id }}_name">{{ $item->name }}
-                                  @php
-                                  $html = '';
-                                    if($item->attribute && is_array(json_decode($item->attribute,true))){
-                                      $array = json_decode($item->attribute,true);
-                                          foreach ($array as $key => $element){
-                                            $html .= '<br><b>'.$attributesGroup[$key].'</b> : <i>'.$element.'</i>';
-                                          }
-                                    }
-                                  @endphp
-                                {!! $html !!}
-                                </span></td>
-                                <td align="right"><span>{{ \Helper::currencyOnlyRender($item->price,$order->currency) }}</span></td>
-                                <td>x <span class="item_{{ $item->id }}_qty">{{ number_format($item->qty) }}</span></td>
-                                <td align="right"><span >{{ \Helper::currencyOnlyRender($item->total_price,$order->currency)}}</span></td>
-                                <td>
-                                  <span style="display: none"  class="item_{{ $item->id }}_price">{{ $item->price }}</span>
-                                  <span style="display: none"  class="item_{{ $item->id }}_total_price">{{ $item->total_price}}</span>
-                                    <button onclick="dataEdit({{ $item->id }});" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#editItem" data-placement="top" rel="tooltip" data-original-title="" title="Edit item"><span class="glyphicon glyphicon-pencil"></span></button>
-                                     &nbsp;
-                                    <button  onclick="dataRemove({{ $item->id }});" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#removeItem" data-placement="top" rel="tooltip" data-original-title="" title="Remove item"><span class="glyphicon glyphicon-remove"></span></button>
-                                </td>
-                              </tr>
-                        @endforeach
-                    </tbody>
-                  </table>
-                </div>
-
-                <div class="margin10" id="add-item">
+      <div class="col-sm-6">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 100px;">{{ trans('language.product.sku') }}</th>
+                    <th>{{ trans('language.product.name') }}</th>
+                    <th>{{ trans('language.product.price') }}</th>
+                    <th style="width: 100px;">{{ trans('language.product.quantity') }}</th>
+                    <th>{{ trans('language.product.total_price') }}</th>
+                    <th>{{ trans('admin.action') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    @foreach ($order->details as $item)
+                          <tr>
+                            <span style="display: none;"  class="item_{{ $item->id }}_id">{{ $item->id }}</span>
+                            <td><span class="item_{{ $item->id }}_sku">{{ $item->sku }}</span></td>
+                            <td><span class="item_{{ $item->id }}_name">{{ $item->name }}
+                              @php
+                              $html = '';
+                                if($item->attribute && is_array(json_decode($item->attribute,true))){
+                                  $array = json_decode($item->attribute,true);
+                                      foreach ($array as $key => $element){
+                                        $html .= '<br><b>'.$attributesGroup[$key].'</b> : <i>'.$element.'</i>';
+                                      }
+                                }
+                              @endphp
+                            {!! $html !!}
+                            </span></td>
+                            <td align="right"><span>{{ \Helper::currencyOnlyRender($item->price,$order->currency) }}</span></td>
+                            <td>x <span class="item_{{ $item->id }}_qty">{{ number_format($item->qty) }}</span></td>
+                            <td align="right"><span >{{ \Helper::currencyOnlyRender($item->total_price,$order->currency)}}</span></td>
+                            <td>
+                              <span style="display: none"  class="item_{{ $item->id }}_price">{{ $item->price }}</span>
+                              <span style="display: none"  class="item_{{ $item->id }}_total_price">{{ $item->total_price}}</span>
+                                <button onclick="dataEdit({{ $item->id }});" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#editItem" data-placement="top" rel="tooltip" data-original-title="" title="Edit item"><span class="glyphicon glyphicon-pencil"></span></button>
+                                 &nbsp;
+                                <button  onclick="dataRemove({{ $item->id }});" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#removeItem" data-placement="top" rel="tooltip" data-original-title="" title="Remove item"><span class="glyphicon glyphicon-remove"></span></button>
+                            </td>
+                          </tr>
+                    @endforeach
+                </tbody>
+              </table>
+            </div>
+            @if(\App\Scart\Helper::checkSuperUser())
+              <div class="margin10" id="add-item">
                     <button  type="button" class="btn btn-sm btn-success" id="add-item-button"  title="{{trans('language.product.add_product') }}"><i class="fa fa-plus"></i> {{ trans('language.product.add_product') }}</button>
                 </div>
 
@@ -175,8 +174,8 @@
                       </div>
                   </div>
               </div>
-            </div>
-      @endif
+          @endif
+       </div>
       <div class="col-sm-6">
           <table   class="table table-bordered">
 @foreach ($dataTotal as $element)
