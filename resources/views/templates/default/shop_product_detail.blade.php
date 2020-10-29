@@ -33,9 +33,10 @@
 </div>
 <br/>
 <div class="row"><!-- content div -->
-  <div class="col-sm-2">
+  <div class="col-sm-1">
     &nbsp;
   </div>
+
       <div class="col-sm-8"> <!--content left-->
           <div class="col-sm-8">
               <div class="col-sm-12">
@@ -62,21 +63,22 @@
                     <br/>
                 </div>
               </div>
-
+<div class="clearfix"></div>
+              <hr style="margin: 0 0 15px 0">
               <div class="col-sm-12">
-                <div class="col-sm-6">
-                  <button class="btn btn-default btn-content">بيع هذا المنتج</button>
+                <div class="col-sm-4">
+                  <button class="btn btn-default btn-content" style="float: left;">بيع هذا المنتج</button>
                 </div>
-                <div class="col-sm-6">
-                  <i class="fa fa-heart-o"></i> &nbsp;<a href="">إضافة الى قائمة المفضلة</a>
-                  <a onClick="addToCart('{{ $product->id }}','compare',$(this))">  <i class="fa fa-refresh"></i>&nbsp; مقارنة</a>
-                  <ul class="list-unstyled">
+                <div class="col-sm-8">
+                  <i class="fa fa-heart-o" style="color: #a8a8a8"></i> &nbsp;<a href="" style="color: #a8a8a8 ; margin-left: 30px">إضافة الى قائمة المفضلة</a>
+                  <a onClick="addToCart('{{ $product->id }}','compare',$(this))" style="color: #a8a8a8">  
+                    <i class="fa fa-refresh" style="color: #a8a8a8" ></i>&nbsp; مقارنة</a>
+                  <ul class="list-unstyled product_details">
                    <!-- <li> <b>شركة</b>  {{count($product->company()->get()) == 0? 'Dokkani' : $product->company()->first()->name }}</li>-->
                    <li> <b>شركة</b> Dokkani</li>
                     <li><b>SKU</li>
                     <li>{{ $product->sku }}</li>
                   </ul>
-                  <br/>
                   <br/>
                 </div>
               </div>
@@ -84,12 +86,14 @@
               {{ csrf_field() }}
               <input type="hidden" name="product_id" value="{{ $product->id }}" />
               <div class="col-sm-12">
-                <div class="col-sm-12">
-                  <span style="font-size:14pt;">{!! $product->showPrice() !!}</span>
+                <div class="col-sm-12" >
                   <span><del>EGP90.00</del></span>
+
+                  <span style="margin: -20%">{!! $product->showPrice() !!}</span>
                 </div>
                 <div class="col-sm-12">
-                  <input type="text" name="qty" value="1"/>
+                  <br>
+                  <input type="text" class="form-control" style=" width: 60%; display: inline;" name="qty" value="1"/>
                   <button class="btn btn-default btn-content" type="submit"> <i class="fa fa-shopping-cart" style="color:white;"></i> {{trans('language.add_to_cart')}}</button>
                </form>
                   <button class="btn btn-default btn-content" data-toggle="modal" data-target="#paymentTermModal">إختار نظام الدفع</button>
@@ -98,20 +102,26 @@
               </div>
           </div>
          <!-- // -->
-          <div  id="paymentTermModal" class="modal fade" role="dailog" aria-hidden="true" tabindex="-1">
+
+         
+          <div  id="paymentTermModal" class="modal fade" role="dailog" aria-hidden="true" tabindex="-1" style="overflow:auto">
               <div class="modal-dialog" role="document">
                    <div class="modal-content">
-                       <div class="modal-header">
-                             <h5>select Available Payment Term</h5>
+                        <div class="modal-header" style="height: 60px;">
+                          <h5 class="modal-title" style="text-align: left;width: 80%;float: left; color:#10243f;font-size: 16px;
+                          text-transform: capitalize;">select Available Payment Term</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
                         </div>
-                <div class="model-body">
+                <div class="model-body" style="padding: 20px 10px 5px 10px">
                   <ul>
                  <form action="{{ route('postCart') }}" method="post">
                    @if($paymentTerms != null) 
                  @foreach($paymentTerms as $key => $payment)
                      <li><input type="radio" name="payment[]" value = "{{$payment->id}}"/> {{$payment->paymentTerm()->first()->name}} </li>
                  @endforeach
-                 <input type="hidden" name="qty" value="1"></input>
+                 <input type="hidden" name="qty" value="1">
                  {{ csrf_field() }}
                   <input type="hidden" name="product_id" value="{{ $product->id }}" />
                  @else
@@ -128,7 +138,7 @@
                           </div>
                         </form>
                           <div class="col-md-2">
-                          <button class="btn btn-default" onclick="closeModal()">الغاء</button>
+                          <button class="btn btn-default btn-default1"  onclick="closeModal()">الغاء</button>
                           </div>
                   </div>
                 </div>
@@ -138,23 +148,24 @@
           <!-- // -->
           <div class="col-sm-4" >
             <div class="col-sm-12" style="padding:0px;">
-              <img src="{{ asset($product->getImage()) }}" alt="" style="width:100%;height:200px;" class="block-center"/>
+              <img src="{{ asset($product->getImage()) }}" alt="" style="width:100%;height:200px;border: 1px solid #eee" class="block-center"/>
             </div>
             <div class="col-sm-12" style="padding:0px;">
             @if ($product->images->count())
                        @foreach ($product->images as $key=>$image)
-                <div class="col-sm-3"style="padding:0px;">
-                  <img src="{{ asset($image->getImage()) }}" alt="" style="width:100%;height:100px;" class="block-center"/>
+                <div class="col-sm-3"style="padding:0px;"> 
+                  <img src="{{ asset($image->getImage()) }}" alt="" style="width:100%;height:100px;margin-top: 2px; border:1px solid #eee"  class="block-center"/>
                 </div>
                 @endforeach
             @endif
+
             </div>
 
-          </div>
+          </div>          
 
+          <div class="clearfix"></div>
+<hr>
           <div class="col-sm-12">
-            <br/>
-            <br/>
             <ul class="nav nav-tabs rightSide">
               <li><a data-toggle="tab" href="#menu2">معلومات البائع</a></li>
               <li><a data-toggle="tab" href="#menu3">تقييم العملاء</a></li>
@@ -270,19 +281,36 @@
 
           <div class="col-sm-12">
           @foreach ($productsToCategory as  $key => $product_rel)
-            <div class="col-sm-2" style="border:1px solid #bbb;margin:3px;">
-            <a href="{{ $product_rel->getUrl() }}"> <img src="{{ asset($product_rel->getThumb()) }}" alt="{{ $product_rel->name }}" style="width:100%;" class="block-center"/></a>
-            {!! $product_rel->showPrice() !!}
-            <a href="{{ $product_rel->getUrl() }}"><p>{{ $product_rel->name }}</p></a> 
+            <div class=" card col-sm-3" style="width:23%; border:1px solid #bbb;margin:3px;">
+            <a href="{{ $product_rel->getUrl() }}">
+               <img  class="card-img-top" src="{{ asset($product_rel->getThumb()) }}" alt="{{ $product_rel->name }}" style="width:100%;" class="block-center"/></a>
+            
+               <div class="card-body">
+                <h5 class="card-title"> <span> {!! $product_rel->showPrice() !!} <span></h5>
+                <p class="card-text"  style="text-align: center ; background: #10243f;border-radius:0 15px; padding: 4px;">
+                  <a href="{{ $product_rel->getUrl() }}" style="color: white" >
+                {{ $product_rel->name }}</a> 
+              </p>
+              </div>
+            
+              
+            
           </div>
            @endforeach
           </div>
+
+       
+
           <div class="col-sm-12">
+
+        
           </div>
 
 
       </div>
-      <div class="col-sm-2" style="padding:0px;"><!-- content right-->
+
+
+      <div class="col-sm-3" style="padding:0px;"><!-- content right-->
         <div class="col-sm-12" style="padding:0px;">
           <ul class="product-right-list"style="padding:0px;">
             <li class="product-right-list-head"> <a class="product-right-list-link" href="#">إظهار جميع الاقسام</a> &nbsp;<span class="fa fa-angle-left"></span>
@@ -295,7 +323,7 @@
         <div class="col-sm-12" style="padding:0px;">
         @if (!empty($banner))
         <a href="{{$banner->url}}">
-          <img src="{{ asset($path_file.'') }}/{{ $banner->image }}" alt=""  class="product-detail-banner block-center"/>
+          <img src="{{ asset($path_file.'') }}/{{ $banner->image }}" alt=""  class="product-detail-banner block-center" style="width:100% !important"/>
           </a>
           @endif
         </div>

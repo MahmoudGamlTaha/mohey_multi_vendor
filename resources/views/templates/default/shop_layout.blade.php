@@ -29,9 +29,16 @@
     <link href="{{ asset($theme_asset.'/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{ asset($theme_asset.'/css/font-awesome.min.css')}}" rel="stylesheet">
     <link href="{{ asset($theme_asset.'/css/prettyPhoto.css')}}" rel="stylesheet">
+    <link href="{{ asset($theme_asset.'/select2/css/select2.min.css')}}" rel="stylesheet">
     <link href="{{ asset($theme_asset.'/css/animate.css')}}" rel="stylesheet">
     <link href="{{ asset($theme_asset.'/css/main.css')}}" rel="stylesheet">
     <link href="{{ asset($theme_asset.'/css/responsive.css')}}" rel="stylesheet">
+    
+    <link href="{{ asset($theme_asset.'/css/newstyle.css')}}" rel="stylesheet">
+
+ 
+
+
     <!--[if lt IE 9]>
     <script src="{{ asset($theme_asset.'/js/html5shiv.js')}}"></script>
     <script src="{{ asset($theme_asset.'/js/respond.min.js')}}"></script>
@@ -111,6 +118,7 @@
           <!--//fillter-->
         </div>
 
+        
         <!--body sprint 3-->
         @section('main')
           @include($theme.'.center')
@@ -142,11 +150,16 @@
 <script src="{{ asset($theme_asset.'/js/slick.js')}}"></script>
 <script src="{{ asset($theme_asset.'/js/jquery-ui.min.js')}}"></script>
 <script src="{{ asset($theme_asset.'/js/bootstrap.min.js')}}"></script>
+<script src="{{ asset($theme_asset.'/select2/js/select2.min.js')}}"></script>
 
 <script src="{{ asset($theme_asset.'/js/jquery.scrollUp.min.js')}}"></script>
 <script src="{{ asset($theme_asset.'/js/jquery.prettyPhoto.js')}}"></script>
 <script src="{{ asset($theme_asset.'/js/main.js')}}"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/mouse0270-bootstrap-notify/3.1.7/bootstrap-notify.min.js"></script>
+
+
+
+
 @stack('scripts')
 
     <script type="text/javascript">
@@ -431,5 +444,19 @@ function updateUserInfo(){
   @endisset
 <!--//Module bottom -->
 
+
+
+
+<script>
+  $(document).ready(function() {
+    $(".js-example-placeholder-single").select2({
+    placeholder: "البحث عن المنتجات ............",
+    allowClear: true
+});
+
+});
+
+
+</script>
 </body>
 </html>
