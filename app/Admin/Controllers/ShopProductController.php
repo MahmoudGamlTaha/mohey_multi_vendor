@@ -24,6 +24,7 @@ use App\Models\ProductPriceList;
 use App\Models\ShopProductImage;
 use Encore\Admin\Form\Field\Image;
 use DB;
+use Illuminate\Support\Facades\Storage;
 
 class ShopProductController extends Controller
 {
@@ -70,14 +71,39 @@ class ShopProductController extends Controller
                   
                 }
             }
+         // delete in image tabs
 
-            if(isset($arr['image'])){
+            if(array_key_exists('images', $arr)){
+                $ids = [];
+                $arrImages = $arr['images'];
+                foreach($arrImages as $key=>$value){
+                    if($value['_remove_'] == 1){
+                           $ids[] = $value['id'];
+                    }
+                }
+                
+                  $prodsImages = ShopProductImage::whereIn("id", $ids );//->delete();
+                  $imageslist = $prodsImages->get();
+                  $prodsImages->delete();
+                  try{
+                     foreach($imageslist as $key => $value){
+                         if($value->path == null){
+                            $value->path = config('filesystems.disks.admin.root');
+                         }
+                         unlink($value->path."/".$value->image);
+                     }
+                     
+                  }catch(\Exception $ex){
+                      // write logs here
+                  }
+            }
+                if(array_key_exists('image', $arr)){
                 $uploadedImage = new Image($arr['image']) ;
                 $uploadedImage->uniqueName();
                 $uploadedImage->move('productImage_'.$company);
 //                dd($uploadedImage->prepare($arr['image']));
                 $shopProductModel->image = $uploadedImage->prepare($arr['image']);
-            }
+                }
             $shopProductModel->company_id = $company;
             $shopProductModel->brand_id = $arr['brand_id'];
             $shopProductModel->date_available = $arr['date_available'];
@@ -95,9 +121,10 @@ class ShopProductController extends Controller
             $productPriceList->company_id = $company;
             $productPriceList->save();
             }
-			 if(isset($arr['images'])){
+			 if(array_key_exists('images', $arr)){
                 $ImageData = array();
                 foreach($arr['images'] as $metaFile) {
+                    if(array_key_exists('image',$metaFile)){
                     $image = $metaFile['image'];
                     $uploadedImage = new Image($image) ;
                     $uploadedImage->uniqueName();
@@ -106,8 +133,9 @@ class ShopProductController extends Controller
                     $data = array('path'=>$shopProductModel->path,
                      'image'=> $relativePath,'company_id'=>$company,'status'=> 1, 'product_id'=> $shopProductModel->id);
                      array_push($ImageData, $data);
+                    }
                 }
-                ShopProductImage::insert($ImageData);
+                  ShopProductImage::insert($ImageData);
             }
         
             $languages = Language::getLanguages();
@@ -131,7 +159,6 @@ class ShopProductController extends Controller
           
               return $this->edit($id);
     }catch(\Exception $e){
-          dd($e->getMessage());
         return $e->getMessage();
     }
                 
