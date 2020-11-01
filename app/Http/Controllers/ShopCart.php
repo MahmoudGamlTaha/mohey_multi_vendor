@@ -2,6 +2,8 @@
 #app/Http/Controller/ShopCart.php
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\CompanyContact;
 use App\Models\CustomerPaymentTerm;
 use App\Models\ShopAttributeGroup;
 use App\Models\ShopOrder;
@@ -163,7 +165,7 @@ class ShopCart extends GeneralController
         $request['phone'] = auth()->user()->mobile;
         $request['email'] = auth()->user()->email;
         $request['comment'] = 'new Order from web';
-       
+
         $v = Validator::make($request->all(), [
             'toname'         => 'required|max:100',
             'address1'       => 'required|max:100',
@@ -308,10 +310,11 @@ class ShopCart extends GeneralController
         if (Cart::count() == 0) {
             return redirect()->route('home');
         }
-        //Not allow for guest
+
         if (!$this->configs['shop_allow_guest'] && !auth()->user()) {
             return redirect()->route('login');
-        } //
+        }
+
         $data = request()->all();
         if (!$data) {
             return redirect()->route('cart');
@@ -321,68 +324,78 @@ class ShopCart extends GeneralController
             $payment   = $data['payment'];
             $shipping  = $data['shipping'];
         }
-        try {
-            //Process total
-            $subtotal       = (new ShopOrderTotal)->sumValueTotal('subtotal', $dataTotal);
+
+        try{
             $shipping       = (new ShopOrderTotal)->sumValueTotal('shipping', $dataTotal); //sum shipping
             $discount       = (new ShopOrderTotal)->sumValueTotal('discount', $dataTotal); //sum discount
-            $received       = (new ShopOrderTotal)->sumValueTotal('received', $dataTotal); //sum received
-            $total          = (new ShopOrderTotal)->sumValueTotal('total', $dataTotal);
+            $received       = (new ShopOrderTotal)->sumValueTotal('received', $dataTotal);
             $payment_method = $payment;
-            //end total
-            DB::connection('mysql')->beginTransaction();
-            $arrOrder['user_id'] = auth()->user()->id ?? 0;
+            foreach (Cart::content() as $value)
+            {
+                $subtotal       = $value->price * $value->qty;
+                $total          =  $subtotal + $shipping ;
 
-            $arrOrder['subtotal']        = $subtotal;
-            $arrOrder['shipping']        = $shipping;
-            $arrOrder['discount']        = $discount;
-            $arrOrder['received']        = $received;
-            $arrOrder['payment_status']  = 0;
-            $arrOrder['shipping_status'] = 0;
-            $arrOrder['status']          = 0;
-            $arrOrder['currency']        = \Helper::currencyCode();
-            $arrOrder['exchange_rate']   = \Helper::currencyRate();
-            $arrOrder['total']           = $total;
-            $arrOrder['balance']         = $total + $received;
-            $arrOrder['toname']          = $address['toname'];
-            $arrOrder['email']           = $address['email'];
-            $arrOrder['address1']        = $address['address1'];
-            $arrOrder['address2']        = $address['address2'];
-            $arrOrder['phone']           = $address['phone'];
-            $arrOrder['payment_method']  = $payment_method;
-            $arrOrder['comment']         = $address['comment'];
-            $arrOrder['created_at']      = date('Y-m-d H:i:s');
+                $products = ShopProduct::where('id', $value->id)->get();
+                foreach ($products as $product) {
+                    $company_address = CompanyContact::where('company_id', $product->company_id)->first();
 
-            //Insert to Order
-            $orderId = ShopOrder::insertGetId($arrOrder);
-            //
+                    $arrOrder                   = new ShopOrder();
+                    $arrOrder->company_id       = $product->company_id;
+                    $arrOrder->user_id          = auth()->user()->id ?? 0;
+                    $arrOrder->subtotal         = $subtotal;
+                    $arrOrder->shipping         = $shipping;
+                    $arrOrder->discount         = $discount;
+                    $arrOrder->received         = $received;
+                    $arrOrder->payment_status   = 0;
+                    $arrOrder->shipping_status  = 0;
+                    $arrOrder->status           = 0;
+                    $arrOrder->currency         = \Helper::currencyCode();
+                    $arrOrder->exchange_rate    = \Helper::currencyRate();
+                    $arrOrder->total            = $total;
+                    $arrOrder->balance          = $total + $received;
+                    $arrOrder->toname           = $address['toname'];
+                    $arrOrder->email            = $address['email'];
+                    $arrOrder->address1         = $address['address1'];
+                    $arrOrder->address2         = $company_address->address;
+                    $arrOrder->phone            = $address['phone'];
+                    $arrOrder->payment_method   = $payment_method;
+                    $arrOrder->comment          = $address['comment'];
+                    $arrOrder->created_at       = date('Y-m-d H:i:s');
 
-            //Insert order total
-            ShopOrderTotal::insertTotal($dataTotal, $orderId);
-            //End order total
+                    $arrOrder->save();
+                    $orderId = $arrOrder->id;
+                }
+                foreach ($dataTotal as $k => $v)
+                {
+                    $dataTotal[$k]['company_id'] = $product->company_id;
+                    $dataTotal[$k]['order_id']   = $orderId;
+                    $dataTotal[0]['value']      = $subtotal;
+                    $dataTotal[1]['value']      = $discount;
+                    $dataTotal[2]['value']      = $total;
+                    $dataTotal[3]['value']      = $received;
+                }
+                ShopOrderTotal::insertTotal($dataTotal);
 
-            foreach (Cart::content() as $value) {
-                $product                  = ShopProduct::find($value->id);
-                $arrDetail['order_id']    = $orderId;
-                $arrDetail['product_id']  = $value->id;
-                $arrDetail['name']        = $value->name;
-                $arrDetail['price']       = \Helper::currencyValue($value->price);
-                $arrDetail['qty']         = $value->qty;
-                $arrDetail['attribute']   = ($value->options->att) ? json_encode($value->options->att) : null;
-                $arrDetail['sku']         = $product->sku;
-                $arrDetail['total_price'] = \Helper::currencyValue($value->price) * $value->qty;
-                $arrDetail['created_at']  = date('Y-m-d H:i:s');
+                $arrDetail['company_id']    = $product->company_id;
+                $arrDetail['order_id']      = $orderId;
+                $arrDetail['product_id']    = $value->id;
+                $arrDetail['name']          = $value->name;
+                $arrDetail['price']         = \Helper::currencyValue($value->price);
+                $arrDetail['qty']           = $value->qty;
+                $arrDetail['attribute']     = ($value->options->att) ? json_encode($value->options->att) : null;
+                $arrDetail['sku']           = $product->sku;
+                $arrDetail['total_price']   = \Helper::currencyValue($value->price) * $value->qty;
+                $arrDetail['created_at']    = date('Y-m-d H:i:s');
                 ShopOrderDetail::insert($arrDetail);
-                //If product out of stock
+
                 if (!$this->configs['product_buy_out_of_stock'] && $product->stock < $value->qty) {
                     return redirect()->route('home')->with('error', trans('language.cart.over', ['item' => $product->sku]));
-                } //
+                }
                 $product->stock -= $value->qty;
                 $product->sold += $value->qty;
                 $product->save();
 
             }
-
             //Add history
             $dataHistory = [
                 'order_id' => $orderId,
@@ -435,26 +448,26 @@ class ShopCart extends GeneralController
                     $product        = ShopProduct::find($value->id);
                     $data_payment[] =
                         [
-                        'name'     => $value->name,
-                        'quantity' => $value->qty,
-                        'price'    => \Helper::currencyValue($value->price),
-                        'sku'      => $product->sku,
-                    ];
+                            'name'     => $value->name,
+                            'quantity' => $value->qty,
+                            'price'    => \Helper::currencyValue($value->price),
+                            'sku'      => $product->sku,
+                        ];
                 }
                 $data_payment[] =
                     [
-                    'name'     => 'Shipping',
-                    'quantity' => 1,
-                    'price'    => $shipping,
-                    'sku'      => 'shipping',
-                ];
+                        'name'     => 'Shipping',
+                        'quantity' => 1,
+                        'price'    => $shipping,
+                        'sku'      => 'shipping',
+                    ];
                 $data_payment[] =
                     [
-                    'name'     => 'Discount',
-                    'quantity' => 1,
-                    'price'    => $discount,
-                    'sku'      => 'discount',
-                ];
+                        'name'     => 'Discount',
+                        'quantity' => 1,
+                        'price'    => $discount,
+                        'sku'      => 'discount',
+                    ];
                 $data_payment['order_id'] = $orderId;
                 $data_payment['currency'] = \Helper::currencyCode();
                 return redirect()->route('paypal')->with('data_payment', $data_payment);
@@ -462,7 +475,7 @@ class ShopCart extends GeneralController
                 return $this->completeOrder($orderId);
             }
 
-        
+
         } catch (\Exception $e) {
             DB::connection('mysql')->rollBack();
             echo 'Caught exception: ', $e->getMessage(), "\n";
@@ -610,7 +623,7 @@ class ShopCart extends GeneralController
            catch(\Exception $e){
             return response()->json(
                 ['error' => 1,
-                 'data' -> $e->message()
+                 'data' => $e->message()
                 ]);
             }
         }

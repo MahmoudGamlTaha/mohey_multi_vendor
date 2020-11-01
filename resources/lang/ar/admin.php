@@ -175,6 +175,7 @@ return [
      'paymentplans'          => 'خطط الدفع',
      'paymentterm'           => 'شروط الدفع',
      'paymentcustomerterm'   => 'شروط الدفع للعميل',
+        'OrderDetail'        => 'تفاصيل الطلب',
 
 	],
 ];
