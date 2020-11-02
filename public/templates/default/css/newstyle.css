@@ -228,7 +228,7 @@ h2.title {
 
 .product_details li {
     list-style: disc;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .nav-tabs li a {
@@ -267,6 +267,14 @@ h2.title {
     padding: 12px 15px;
 }
 
+
+
+
+.btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open .dropdown-toggle.btn-danger {
+    color: #fff;
+    background-color: #d2322d !important;
+    border-color: #ac2925  !important;
+}
 
 #footer #icon-mail{
     color: #c6c7cc;

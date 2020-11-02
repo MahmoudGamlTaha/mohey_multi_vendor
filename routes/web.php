@@ -20,6 +20,7 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'member'], function ($router) {
    // $router->get('/profile', 'LoginController@showProfileForm')->name('profilePage');
     $router->get('/register.html', 'RegisterController@showRegisterForm')->name('register');
     $router->get('/registerMerchant.html', 'RegisterController@showRegisterMerchantForm')->name('registermerchant');
+    $router->get('/registerMerchantl', 'RegisterController@showRegisterMerchantForm')->name('registermerchantl');
     $router->post('/registerMerchant', 'RegisterController@registerMerchand')->name('newMerchant');
     $router->get('/registerMerchant', 'RegisterController@registerMerchand')->name('newMerchant');
     $router->post('/registerMerchant', 'RegisterController@registerCustomer')->name('newCustomer');
@@ -67,7 +68,7 @@ Route::get('currency/{code}', function ($code) {
 Route::get('/getcompanybyCode/{code}','ShopFront@getCompanyName');
 //========Cart
 Route::get('/wishlist.html', 'ShopCart@wishlist')->name('wishlist');
-Route::get('/compare.html', 'ShopCart@compare')->name('compare');
+Route::get('/compare', 'ShopCart@compare')->name('compare');
 Route::get('/cart', 'ShopCart@getCart')->name('cart');
 Route::post('/cart.html', 'ShopCart@postCart')->name('postCart');
 Route::get('/checkout.html', 'ShopCart@getCheckout')->name('checkout');
