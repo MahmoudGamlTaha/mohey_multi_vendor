@@ -10,9 +10,9 @@
         <div class="col-sm-12">
           <h4 style="color: #10243f;">{{ $title }}</h4>
         </div>
-        <div class="col-sm-12 table-responsive"  style="border: 1px solid #eee; padding: 19px 5px; margin-bottom: 5px;">
+        <div class="col-sm-12 table-responsive"  style="border: 1px solid #eee; padding: 19px 5px 0 5px; margin-bottom: 5px;">
         @if(isset($cart) && sizeof($cart) > 0)
-        <table class="table table-striped">
+        <table class="table table-striped" style="margin-bottom:0;">
             <thead>
               <tr>
                 <th style="width: 15%;text-align:center;"></th>
@@ -65,26 +65,52 @@
               </tr>
               @endforeach
             </tbody>
-            <tfoot>
+            <tfoot style="background: #f9f9f9;">
               <tr>
                 @if($extensionDiscount)
                 <td colspan="100%">
-                  <div style="padding-right:20px;">
-                    <form style="background-color:#FBFBFB;border-radius:5px;" class="shipping_address" id="form-order" role="form" method="POST" action="{{ route('processCart') }}">
-                    {{ csrf_field() }}
-                     <h4 style="background-color:#F5F5F5;">كود الخصم</h4>
-                      <label>{{ trans('language.cart.coupon') }}:</label>
-                      <br/>
-                      <input type="text" id="coupon-value"  {{ ($extensionDiscount['permission'])?'':'disabled' }} placeholder="كوبون الخصم"/>
-                      <button style="color:white;background-color:#10243F;border-radius:5px;padding:5px;font-size:12pt;" {!! ($extensionDiscount['permission'])?'id="coupon-button"':'' !!}>تطبيق</button>
-                      <div class="coupon-msg  {{ Session::has('error_discount')?'text-danger':'' }}" style="text-align: left;padding-left: 10px;">{{ Session::has('error_discount')?Session::get('error_discount'):'' }}</div>
-                    </form>
+                  <div >
+                   
+
+
+                    <div class="panel-group">
+                      <div class="panel panel-default">
+                    
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse" style="color:#10243f ; font-size:18px">
+                               <i  onclick="myFunctiondiscount(this)" class="fa fa-angle-up" style="float: left "></i> كود الخصم  </a>
+                          </h4>
+                        </div>
+                              
+          
+                      <div id="collapse" class="panel-collapse collapse in" style="height: auto;text-align: center;">
+                      
+                        <form style=" width: 50%; padding: 5px 30px;" class="shipping_address" id="form-order" role="form" method="POST" action="{{ route('processCart') }}">
+                          {{ csrf_field() }}
+                           <div>
+                            <label style="float: right ; color: #b0b0b0;padding-right: 20px;">{{ trans('language.cart.coupon') }}:</label>
+                            <input type="text" class="form-control" id="coupon-value"  {{ ($extensionDiscount['permission'])?'':'disabled' }} placeholder="كوبون الخصم" style="width: 80% ; display: inline;"/>
+                           
+                            <button style="color:white;background-color:#10243F;border-radius:5px;padding:5px;font-size:12pt;" {!! ($extensionDiscount['permission'])?'id="coupon-button"':'' !!}>تطبيق</button>
+                            <div class="coupon-msg  {{ Session::has('error_discount')?'text-danger':'' }}" style="text-align: left;padding-left: 10px;">{{ Session::has('error_discount')?Session::get('error_discount'):'' }}</div>
+                          <div>
+                          </form>
+                       </div>
+          
+                  </div>
+                </div>
+
                   </div>
                   <br/>
-                  <a  style="color:#10243C;background-color:#FEFEFE;border-radius:5px;padding:5px;font-size:12pt;cursor:pointer;">تحديث السلة</a>
-                  <a href="{{ route('home') }}" style="color:#10243C;background-color:#F99520;border-radius:5px;padding:5px;font-size:12pt; border:none;cursor:pointer;"><b>متابعة التسوق</b></a>
+                  <a  style="color:#9f9f9f;background-color:#fdfdfd ; border: 1px solid #9f9f9f ;border-radius:5px;padding:5px;font-size:12pt;cursor:pointer;">تحديث السلة</a>
+                  <a href="{{ route('home') }}" 
+                  style="color:#10243C;background-color:#F99520;border-radius:5px;padding:5px;font-size:12pt; border:none;cursor:pointer;"><b>متابعة التسوق</b></a>
                  <!-- <a onClick="return confirm('Confirm ?')" href="{{route('clearCart')}}"><button class="btn" type="button" style="cursor: pointer;padding:10px 30px">{{ trans('language.cart.remove_all') }}</button></a>
 -->
+<br/><br/>
+
+
                 </td>
                 @endif
               </tr>
@@ -100,15 +126,16 @@
 
           <div class="panel-group">
             <div class="panel panel-default">
-          
-          <form id="form-order" role="form" method="POST" action="{{ route('processCart') }}" style="margin-bottom: 0">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#collapse1" style="color:#10243f ; font-size:18px">
+                     <i  onclick="myFunction(this)" class="fa fa-angle-up" style="float: left "></i> الاجمالى  </a>
+                </h4>
+              </div>
+     
+              <form id="form-order" role="form" method="POST" action="{{ route('processCart') }}" style="margin-bottom: 0">
           {{ csrf_field() }}           
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" href="#collapse1" style="color:#10243f ; font-size:18px">
-                   <i  onclick="myFunction(this)" class="fa fa-angle-up" style="float: left "></i> الاجمالى  </a>
-              </h4>
-            </div>
+         
 
             <div id="collapse1" class="panel-collapse collapse in" style="height: auto;text-align: center;">
             
@@ -116,13 +143,13 @@
                     @if ($element['value'] !=0)
             @if($element['code']=='total')
             <div style="margin-top: 12px; margin-bottom: -5px;">
-              <span style="text-align:center; color: #c1c1c1; margin: 20px;">  الاجمالى : </span>
+              <span style="text-align:center; color: #b0b0b0; margin: 20px;">  الاجمالى : </span>
               <span style="text-align:center; color: #000;">   {{$element['text'] }}</span>
             </div>
             <hr/>
             
             <div style="margin-top: -8px; margin-bottom: 15px;">
-              <span style="text-align:center; color: #c1c1c1; margin: 4px;">  {!! $element['title'] !!} :  </span>
+              <span style="text-align:center; color: #b0b0b0; margin: 4px;">  {!! $element['title'] !!} :  </span>
               <span style="text-align:center; color: #000;">   {{$element['text'] }}</span>
             </div>
             @endif
@@ -144,67 +171,66 @@
       </div>
       </div>
       <br/>
-      <div class="row" style="border-top:3px solid #F5F5F5;border-right:10px solid #C1C1C1;padding-left:30px;padding-right:30px; ">
+<hr style="margin-bottom: 0">
+      <div class="row" style="">
         <div class="row">
-          <div class="col-sm-4">
+        
+          <div class="col-sm-12" style="text-align:center;">
+            <h4 style="background: #f69620;padding: 12px 5px;color: white;">{{ trans('language.cart.lastViewd') }}</h4>
           </div>
-          <div class="col-sm-4" style="padding-bottom:-5px;text-align:center;">
-            <h4 style="border:1px solid #ccc;border-bottom:none; margin-bottom:0px;">{{ trans('language.cart.lastViewd') }}</h4>
-          </div>
-          <div class="col-sm-4">
-          </div>
+         
         </div>
-        <div class="row">
+        <div class="row" style="margin: 0px 6px;">
           @foreach($lastViewed as $key => $value)
-          <div class="col-sm-2" style="padding-top:20px;padding-bottom:20px;">
+          <div class="col-sm-2"  style="width: 16.1%; border: 1px solid #eee; margin:5px 3px 0 3px;">
             <a href="{{$value->getUrl() }}"><img src="{{asset($value->getImage())}}" alt style="width:100%;"/></a>
             <span>{{$value->getName()}}</span>
           </div>
           @endforeach
         </div>
         <div class="row">
-          <div class="col-sm-8">
-          </div>
-          <div class="col-sm-2">
-            <a href="" style="color:#000;">{{ trans('language.ViewAll') }}</a>  >
+          <div class="col-sm-12">
+            <a href="" class="btn btn-default1">{{ trans('language.ViewAll') }}  <i class="fa fa-angle-double-left"></i> </a>  
           </div>
         </div>
       </div>
-      <br/>
-      <div class="row" style="border-top:3px solid #F5F5F5;border-right:10px solid #C1C1C1;padding-left:30px;padding-right:30px;">
-        <div class="row">
-          <div class="col-sm-4">
-          </div>
-          <div class="col-sm-4" style="padding-bottom:-5px;text-align:center;">
-            <h4 style="border:1px solid #ccc;border-bottom:none; margin-bottom:0px;color:red;">{{trans('language.wishlist_products')}}</h4>
-          </div>
-          <div class="col-sm-4">
-          </div>
-        </div>
+
+  <hr style="margin-bottom: 0">
+      <div class="row" style="">
         <div class="row">
         
-        @foreach( $wishlist as $item)
-        @php
-        $count = (isset($n)?$n:0);
-        if($count >= 6)
-           break;
-        $count++;
-        $productWish = App\Models\ShopProduct::find( $item->id);
-       
-        @endphp
-          <div class="col-sm-2" style="padding-top:20px;padding-bottom:20px;">
-          <a href="{{ $productWish->getUrl() }}"><img src="{{asset($productWish->getImage())}}" alt=""></a>
+          <div class="col-sm-12" style="text-align:center;">
+            <h4 style="background: #f69620;padding: 12px 5px;color: white;">{{trans('language.wishlist_products')}}</h4>
           </div>
-          @endforeach
+         
         </div>
-        <div class="row">
-          <div class="col-sm-8">
+
+        <div class="row" style="margin: 0px 6px;">
+          @foreach( $wishlist as $item)
+          @php
+          $count = (isset($n)?$n:0);
+          if($count >= 6)
+             break;
+          $count++;
+          $productWish = App\Models\ShopProduct::find( $item->id);
+         
+          @endphp
+            <div class="col-sm-2"  style="width: 16.1%; border: 1px solid #eee; margin:5px 3px 0 3px;">
+            <a href="{{ $productWish->getUrl() }}"><img style="width:95% " src="{{asset($productWish->getImage())}}" alt=""></a>
+            </div>
+            @endforeach
           </div>
-          <div class="col-sm-2">
-            <a href="{{route('wishlist')}}" style="color:#000;">رؤية الكل</a>  >
+          <br>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <a href="{{route('wishlist')}}" class="btn btn-default1">{{ trans('language.ViewAll') }}  <i class="fa fa-angle-double-left"></i> </a>  
           </div>
         </div>
       </div>
+<br>
+
+
     </div>
 </section>
 @endsection
@@ -352,4 +378,10 @@ $('#submit-order').click(function(){
   function myFunction(x) {
     x.classList.toggle("fa-angle-down");
   }
+
+  function myFunctiondiscount(x) {
+    x.classList.toggle("fa-angle-down");
+  }
+
+  
   </script>

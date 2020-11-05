@@ -93,11 +93,13 @@
                 </div>
                 <div class="col-sm-12">
                   <br>
-                  <input type="text" class="form-control" style=" width: 60%; display: inline;" name="qty" value="1"/>
+                  <input type="number" class="form-control" style="width:50%;display:inline;" name="qty" value="1"/>
                   <button class="btn btn-default btn-content" type="submit"> <i class="fa fa-shopping-cart" style="color:white;"></i> {{trans('language.add_to_cart')}}</button>
-               </form>
-                  <button class="btn btn-default btn-content" data-toggle="modal" data-target="#paymentTermModal">إختار نظام الدفع</button>
-
+                  <button style="display:inline" class="btn btn-default btn-content" data-toggle="modal" data-target="#paymentTermModal">نظام الدفع</button>
+                </form>
+              <br>
+               
+              
                 </div>
               </div>
           </div>

@@ -183,8 +183,8 @@ class ShopOrderTotal extends Model
 
         try {
             $order           = ShopOrder::find($order_id);
-            $order->subtotal = $subtotal_value;
-            $total           = $subtotal_value + $order->discount + $order->shipping;
+            $order->subtotal += $subtotal_value;
+            $total           = $order->subtotal + $order->discount + $order->shipping;
             $balance         = $total + $order->received;
             $payment_status  = 0;
             if ($balance == $total) {
@@ -207,7 +207,7 @@ class ShopOrderTotal extends Model
             $updateTotal->save();
             //Update Subtotal
             $updateSubTotal        = self::where('order_id', $order_id)->where('code', 'subtotal')->first();
-            $updateSubTotal->value = $subtotal_value;
+            $updateSubTotal->value = $order->subtotal;
             $updateSubTotal->save();
 
             return 1;
@@ -224,6 +224,11 @@ class ShopOrderTotal extends Model
  */
     public static function insertTotal($data)
     {
+       $orderTotal = self::where("order_id", $order_id)->first();
+       if($orderTotal != null) {
+           return self::updateSubTotal($order_id, $data[0]["value"]);
+        }
+
         for ($i = 0; $i < count($data); $i++) {
             $data[$i]['created_at'] = date('Y-m-d H:i:s');
         }
