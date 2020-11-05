@@ -154,3 +154,6 @@ ALTER TABLE `admin_users` ADD `active` TINYINT NOT NULL DEFAULT '1' AFTER `selle
 ALTER TABLE `customer_payment_term` CHANGE `id` `id` BIGINT(20) NOT NULL AUTO_INCREMENT, add PRIMARY KEY (`id`);
 ALTER TABLE `shop_order` ADD `payment_term_id` INT NULL DEFAULT NULL AFTER `payment_method`;
 
+--//
+ALTER TABLE `company_work_time` ADD `update_at` DATE ;
+ALTER TABLE `company_work_time` ADD `created_at` DATE CURRENT_TIMESTAMP AFTER `update_at`;

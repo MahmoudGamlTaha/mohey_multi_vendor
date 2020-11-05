@@ -22,7 +22,7 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'member'], function ($router) {
     $router->get('/registerMerchant.html', 'RegisterController@showRegisterMerchantForm')->name('registermerchant');
     $router->post('/registerMerchant', 'RegisterController@registerMerchand')->name('newMerchant');
     $router->get('/registerMerchant', 'RegisterController@registerMerchand')->name('newMerchant');
-    $router->post('/registerMerchant', 'RegisterController@registerCustomer')->name('newCustomer');
+    $router->post('/registerCustomer', 'RegisterController@registerCustomer')->name('newCustomer');
     $router->post('/register.html', 'RegisterController@register')->name('postRegister');
     $router->redirect('/login', '/login.html', 301);
     $router->post('/logout', 'LoginController@logout')->name('logout');

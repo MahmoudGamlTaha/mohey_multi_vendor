@@ -35,8 +35,10 @@ class ShopCart extends GeneralController
         session()->forget('shippingMethod'); //destroy shippingMethod
        $prodLastView = json_decode($request->cookie('productsLastView'));
        $productIds = array();
-        foreach($prodLastView as $key => $value){
-            array_push($productIds, $key);
+        if(is_array($prodLastView)) {
+            foreach ($prodLastView as $key => $value) {
+                array_push($productIds, $key);
+            }
         }
         $lastviewed = ShopProduct::whereIn('id', $productIds)->get();
         //Shipping
