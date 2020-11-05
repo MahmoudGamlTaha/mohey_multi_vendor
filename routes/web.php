@@ -71,7 +71,7 @@ Route::get('/compare.html', 'ShopCart@compare')->name('compare');
 Route::get('/cart', 'ShopCart@getCart')->name('cart');
 Route::post('/cart.html', 'ShopCart@postCart')->name('postCart');
 Route::get('/checkout.html', 'ShopCart@getCheckout')->name('checkout');
-Route::post('/checkout.html', 'ShopCart@processCart')->name('processCart');
+Route::post('/checkout', 'ShopCart@processCart')->name('processCart');
 Route::get('/removeItem/{id}', 'ShopCart@removeItem')->name('removeItem');
 Route::get('/removeItemWishlist/{id}', 'ShopCart@removeItemWishlist')->name('removeItemWishlist');
 Route::get('/removeItemCompare/{id}', 'ShopCart@removeItemCompare')->name('removeItemCompare');

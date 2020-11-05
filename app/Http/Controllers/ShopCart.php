@@ -343,7 +343,8 @@ class ShopCart extends GeneralController
                 $subtotal = $value->price * $value->qty;
                 $total = $subtotal + $shipping;
                 if($productCount == 0){
-                    $order = clone $this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);
+                    $order = 
+											$this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);
 
                 } else {
                     $order = clone $this->createOrder($order->id, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);

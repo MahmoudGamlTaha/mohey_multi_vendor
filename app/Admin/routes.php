@@ -37,6 +37,7 @@ Route::group([
 //Shop sprint 3
     $router->resource('shop_customer', ShopCustomerController::class)->names('customerControl');
     $router->resource('shop_order', ShopOrderController::class)->names('orderControl');
+    $router->resource('shop_order_detail', ShopOrderDetailController::class)->names('orderDetailControl');
     $router->resource('shop_product', ShopProductController::class)->names('productControl');
     $router->resource('shop_category', ShopCategoryController::class)->names('categoryControl');
     $router->resource('shop_brand', ShopBrandController::class)->names('brandControl');

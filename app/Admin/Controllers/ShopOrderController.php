@@ -109,6 +109,10 @@ class ShopOrderController extends Controller
                 $grid->email('Email')->display(function ($email) {
                     return empty($email) ? 'N/A' : '<div style="max-width:150px; overflow:auto;word-wrap: break-word;">' . $email . '</div>';
                 });
+                $grid->company_id('company')->display(function ($company_id) {
+                    $company_name = Company::where('id', $company_id)->first();
+                    return empty($company_name->name) ? 'N/A' : '<div style="max-width:150px; overflow:auto;word-wrap: break-word;">' . $company_name->name . '</div>';
+                });
             }
             $grid->subtotal(trans('language.order.sub_total'))->display(function ($price) {
                 return empty($price) ? 0 : '<div style="max-width:100px; overflow:auto;word-wrap: break-word;">' . \Helper::currencyOnlyRender($price, $this->currency) . '</div>';
@@ -418,7 +422,7 @@ JS;
         //Add history
         $dataHistory = [
             'order_id' => $order_id,
-            'content'  => 'Change <b>' . $field . '</b> from <span style="color:blue">\'' . $oldValue . '\'</span> to <span style="color:red">\'' . $value . '\'</span>',
+            //'content'  => 'Change <b>' . $field . ' . $oldValue . '' . $value . '\'</span>',
             'admin_id' => Admin::user()->id,
             'add_date' => date('Y-m-d H:i:s'),
         ];

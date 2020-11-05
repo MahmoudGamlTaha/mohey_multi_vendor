@@ -192,6 +192,8 @@ return [
         'companies_manager'                 => 'ادراة الشركات',
         'units'                             => 'الوحدات',
         'access_denied_msg'                 => 'Can\'t disable this language. Please change default language before do that.',
+        'Orderdetail'                       => 'تفاصيل الطلب',
+        'Orderdetail'                       => 'Order Detail',
     ],
     'order'              => [
         'title'                 => 'Order',
@@ -233,6 +235,16 @@ return [
             'title'     => 'Email',
             'new_title' => 'NEW ORDER',
         ],
+        'product_id'            => 'رقم المنتج',
+        'product_id'            => 'product id',
+        'order_id'              => 'رقم الطلب',
+        'order_id'              => 'order_id',
+        'qty'                   => 'الكميه',
+        'qty'                   => 'qty',
+        'total_price'           => 'total price',
+        'sku'                   => 'sku',
+        'product_name'          => 'product name',
+        'company'               => 'company',
     ],
 
     'product'            => [

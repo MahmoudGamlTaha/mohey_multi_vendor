@@ -222,7 +222,7 @@ class ShopOrderTotal extends Model
  * @param  [type] $order_id [description]
  * @return [type]           [description]
  */
-    public static function insertTotal($data, $order_id)
+    public static function insertTotal($data)
     {
        $orderTotal = self::where("order_id", $order_id)->first();
        if($orderTotal != null) {
@@ -230,7 +230,6 @@ class ShopOrderTotal extends Model
         }
 
         for ($i = 0; $i < count($data); $i++) {
-            $data[$i]['order_id']   = $order_id;
             $data[$i]['created_at'] = date('Y-m-d H:i:s');
         }
         return self::insert($data);
