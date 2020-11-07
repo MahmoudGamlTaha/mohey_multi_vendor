@@ -105,9 +105,9 @@ Route::get('/brand/{name}_{id}', 'ShopFront@productToBrand')
 //End brand
 
 //Vendor
-Route::get('/vendors', 'ShopFront@getVendors')->name('vendors');
-Route::get('/vendor/{name}_{id}', 'ShopFront@productToVendor')
-    ->where(['id' => '[0-9]+'])->name('vendor');
+//Route::get('/vendors', 'ShopFront@getVendors')->name('vendors');
+//Route::get('/vendor/{name}_{id}', 'ShopFront@productToVendor')
+//    ->where(['id' => '[0-9]+'])->name('vendor');
 //End vendor
 
 //Product

@@ -304,7 +304,6 @@
                 <li><a href="{{ route('products') }}">{{ trans('language.all_product') }}</a></li>
                  <!--       <li><a href="{{ route('cart') }}">{{ trans('language.cart_title') }}</a></li>-->
                         <li><a href="{{ route('brands') }}">{{ trans('language.brands') }}</a></li>
-                    <!--    <li><a href="{{ route('vendors') }}">{{ trans('language.companies') }}</a></li>-->
 
               </ul>
             </li>

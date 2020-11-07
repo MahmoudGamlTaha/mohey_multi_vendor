@@ -157,3 +157,6 @@ ALTER TABLE `shop_order` ADD `payment_term_id` INT NULL DEFAULT NULL AFTER `paym
 --//
 ALTER TABLE `company_work_time` ADD `update_at` DATE ;
 ALTER TABLE `company_work_time` ADD `created_at` DATE CURRENT_TIMESTAMP AFTER `update_at`;
+
+--//
+DELETE FROM `admin_menu` WHERE `title` = 'Vendor' ;
