@@ -11,7 +11,7 @@
 
                 </div>
                 <div class="col-sm-6">
-                    <form action="{{route('newMerchant')}}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                    <form action="{{route('newMerchant')}}" method="post" enctype="multipart/form-data">
                         {!! csrf_field() !!}
                         <div class="col-sm-12">
 
@@ -24,8 +24,8 @@
                                    value="{{ old('data.familyname') }}" autofocus>
                             @if ($errors->has('familyname'))
                                 <span class="invalid-feedback" style="color: red" role="alert">
-                            {{ $errors->first('familyname') }}
-                          </span>
+                                    {{ $errors->first('familyname') }}
+                                </span>
                             @endif
                         </div>
                         <div class="col-sm-6 form-group">
@@ -44,8 +44,8 @@
                                    value="{{ old('data.email') }}" autofocus>
                             @if ($errors->has('email'))
                                 <span class="invalid-feedback" style="color: red" role="alert">
-                            {{ $errors->first('email') }}
-                          </span>
+                                    {{ $errors->first('email') }}
+                                </span>
                             @endif
                         </div>
                         <div class="col-sm-6 form-group">
