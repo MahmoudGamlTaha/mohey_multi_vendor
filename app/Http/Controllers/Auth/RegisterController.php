@@ -82,12 +82,17 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'reg_name'     => 'required|string|max:255',
-            'reg_email'    => 'required|string|email|max:255|unique:' . (new User)->getTable() . ',email',
-            'reg_password' => 'required|string|min:6|confirmed',
-            'reg_phone'    => 'required|regex:/^0[^0][0-9\-]{7,13}$/',
-            'reg_address1' => 'required|string|max:255',
-            'reg_address2' => 'required|string|max:255',
+            'firstname'   => 'required|string|max:255',
+            'familyname'  => 'required|string|max:255',
+            'email'       => 'required|string|email|max:255|unique:' . (new User)->getTable() . ',email',
+            'password'    => ['required','confirmed','min:6','regex:/^[a-zA-Z0-9!$#%]+$/'],
+            'mobile'      => 'required|regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new User)->getTable() . ',mobile',
+            'phone'       => 'required|regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new CompanyContact)->getTable() . ',mobile_contact',
+            'address'     => ['required', 'string', 'max:255'],
+            'gov'         => ['required','string', 'max:255'],
+            'authMobile'  => 'required|regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new CompanyContact)->getTable() . ',phone_contact,mobile_contact',
+            'authcompanyname' => ['required','string','max:255'],
+            'companycode'     => ['required','string','max:255'],
         ]
         );
     }
@@ -96,145 +101,161 @@ class RegisterController extends Controller
         $messages = [
             'email.unique'   => trans('language.errors.email'),
             'image'          => trans('language.errors.image'),
-            'password.regex' => 'password must contain at least one uppercase letter one lowercase letter',
             'required'       => trans('language.errors.required'),
             'phone.unique'   => trans('language.errors.mobile'),
-            'mobile.unique'   => trans('language.errors.mobile'),
+            'mobile.unique'  => trans('language.errors.mobile'),
+
         ];
         return Validator::make($data, [
             'email'             => 'required|string|email|max:255|unique:'. (new User)->getTable().',email',
             'firstname'         => 'required|string|max:255',
             'familyname'        => 'required|string|max:255',
-            'marketname'        => ['required','string','max:255','unique:'.(new Company)->getTable().',name'],
+            'marketname'        => ['required','string','max:255'],
             'password'          => ['required','confirmed','min:6','regex:/^[a-zA-Z0-9!$#%]+$/'],
-            'mobile'            => 'required|regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new User)->getTable() . ',mobile',
-            'phone'             => 'required|regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new CompanyContact)->getTable() . ',mobile_contact',
+            'mobile'            => 'required|regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new CompanyContact)->getTable() . ',phone_contact,mobile_contact',
+            'phone'             => 'required|regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new CompanyContact)->getTable() . ',phone_contact,mobile_contact',
             'address'           => ['required', 'string', 'max:255'],
             'sector'            => ['required', 'string', 'max:255'],
             'gov'               => ['required', 'string', 'max:255'],
             'owner'             => ['required', 'string', 'max:255'],
-            'companyname'       => ['required','string','max:255','unique:'.(new Company)->getTable().',name'],
+            'companyname'       => ['required','string','max:255'],
             'companycode'       => ['required','string','max:255','unique:'.(new Company)->getTable().',code'],
-            'bankbranch'        => ['required', 'string', 'max:255'],
-            'bank'              => ['required', 'string', 'max:255'],
-            'bankid'            => ['required', 'unique:'.(new Company)->getTable().',iban'],
-            'commercerecording' => ['image','mimes:jpeg,jpg,png,svg','required','max:10000'],
-            'taxcard'           => ['image','mimes:jpeg,jpg,png,svg','required','max:10000'],
-            'extrataxcard'      => ['image','mimes:jpeg,jpg,png,svg','required','max:10000'],
+            'bankbranch'        => ['string', 'max:255'],
+            'bank'              => ['string', 'max:255'],
+            'bankid'            => ['unique:'.(new Company)->getTable().',iban'],
+            'commercerecording' => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
+            'taxcard'           => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
+            'extrataxcard'      => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
 
         ], $messages);
     }
     public function registerMerchand(Request $request) {
 
-        $data = $request->data;
+        $data      = $request->data;
+
         $validator = $this->validatorMerchant($data);
         if($validator->fails()){
             return redirect()->back()->withInput()->withErrors($validator->errors());
         }
 
-        $userClass = config('admin.database.users_model');
+        $userClass     = config('admin.database.users_model');
         $roleUserClass = config('admin.database.role_user');
-        $userModel = new $userClass();
 
         try {
+
             DB::beginTransaction();
 
             //company shop
-            $company                  = new Company();
-            $company->name            = $data['companyname'];
-            $company->code            = $data['companycode'];
-            $company->activity_id     = 9;
-            $company->seller          = 1;
-            $company->iban            = $data['bankid'];
-            $company->active          = 1;
-            $company->general_manger  = $data['owner'];
-            $company->general_manger  = trim($request->data['firstname'] .' '.$request->data['familyname']);
-            $company->save();
+            $company = $this->createCompany($data);
 
             //company_contact
-            $companyContact                 = new CompanyContact();
-            $companyContact->company_id     = $company->id;
-            $companyContact->mobile_contact = $data['mobile'];
-            $companyContact->phone_contact  = $data['phone'];
-            $companyContact->address        = $data['address'];
-            $companyContact->bank           = $data['bank'];
-            $companyContact->bank_branch    = $data['bankbranch'];
-            $companyContact->street_number  = $data['sector'];
-            $companyContact->city           = $data['gov'];
-            $companyContact->email          = $data['email'];
-            $company->general_manger  = $data['owner'];
-            $company->general_manger  = trim($request->data['firstname'] .' '.$request->data['familyname']);
-
-            //commercerecording
-            if(isset($request->data['commercerecording'])){
-                $uploadTaxExtra = new Image($request->data['commercerecording']);
-                $uploadTaxExtra->uniqueName();
-                $uploadTaxExtra->move('company_paper_'.$company->id);
-                $companyContact->commercial_paper = $uploadTaxExtra->prepare($request->data['commercerecording']) ;
-                $companyContact->path = Storage::disk(config('admin.upload.disk'))->url('');
-            }
-
-            //tax extra
-            if(isset($request->data['extrataxcard'])){
-                $uploadTaxExtra = new Image($request->data['extrataxcard']);
-                $uploadTaxExtra->uniqueName();
-                $uploadTaxExtra->move('company_paper_'.$company->id);
-                $companyContact->tax_extra = $uploadTaxExtra->prepare($request->data['extrataxcard']) ;
-                $companyContact->path = Storage::disk(config('admin.upload.disk'))->url('');
-            }
-
-            //// tax paper
-            $uploadedTaxImage = new Image( $request->data['taxcard']) ;
-            $uploadedTaxImage->uniqueName();
-            $uploadedTaxImage->move('company_paper_'.$company->id);
-            $companyContact->tax_paper = $uploadedTaxImage->prepare($request->data['taxcard']);
-
-            $companyContact->save();
+            $companyContact = $this->companyContact($data, $company->id);
 
             //user
-            $userModel->name         = $request->data['firstname'];
-            $userModel->lname        = $request->data['familyname'];
-            $userModel->username     = $request->data['email'];
-            $userModel->seller_type  = 1;
-            $userModel->email        = $request->data['email'];
-            $userModel->password     = bcrypt($request->data['password']);
-            $userModel->mobile       = $request->data['mobile'];
-            $userModel->city         = $request->data['gov'];
-            $userModel->street       = $request->data['sector'];
-            $userModel->company_id   = $company->id;
-            $userModel->save();
+            $createUser = $this->create($data, $company->id);
 
             //user role
             $roleUser           = new $roleUserClass();
-            $roleUser->user_id  = $userModel->id;
+            $roleUser->user_id  = $createUser->id;
             $roleUser->role_id  = 1;
             $roleUser->save();
 
             //worktime
-            $companyWorktime          = new CompanyWorkTime();
-            $companyWorktime->from_am = $request->fromhour ?? 0;
-            $companyWorktime->to_pm   = $request->tohour ?? 0;
-            $companyWorktime->company_id = $company->id;
-
-            $companyWorktime->sat        = $request->str ? 1 : 0 ;
-            $companyWorktime->sun        = $request->sun ? 1 : 0;
-            $companyWorktime->mon        = $request->mon ? 1 : 0 ;
-            $companyWorktime->Tues        = $request->tue ? 1 : 0 ;
-            $companyWorktime->Wednesday   = $request->wed ? 1 : 0;
-            $companyWorktime->Thursday    = $request->thu ? 1 : 0;
-            $companyWorktime->Friday      = $request->fri ? 1 : 0;
-            $companyWorktime->save();
+            $companyWorktime = $this->companyWorktime($request, $company->id);
 
             DB::Commit();
             return view((new GeneralController)->theme . '.shop_login',
                 array(
                     'title' => trans('language.login'),
                 )
-            );
+            )->with('message', trans('language.order.success'));
         }
         catch(\Exception $e){
-            print_r($e->getMessage());
             DB::rollback();
+            print_r($e->getMessage());
+        }
+
+    }
+
+    public function registerCustomer(Request $request) {
+        //dd($request);
+        $messages = [
+            'email.unique'   => trans('language.errors.email'),
+            'image'          => trans('language.errors.image'),
+            'required'       => trans('language.errors.required'),
+            'phone.unique'   => trans('language.errors.mobile'),
+            'mobile.unique'  => trans('language.errors.mobile'),
+
+        ];
+
+        $data = $request->data;
+        $vCustomer = Validator::make($data, [
+                'firstname'   => 'required|string|max:255',
+                'familyname'  => 'required|string|max:255',
+                'email'       => 'required|string|email|max:255|unique:' . (new User)->getTable() . ',email',
+                'password'    => ['required','confirmed','min:6','regex:/^[a-zA-Z0-9!$#%]+$/'],
+                'mobile'      => 'required|regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new User)->getTable() . ',mobile',
+                'address'     => ['required', 'string', 'max:255'],
+                'gov'         => ['required','string', 'max:255'],
+                'companycode' => ['required','string','max:255'],
+            ], $messages
+        );
+        if($vCustomer->fails())
+        {
+            return redirect()->back()->withInput()->withErrors($vCustomer->errors());
+        }
+
+        $userClass = config('admin.database.users_model');
+        $roleUserClass = config('admin.database.role_user');
+        try {
+
+            DB::beginTransaction();
+
+            $checkExist =  Company::where('code',$request->data['companycode'])->first();
+            if(!$checkExist) {
+                $vCompany = validator::make($request->data,
+                    [
+                        'authMobile'        => 'regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new CompanyContact)->getTable() . ',phone_contact,mobile_contact',
+                        'companyname'       => ['required','string','max:255'],
+                        'commercerecording' => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
+                        'taxcard'           => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
+                        'extrataxcard'      => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
+                        'bankid'            => ['unique:'.(new Company)->getTable().',iban'],
+                    ], $messages);
+                if($vCompany->fails())
+                {
+                    return redirect()->back()->withInput()->withErrors($vCompany->errors());
+                }
+                //company
+                $company = $this->createCompany($data);
+                //companyWorkTime
+                $companyWorkTime = $this->companyWorktime($request, $company->id);
+
+                //companyContact
+                $companyContact = $this->companyContact($data, $company->id);
+
+                //user
+                $user = $this->create($data, $company->id);
+            }else{
+                //user
+                $user = $this->create($data, $checkExist->id);
+            }
+
+            //user role
+            $roleUser = new $roleUserClass();
+            $roleUser->user_id = $user->id;
+            $roleUser->role_id = $checkExist ? 1 : 3;
+            $roleUser->save();
+            DB::Commit();
+            return view((new GeneralController)->theme . '.shop_login',
+                array(
+                    'title' => trans('language.login'),
+                )
+            )->with('message', trans('language.order.success'));
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            print_r($e->getMessage());
         }
 
     }
@@ -245,16 +266,113 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function create(array $data, $company_id)
     {
         return User::create([
-            'name'     => $data['reg_name'],
-            'email'    => $data['reg_email'],
-            'password' => bcrypt($data['reg_password']),
-            'phone'    => $data['reg_phone'],
-            'address1' => $data['reg_address1'],
-            'address2' => $data['reg_address2'],
+            'name'       => $data['firstname'],
+            'lname'      => $data['familyname'],
+            'username'   => $data['email'],
+            'email'      => $data['email'],
+            'password'   => bcrypt($data['password']),
+            'mobile'     => $data['mobile'],
+            'company_id' => $company_id,
+            'city'       => $data['gov'],
+            'street'     => $data['address'],
+            'seller_type' => 0,
         ]);
     }
+
+    /**
+     * @param $data
+     * @return Company
+     */
+    private function createCompany($data)
+    {
+        $company                  = new Company();
+        $company->name            = $data['companyname'];
+        $company->code            = $data['companycode'];
+        $company->iban            = $data['bankid'];
+        $company->manager         = $data['owner'];
+        $company->general_manger  = trim($data['firstname'] .' '.$data['familyname']);
+        $company->active          = 1;
+        $company->seller          = 1;
+        $company->activity_id     = 9;
+
+        $company->save();
+        return $company;
+    }
+
+    /**
+     * @param $data
+     * @param $company_id
+     * @return CompanyContact
+     */
+    private function companyContact($data, $company_id)
+    {
+        $companyContact                 = new CompanyContact();
+        $companyContact->company_id     = $company_id;
+        $companyContact->mobile_contact = $data['mobile'];
+        $companyContact->phone_contact  = $data['phone'];
+        $companyContact->address        = $data['address'];
+        if(isset($data['department']) || isset($data['floorNum']))
+        {
+            $companyContact->address    = $data['address'].'-F'.$data['floorNum'].'-D'.$data['department'];
+        }
+        $companyContact->bank           = $data['bank'];
+        $companyContact->bank_branch    = $data['bankbranch'];
+        $companyContact->street_number  = $data['sector'];
+        $companyContact->city           = $data['gov'];
+        $companyContact->email          = $data['email'];
+        $companyContact->manager         = $data['owner'];
+        $companyContact->general_manager = trim($data['firstname'] .' '.$data['familyname']);
+
+        //commercerecording
+        if(isset($data['commercerecording'])){
+            $uploadTaxExtra = new Image($data['commercerecording']);
+            $uploadTaxExtra->uniqueName();
+            $uploadTaxExtra->move('company_paper_'.$company_id);
+            $companyContact->commercial_paper = $uploadTaxExtra->prepare($data['commercerecording']) ;
+            $companyContact->path = Storage::disk(config('admin.upload.disk'))->url('');
+        }
+
+        //tax extra
+        if(isset($data['extrataxcard'])){
+            $uploadTaxExtra = new Image($data['extrataxcard']);
+            $uploadTaxExtra->uniqueName();
+            $uploadTaxExtra->move('company_paper_'.$company_id);
+            $companyContact->tax_extra = $uploadTaxExtra->prepare($data['extrataxcard']) ;
+            $companyContact->path = Storage::disk(config('admin.upload.disk'))->url('');
+        }
+
+        //// tax paper
+        if(isset($data['taxcard'])){
+            $uploadedTaxImage = new Image( $data['taxcard']) ;
+            $uploadedTaxImage->uniqueName();
+            $uploadedTaxImage->move('company_paper_'.$company_id);
+            $companyContact->tax_paper = $uploadedTaxImage->prepare($data['taxcard']);
+            $companyContact->path = Storage::disk(config('admin.upload.disk'))->url('');
+        }
+        $companyContact->save();
+        return $companyContact;
+    }
+
+    private function companyWorktime($request, $company_id)
+    {
+        $companyWorktime             = new CompanyWorkTime();
+        $companyWorktime->from_am    = $request->fromhour ?? 0;
+        $companyWorktime->to_pm      = $request->tohour ?? 0;
+        $companyWorktime->company_id = $company_id;
+        $companyWorktime->sat        = $request->str ? 1 : 0 ;
+        $companyWorktime->sun        = $request->sun ? 1 : 0;
+        $companyWorktime->mon        = $request->mon ? 1 : 0 ;
+        $companyWorktime->Tues       = $request->tue ? 1 : 0 ;
+        $companyWorktime->Wednesday  = $request->wed ? 1 : 0;
+        $companyWorktime->Thursday   = $request->thu ? 1 : 0;
+        $companyWorktime->Friday     = $request->fri ? 1 : 0;
+        $companyWorktime->save();
+        return $companyWorktime;
+    }
+
+
 
 }

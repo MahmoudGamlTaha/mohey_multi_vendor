@@ -73,7 +73,8 @@ return [
     ],
     'registerMerchant' =>[
      'account' => 'حساب تاجر',
-     'last_name' => 'اسم العائلة'
+     'last_name' => 'اسم العائلة',
+     'success'   => 'تم تسجيل الحساب بنجاح',
     ],
     'contact_form'       => [
         'title'   => 'Get in touch',

@@ -596,4 +596,10 @@ return [
         'id_desc'    => 'Sort by latest product',
         'id_asc'     => 'Sort by oldest product',
     ],
+    'errors'    => [
+        'required'     => 'This field is required',
+        'email'        => 'This email is already used please enter a valid email',
+        'image'        => 'THis field must be an image',
+        'mobile'       => 'This phone number is already used',
+    ],
 ];

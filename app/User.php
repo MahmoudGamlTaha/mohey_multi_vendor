@@ -19,6 +19,7 @@ class User extends Authenticatable
    /* protected $fillable = [
         'username', 'email', 'password', 'phone',
     ];*/
+    protected $guarded = [];
     protected $appends = [
         'order_total',
         'order_amount',
