@@ -10,4 +10,5 @@ class ShopProductLike extends Model
     public $incrementing  = false;
     protected $primaryKey = null;
     public $table         = 'shop_product_like';
+    protected $guarded    = [];
 }

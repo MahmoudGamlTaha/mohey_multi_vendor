@@ -15,6 +15,7 @@
     <meta property="og:type" content="Website" />
     <meta property="og:title" content="{{ $title??'' }}" />
     <meta property="og:description" content="{{ $description??'' }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 <!--Module meta -->
   @isset ($layouts['meta'])
       @foreach ( $layouts['meta']  as $layout)
@@ -35,6 +36,7 @@
     <link href="{{ asset($theme_asset.'/css/responsive.css')}}" rel="stylesheet">
     
     <link href="{{ asset($theme_asset.'/css/newstyle.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
  
 
