@@ -213,69 +213,6 @@
                           </span>
                       @endif
                   </div>
-                          <div class="col-sm-12 form-group">
-                              <label class="control-label" for="commercerecord">السجل التجارى</label> <span style="color:red;">*</span>
-                              <input type="file" id="commercerecording" name="data[commercerecording]" required="required" accept="image/*" class="form-control{{ $errors->has('commercerecording') ? ' is-invalid' : '' }}"
-                                     name="commercerecording" value="{{ old('data.commercerecording') }}" autofocus>
-                              @if ($errors->has('commercerecording'))
-                                  <span class="invalid-feedback" style="color: red" role="alert">
-                            {{ $errors->first('commercerecording') }}
-                          </span>
-                              @endif
-                          </div>
-                          <div class="col-sm-12 form-group">
-                              <label class="control-label" for="taxcard">البطاقة الضريبية</label> <span style="color:red;">*</span>
-                              <input type="file" id="taxcard" name="data[taxcard]" required="required" accept="image/*" class="form-control{{ $errors->has('taxcard') ? ' is-invalid' : '' }}"
-                                     name="taxcard" value="{{ old('data.taxcard') }}" autofocus>
-                              @if ($errors->has('taxcard'))
-                                  <span class="invalid-feedback" style="color: red" role="alert">
-                            {{ $errors->first('taxcard') }}
-                          </span>
-                              @endif
-                          </div>
-                          <div class="col-sm-12 form-group">
-                              <label class="control-label" for="extrataxcard">بطاقة الضريبة المضافة</label> <span style="color:red;"></span>
-                              <input type="file" id="extrataxcard" name="data[extrataxcard]" accept="image/*" class="form-control{{ $errors->has('extrataxcard') ? ' is-invalid' : '' }}"
-                                     name="extrataxcard" value="{{ old('data.extrataxcard') }}" autofocus>
-                              @if ($errors->has('extrataxcard'))
-                                  <span class="invalid-feedback" style="color: red" role="alert">
-                            {{ $errors->first('extrataxcard') }}
-                          </span>
-                              @endif
-                          </div>
-
-                          <div class="col-sm-6 form-group">
-                              <label class="control-label" for="bankbranch">اسم الفرع</label> <span style="color:red;">*</span>
-                              <input type="text" id="bankbranch" name="data[bankbranch]" required="required" class="form-control{{ $errors->has('bankbranch') ? ' is-invalid' : '' }}"
-                                     value="{{ old('data.bankbranch') }}" autofocus>
-                              @if ($errors->has('bankbranch'))
-                                  <span class="invalid-feedback" style="color: red" role="alert">
-                            {{ $errors->first('bankbranch') }}
-                          </span>
-                              @endif
-                          </div>
-                          <div class="col-sm-6 form-group">
-                              <label class="control-label" for="bank">اسم البنك</label> <span style="color:red;">*</span>
-                              <input type="text" id="bank" name="data[bank]" required="required" class="form-control{{ $errors->has('bank') ? ' is-invalid' : '' }}"
-                                     value="{{ old('data.bank') }}" autofocus>
-                              @if ($errors->has('bank'))
-                                  <span class="invalid-feedback" style="color: red" role="alert">
-                            {{ $errors->first('bank') }}
-                          </span>
-                              @endif
-                          </div>
-
-
-                          <div class="col-sm-12 form-group">
-                              <label class="control-label" for="bankid">رقم الحساب البنكى</label> <span style="color:red;">*</span>
-                              <input type="text" id="bankid" name="data[bankid]" required="required" class="form-control{{ $errors->has('bankid') ? ' is-invalid' : '' }}"
-                                     value="{{ old('data.bankid') }}" autofocus>
-                              @if ($errors->has('bankid'))
-                                  <span class="invalid-feedback" style="color: red" role="alert">
-                            {{ $errors->first('bankid') }}
-                          </span>
-                              @endif
-                          </div>
                     </div>
                     </div>
                     <br/>
