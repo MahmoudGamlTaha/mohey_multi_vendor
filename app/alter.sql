@@ -159,6 +159,8 @@ ALTER TABLE `company_work_time` ADD `update_at` DATE ;
 ALTER TABLE `company_work_time` ADD `created_at` DATE CURRENT_TIMESTAMP AFTER `update_at`;
 
 --//
+DELETE FROM `admin_menu` WHERE `title` = 'Vendor' ;
+
 INSERT INTO `admin_roles` (`id`, `company_id`, `is_register_type`, `name`, `slug`, `created_at`, `updated_at`) VALUES (NULL, NULL, '0', ' contracting_manager', 'company', NULL, NULL);
 ALTER TABLE `company_contact` CHANGE `general_manager` `contracting_manager` VARCHAR(250) CHARACTER SET utf32 COLLATE utf32_general_ci NULL DEFAULT NULL;
 ALTER TABLE `companies` CHANGE `general_manger` `contracting_manger` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;

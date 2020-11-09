@@ -41,7 +41,7 @@ Route::group([
     $router->resource('shop_product', ShopProductController::class)->names('productControl');
     $router->resource('shop_category', ShopCategoryController::class)->names('categoryControl');
     $router->resource('shop_brand', ShopBrandController::class)->names('brandControl');
-    $router->resource('shop_vendor', ShopVendorController::class)->names('vendorControl');
+    //$router->resource('shop_vendor', ShopVendorController::class)->names('vendorControl');
     $router->resource('shop_order_status', ShopOrderStatusController::class)->names('orderStatusControl');
     $router->resource('shop_payment_status', ShopPaymentStatusController::class)->names('paymentStatusControl');
     $router->resource('shop_shipping_status', ShopShipingStatusController::class)->names('shippingStatusControl');
