@@ -146,29 +146,25 @@ class RegisterController extends Controller
             DB::beginTransaction();
 
             //company shop
-            $company = $this->createCompany($data);
+            $company = $this->createCompany($data, 1);
 
             //company_contact
             $companyContact = $this->companyContact($data, $company->id);
 
             //user
-            $createUser = $this->create($data, $company->id);
+            $createUser = $this->create($data, $company->id, 1);
 
             //user role
             $roleUser           = new $roleUserClass();
             $roleUser->user_id  = $createUser->id;
-            $roleUser->role_id  = 1;
+            $roleUser->role_id  = 6;
             $roleUser->save();
 
             //worktime
             $companyWorktime = $this->companyWorktime($request, $company->id);
 
             DB::Commit();
-            return view((new GeneralController)->theme . '.shop_login',
-                array(
-                    'title' => trans('language.login'),
-                )
-            )->with('message', trans('language.order.success'));
+            return redirect('login')->with('message', trans('language.registerMerchant.success'));
         }
         catch(\Exception $e){
             DB::rollback();
@@ -217,17 +213,14 @@ class RegisterController extends Controller
                     [
                         'authMobile'        => 'regex:/^0[^0][0-9\-]{7,13}$/|unique:' . (new CompanyContact)->getTable() . ',phone_contact,mobile_contact',
                         'companyname'       => ['required','string','max:255'],
-                        'commercerecording' => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
-                        'taxcard'           => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
-                        'extrataxcard'      => ['image','mimes:jpeg,jpg,png,svg','max:10000'],
-                        'bankid'            => ['unique:'.(new Company)->getTable().',iban'],
+                        'owner'             => ['required','string','max:255'],
                     ], $messages);
                 if($vCompany->fails())
                 {
                     return redirect()->back()->withInput()->withErrors($vCompany->errors());
                 }
                 //company
-                $company = $this->createCompany($data);
+                $company = $this->createCompany($data, 0);
                 //companyWorkTime
                 $companyWorkTime = $this->companyWorktime($request, $company->id);
 
@@ -235,23 +228,19 @@ class RegisterController extends Controller
                 $companyContact = $this->companyContact($data, $company->id);
 
                 //user
-                $user = $this->create($data, $company->id);
+                $user = $this->create($data, $company->id, 0);
             }else{
                 //user
-                $user = $this->create($data, $checkExist->id);
+                $user = $this->create($data, $checkExist->id, 0);
             }
 
             //user role
             $roleUser = new $roleUserClass();
             $roleUser->user_id = $user->id;
-            $roleUser->role_id = $checkExist ? 1 : 3;
+            $roleUser->role_id = 7 ;
             $roleUser->save();
             DB::Commit();
-            return view((new GeneralController)->theme . '.shop_login',
-                array(
-                    'title' => trans('language.login'),
-                )
-            )->with('message', trans('language.order.success'));
+            return redirect('login')->with('message', trans('language.registerMerchant.success'));
         }
         catch(\Exception $e){
             DB::rollback();
@@ -261,12 +250,12 @@ class RegisterController extends Controller
     }
 
     /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
+     * @param array $data
+     * @param $company_id
+     * @param $seller_type
+     * @return mixed
      */
-    protected function create(array $data, $company_id)
+    protected function create(array $data, $company_id, $seller_type)
     {
         return User::create([
             'name'       => $data['firstname'],
@@ -278,25 +267,28 @@ class RegisterController extends Controller
             'company_id' => $company_id,
             'city'       => $data['gov'],
             'street'     => $data['address'],
-            'seller_type' => 0,
+            'seller_type' => $seller_type,
+            'Cmanager_mobile' => $data['authMobile'] ?? null,
         ]);
     }
 
     /**
+     * create new company
      * @param $data
+     * @param $seller_type
      * @return Company
      */
-    private function createCompany($data)
+    private function createCompany($data, $seller_type)
     {
         $company                  = new Company();
         $company->name            = $data['companyname'];
         $company->code            = $data['companycode'];
-        $company->iban            = $data['bankid'];
-        $company->manager         = $data['owner'];
-        $company->general_manger  = trim($data['firstname'] .' '.$data['familyname']);
+        $company->iban            = $data['bankid'] ?? null;
+        $company->seller          = $seller_type;
         $company->active          = 1;
-        $company->seller          = 1;
         $company->activity_id     = 9;
+        $company->manager         = trim($data['firstname'] .' '.$data['familyname']);
+        $company->contracting_manager = $data['owner'] ?? null ;
 
         $company->save();
         return $company;
@@ -318,13 +310,13 @@ class RegisterController extends Controller
         {
             $companyContact->address    = $data['address'].'-F'.$data['floorNum'].'-D'.$data['department'];
         }
-        $companyContact->bank           = $data['bank'];
-        $companyContact->bank_branch    = $data['bankbranch'];
+        $companyContact->bank           = $data['bank'] ?? null;
+        $companyContact->bank_branch    = $data['bankbranch'] ?? null;
         $companyContact->street_number  = $data['sector'];
         $companyContact->city           = $data['gov'];
         $companyContact->email          = $data['email'];
-        $companyContact->manager         = $data['owner'];
-        $companyContact->general_manager = trim($data['firstname'] .' '.$data['familyname']);
+        $companyContact->manager         = trim($data['firstname'] .' '.$data['familyname']);
+        $companyContact->contracting_manager = $data['owner'] ?? null;
 
         //commercerecording
         if(isset($data['commercerecording'])){
