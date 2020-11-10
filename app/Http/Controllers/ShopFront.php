@@ -11,6 +11,7 @@ use App\Models\ShopOrderDetail;
 use App\Models\ShopOrderStatus;
 use App\Models\ShopPage;
 use App\Models\ShopProduct;
+use App\Models\ShopProductLike;
 use App\User;
 use Cart;
 use DB;
@@ -183,7 +184,7 @@ class ShopFront extends GeneralController
  * @param  [type] $id   [description]
  * @return [type]       [description]
  */
-    public function productDetail($name, $id)
+    public function productDetail( Request $request,$name, $id)
     {
         $product = ShopProduct::find($id);
         if ($product && $product->status && ($this->configs['product_display_out_of_stock'] || $product->stock > 0)) {
@@ -211,6 +212,15 @@ class ShopFront extends GeneralController
             $sortBy    = request('sortBy') ?? null;
             $sortOrder = request('sortOrder') ?? 'asc';
 
+            //Rate
+            $productLike = ShopProductLike::select(DB::raw("IFNULL(sum(rate),0) as rate, count(users_id) as user_count"))->where('product_id', $id)->first();
+            $userCount = $productLike['user_count'];
+            $rateSum   = $productLike['rate'];
+            if($rateSum > 0) {
+                $percent = round(5 * $rateSum / ($userCount * 5), 1);
+                $ratePercentage = round(100 * $rateSum / ($userCount * 5), 1);
+            }
+            //$rate = $this->productRate($request, $product);
             //Check product available
             return view($this->theme . '.shop_product_detail',
                 array(
@@ -222,13 +232,39 @@ class ShopFront extends GeneralController
                     'productsToCategory' => (new ShopCategory)->getProductsToCategory($id = $product->category_id, $limit = $this->configs['product_relation'], $opt = 'random', $sortBy, $sortOrder),
                     'og_image'           => url($product->getImage()),
                     'layout_page'        => 'product_detail',
-                    'paymentTerms'       => $paymentTerms
+                    'paymentTerms'       => $paymentTerms,
+                    'userCount'          => $userCount,
+                    'rateSum'            => $rateSum,
+                    'ratePercentage'     => $ratePercentage ?? 'لا يوجد تقييم',
+                    'percent'            => $percent?? 'لا يوجد تقييم',
+                    'productLike'        => $productLike,
                 )
             );
         } else {
             return $this->itemNotFound();
         }
 
+    }
+    public function productRate(Request $request)
+    {
+        if(Request('uID') == null)
+        {
+            return redirect('login')->with('message', 'برجاء تسجيل الدخول');
+        }
+            $insertRate = ShopProductLike::where(['users_id' => Request('uID'), 'product_id' => Request('productID')])->update([
+                'product_id'=> Request('productID'),
+                'company_id'=> Request('companyID'),
+                'users_id'  => Request('uID'),
+                'rate'      => Request('ratedIndex')+1,
+            ]);
+            if(!$insertRate){
+                $insertRate = ShopProductLike::create([
+                    'product_id'=> Request('productID'),
+                    'company_id'=> Request('companyID'),
+                    'users_id'  => Request('uID'),
+                    'rate'      => Request('ratedIndex')+1,
+                    ]);
+            }
     }
 /**
  * [brands description]

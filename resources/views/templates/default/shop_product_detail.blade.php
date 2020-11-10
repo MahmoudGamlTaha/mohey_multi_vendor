@@ -45,12 +45,10 @@
                   <span><b>{{$title}}</b></span>
                 </div>
                 <div class="col-sm-6">
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star-o"></span>
-                  <span class="fa fa-star-o"></span>
-                  هذا المنتج تقييمه 60%
+                    @for ($i = 0; $i < 5; ++$i)
+                        <span style="list-style-type:none;display:inline-block;text-shadow: 0 0 1.5px #666666;font-size:15px;color:{{$percent<= $i?' wheat':' #FFBC41'}}" class="fa fa-star"></span>
+                    @endfor
+                    هذا المنتج تقييمه {{$ratePercentage}}%
                 </div>
                 <div class="col-sm-6">
                     <span>{{ trans('language.product.quantity') }} :</span>
@@ -193,13 +191,14 @@
                   <br/>
                   <span><p>100% من المستخدمين ينصحون بهذا المنتج لصديق.</p></span>
                   <h2>قيم هذا المنتج:</h2>
-                  <span class="fa fa-star-o"></span>
-                  <span class="fa fa-star-o"></span>
-                  <span class="fa fa-star-o"></span>
-                  <span class="fa fa-star-o"></span>
-                  <span class="fa fa-star-o"></span>
-                  <br/>
-                  <br/>
+                    <div align="center" style="color:white;">
+                        <i class="fa fa-star fstar fa-2x" data-index="0"></i>
+                        <i class="fa fa-star fstar fa-2x" data-index="1"></i>
+                        <i class="fa fa-star fstar fa-2x" data-index="2"></i>
+                        <i class="fa fa-star fstar fa-2x" data-index="3"></i>
+                        <i class="fa fa-star fstar fa-2x" data-index="4"></i>
+                        <br><br>
+                    </div>
                 </div>
                 <div class="col-sm-4">
                   <br/>
@@ -251,29 +250,27 @@
               </div>
                 <div class="col-sm-4" >
                   <div class="col-sm-12" style="text-align:center;" >
-                    <div>
+                    <div style="width: 200px;">
                       <br/>
                       <br/>
-                        <span style="font-size:20pt;font-style:bold;border: 1px solid #bbb;border-radius:50px;width:100px;height:100px;padding:30px;">4.7</span>
+                        <span style="font-size:20pt;font-style:bold;border: 1px solid #bbb;border-radius:50px;width:100px;height:100px;padding:30px;">{{$percent}}</span>
                         <br/>
                         <br/>
                     </div>
                     <br/>
-                    <div>
-                      <span class="fa fa-star-o"></span>
-                      <span class="fa fa-star-o"></span>
-                      <span class="fa fa-star-o"></span>
-                      <span class="fa fa-star-o"></span>
-                      <span class="fa fa-star-o"></span>
-                      <br/>
-                      4.7 من 5
+                      <div>
+                          @for ($i = 0; $i < 5; ++$i)
+                              <span style="list-style-type:none;display:inline-block;color: wheat;text-shadow: 0 0 1.5px #666666;font-size:15px;color:{{$percent<= $i?' wheat':' #FFBC41'}}" class="fa fa-star"></span>
+                          @endfor
+                          <br/>
+                          {{$percent}} من 5
 
-                    </div>
-                    <div>
-                        25 تقييم
-                        <br/>
-                        <br/>
-                        <br/>
+                      </div>
+                      <div>
+                          {{$userCount}} تقييم
+                          <br/>
+                          <br/>
+                          <br/>
                     </div>
                   </div>
                 </div>
@@ -346,6 +343,74 @@
 
 @endpush
 @push('scripts')
+    <script>
+        var ratedIndex = -1, uID = {{Auth::id() ?? 0}};
+        resetStarColors();
+        $(document).ready(function () {
+            resetStarColors();
+
+            if (localStorage.getItem('ratedIndex') != null) {
+                setStars(parseInt(localStorage.getItem('ratedIndex')));
+                uID = localStorage.getItem('uID');
+            }
+
+            $('.fstar').on('click', function () {
+                @if(Auth::id() != null)
+                ratedIndex = parseInt($(this).data('index'));
+                localStorage.setItem('ratedIndex', ratedIndex);
+                saveToTheDB();
+                @else
+                window.location.replace("{{ route('login') }}");
+                @endif
+            });
+
+            $('.fstar').mouseover(function () {
+                resetStarColors();
+                var currentIndex = parseInt($(this).data('index'));
+                setStars(currentIndex);
+            });
+
+            $('.fstar').mouseleave(function () {
+                resetStarColors();
+
+                if (ratedIndex != -1)
+                    setStars(ratedIndex);
+            });
+        });
+
+        function saveToTheDB() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('productRate') }}",
+                method: "POST",
+                dataType: 'json',
+                data: {
+                    save: 1,
+                    _token: '{{csrf_token()}}',
+                    uID: "{{Auth::id() ?? 0}}",
+                    ratedIndex: ratedIndex,
+                    productID: " {{ $product->id }} ",
+                    companyID: "{{ $product->company()->first()->id }}",
+                }, success: function (r) {
+                    uID = r.id;
+                    localStorage.setItem('uID', uID);
+                }
+            });
+        }
+
+        function setStars(max) {
+            for (var i=0; i <= max; i++)
+                $('.fstar:eq('+i+')').css('color', '#FFBC41');
+        }
+
+        function resetStarColors() {
+            $('.fstar').css({'color': 'wheat'});
+        }
+    </script>
 <script>
     function closeModal(){ 
       $('#paymentTermModal').modal('toggle');
