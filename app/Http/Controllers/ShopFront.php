@@ -217,10 +217,9 @@ class ShopFront extends GeneralController
             $userCount = $productLike['user_count'];
             $rateSum   = $productLike['rate'];
             if($rateSum > 0) {
-                $percent = round(5 * $rateSum / ($userCount * 5), 1);
+                $percent = round( $rateSum / ($userCount ), 1);
                 $ratePercentage = round(100 * $rateSum / ($userCount * 5), 1);
             }
-            //$rate = $this->productRate($request, $product);
             //Check product available
             return view($this->theme . '.shop_product_detail',
                 array(
@@ -237,7 +236,6 @@ class ShopFront extends GeneralController
                     'rateSum'            => $rateSum,
                     'ratePercentage'     => $ratePercentage ?? 'لا يوجد تقييم',
                     'percent'            => $percent?? 'لا يوجد تقييم',
-                    'productLike'        => $productLike,
                 )
             );
         } else {
@@ -247,24 +245,43 @@ class ShopFront extends GeneralController
     }
     public function productRate(Request $request)
     {
-        if(Request('uID') == null)
+        if(!is_numeric($request->ratedIndex) || !is_numeric($request->productID) || !is_numeric($request->companyID))
+        {
+            return redirect('login')->with('message', 'error');
+        }
+        if(Request('uID') == 0)
         {
             return redirect('login')->with('message', 'برجاء تسجيل الدخول');
         }
             $insertRate = ShopProductLike::where(['users_id' => Request('uID'), 'product_id' => Request('productID')])->update([
                 'product_id'=> Request('productID'),
                 'company_id'=> Request('companyID'),
-                'users_id'  => Request('uID'),
+                'users_id'  => Auth::user()->id,
                 'rate'      => Request('ratedIndex')+1,
             ]);
             if(!$insertRate){
                 $insertRate = ShopProductLike::create([
                     'product_id'=> Request('productID'),
                     'company_id'=> Request('companyID'),
-                    'users_id'  => Request('uID'),
+                    'users_id'  => Auth::user()->id,
                     'rate'      => Request('ratedIndex')+1,
                     ]);
             }
+        //Rate
+        $productLike = ShopProductLike::select(DB::raw("IFNULL(sum(rate),0) as rate, count(users_id) as user_count"))->where('product_id', Request('productID'))->first();
+        $userCount = $productLike['user_count'];
+        $rateSum   = $productLike['rate'];
+        if($rateSum > 0) {
+            $percent = round( $rateSum / $userCount, 1);
+            $ratePercentage = round(100 * $rateSum / ($userCount * 5), 1);
+        }
+
+        return response()->json([
+            'userCount'          => $userCount,
+            'rateSum'            => $rateSum,
+            'ratePercentage'     => $ratePercentage ?? 'لا يوجد تقييم',
+            'percent'            => $percent?? 'لا يوجد تقييم',
+        ]);
     }
 /**
  * [brands description]

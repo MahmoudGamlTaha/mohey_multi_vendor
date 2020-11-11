@@ -46,9 +46,9 @@
                 </div>
                 <div class="col-sm-6">
                     @for ($i = 0; $i < 5; ++$i)
-                        <span style="list-style-type:none;display:inline-block;text-shadow: 0 0 1.5px #666666;font-size:15px;color:{{$percent<= $i?' wheat':' #FFBC41'}}" class="fa fa-star"></span>
+                        <span style="color:{{$percent<= $i?' wheat':' #FFBC41'}}" data-index="{{$i}}" class="fa fa-star rateStar-{{$i}}"></span>
                     @endfor
-                    هذا المنتج تقييمه {{$ratePercentage}}%
+                        هذا المنتج تقييمه<p class="ratePercentage">{{$ratePercentage.'%'}}</p>
                 </div>
                 <div class="col-sm-6">
                     <span>{{ trans('language.product.quantity') }} :</span>
@@ -189,8 +189,8 @@
               <div id="menu3" class="tab-pane fade">
                 <div class="col-sm-4">
                   <br/>
-                  <span><p>100% من المستخدمين ينصحون بهذا المنتج لصديق.</p></span>
-                  <h2>قيم هذا المنتج:</h2>
+                  <span><p class="ratePercentage2">{{$ratePercentage.'%'}} من المستخدمين ينصحون بهذا المنتج لصديق.</p></span>
+                  <h3>قيم هذا المنتج:</h3>
                     <div align="center" style="color:white;">
                         <i class="fa fa-star fstar fa-2x" data-index="0"></i>
                         <i class="fa fa-star fstar fa-2x" data-index="1"></i>
@@ -202,72 +202,42 @@
                 </div>
                 <div class="col-sm-4">
                   <br/>
-                  <div class="row">
-                    <div class="col-sm-2">
-                      <span>(20)</span>
-                    </div>
-                    <div class="col-sm-8">
-                      <div class="progress">
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-                           aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                           </div>
-                         </div>
-                      </div>
-                      <div class="col-sm">
-                        <span>5نجوم</span>
-                      </div>
-                  </div>
                     <div class="row">
-                      <div class="col-sm-2">
-                        <span>(20)</span>
+                      <div class="col-sm">
+                        <span class="ratePercentage">({{$ratePercentage.'%'}})</span>
                       </div>
                       <div class="col-sm-8">
                       <div class="progress">
                           <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-                           aria-valuemin="0" aria-valuemax="100" style="width:70%">
+                           aria-valuemin="0" aria-valuemax="100" style="width:{{$ratePercentage}}%">
                            </div>
                      </div>
                     </div>
                     <div class="col-sm">
-                      <span>5نجوم</span>
+                      <span class="starCount"> {{$percent}} نجوم </span>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-2">
-                      <span>(20)</span>
-                    </div>
-                    <div class="col-sm-8">
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-                         aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                         </div>
-                   </div>
-                  </div>
-                  <div class="col-sm">
-                    <span>5نجوم</span>
-                  </div>
-                </div>
               </div>
                 <div class="col-sm-4" >
                   <div class="col-sm-12" style="text-align:center;" >
                     <div style="width: 200px;">
                       <br/>
                       <br/>
-                        <span style="font-size:20pt;font-style:bold;border: 1px solid #bbb;border-radius:50px;width:100px;height:100px;padding:30px;">{{$percent}}</span>
+                        <span class="percent" style="font-size:20pt;font-style:bold;border: 1px solid #bbb;border-radius:50px;width:100px;height:100px;padding:30px;">{{$percent}}</span>
                         <br/>
                         <br/>
                     </div>
                     <br/>
                       <div>
                           @for ($i = 0; $i < 5; ++$i)
-                              <span style="list-style-type:none;display:inline-block;color: wheat;text-shadow: 0 0 1.5px #666666;font-size:15px;color:{{$percent<= $i?' wheat':' #FFBC41'}}" class="fa fa-star"></span>
+                              <span style="color:{{$percent<= $i?' wheat':' #FFBC41'}}" data-index="{{$i}}" class="fa fa-star rateStar-{{$i}}"></span>
                           @endfor
                           <br/>
-                          {{$percent}} من 5
+                          <div style="display:inline" class="percent">{{$percent}}</div> من 5
 
                       </div>
                       <div>
-                          {{$userCount}} تقييم
+                          <div style="display:inline" class="userCount">{{$userCount}}</div> تقييم
                           <br/>
                           <br/>
                           <br/>
@@ -345,7 +315,7 @@
 @push('scripts')
     <script>
         var ratedIndex = -1, uID = {{Auth::id() ?? 0}};
-        resetStarColors();
+
         $(document).ready(function () {
             resetStarColors();
 
@@ -389,19 +359,30 @@
                 method: "POST",
                 dataType: 'json',
                 data: {
-                    save: 1,
                     _token: '{{csrf_token()}}',
                     uID: "{{Auth::id() ?? 0}}",
                     ratedIndex: ratedIndex,
-                    productID: " {{ $product->id }} ",
-                    companyID: "{{ $product->company()->first()->id }}",
-                }, success: function (r) {
-                    uID = r.id;
+                    productID:  {{ $product->id }} ,
+                    companyID: {{ $product->company()->first()->id }},
+                }, success: function (result) {
+                    uID = result.id;
                     localStorage.setItem('uID', uID);
-                }
+                    $(".ratePercentage").html(result.ratePercentage+'%');
+                    $(".ratePercentage2").html(result.ratePercentage+'%'+' من المستخدمين ينصحون بهذا المنتج لصديق.');
+                    $(".percent").html(result.percent);
+                    $(".userCount").html(result.userCount);
+                    $(".progress-bar").css('width', result.ratePercentage+'%');
+                    $(".starCount").html(result.percent +'نجوم');
+                    for (var i=0; i <= 5; i++){
+                        if($(".rateStar-"+i).data('index') < result.percent){
+                            $(".rateStar-"+i).css('color', '#FFBC41');
+                        }else{
+                            $(".rateStar-"+i).css('color', 'wheat');
+                        }
+                    }
+                },
             });
         }
-
         function setStars(max) {
             for (var i=0; i <= max; i++)
                 $('.fstar:eq('+i+')').css('color', '#FFBC41');
