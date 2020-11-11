@@ -249,6 +249,9 @@ class ShopFront extends GeneralController
         {
             return redirect('login')->with('message', 'error');
         }
+        if ( !in_array($request->ratedIndex, range(0,4)) ) {
+            return redirect('login')->with('message', 'error');
+        }
         if(Request('uID') == 0)
         {
             return redirect('login')->with('message', 'برجاء تسجيل الدخول');
