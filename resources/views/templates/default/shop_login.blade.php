@@ -17,7 +17,7 @@
                 <br/>
                 <br/>
               </div>
-              <div class="col-sm-5">
+              <div class="col-sm-5" style="background: #f9f8f8;padding: 15px; border-radius: 10px;">
                 <form action="{{ route('postLogin')}}" method="post">
                   @csrf
                   <h4>تسجيل الدخول</h4>
@@ -40,4 +40,6 @@
             </div>
         </div>
     </section><!--/form-->
+
+    <br><br><br>
 @endsection

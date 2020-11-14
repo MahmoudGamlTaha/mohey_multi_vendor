@@ -5,17 +5,20 @@
     <section id="form-login"><!--form-->
         <div class="container">
             <div class="row">
-              <div class="col-sm-1">
-              </div>
-              <div class="col-sm-2">
+             
+              <div class="col-sm-3">
 
               </div>
-              <div class="col-sm-6">
-                <form action="{{route('newMerchant')}}" method="post" enctype="multipart/form-data">
+              <div >
+                <form class="col-sm-6" action="{{route('newMerchant')}}" method="post" enctype="multipart/form-data">
                 {!! csrf_field() !!}
                   <div class="col-sm-12">
+                    
+                    <div  style="text-align:center;">
+                      <h4 style="background: #f69620;padding: 12px 5px;color: white;">{{ trans('language.registerMerchant.account') }}</h4>
+                    </div>
 
-                    <h3 style="text-align: center;color:#F68C31;">{{ trans('language.registerMerchant.account') }}</h3>
+                    {{-- <h3 style="text-align: center;color:#F68C31;">{{ trans('language.registerMerchant.account') }}</h3> --}}
                     <br/>
                   </div>
                   <div class="col-sm-6 form-group">
@@ -66,7 +69,7 @@
                   </div>
                   <div class="col-sm-12 form-group">
                       <label class="control-label" for="commercerecord">السجل التجارى</label> <span style="color:red;">*</span>
-                      <input type="file" id="commercerecordimg" name="data[commercerecordimg]" required="required" class="form-control" accept="image/*">
+                      <input type="file" id="commercerecordimg" placeholder="jj" name="data[commercerecordimg]" required="required" class="form-control" accept="image/*">
                   </div>
                   <div class="col-sm-12 form-group">
                       <label class="control-label" for="taxcard">البطاقة الضريبية</label> <span style="color:red;">*</span>
@@ -97,8 +100,7 @@
                   </div>
 
                   <div class="col-sm-12 form-group">
-                    <br/>
-                    <br/>
+                  
                   </div>
                   <div class="col-sm-6 form-group">
                       <label class="control-label" for="companyname">اسم الشركة</label> <span style="color:red;">*</span>
@@ -108,64 +110,78 @@
                       <label class="control-label" for="companycode">كود الشركة</label> <span style="color:red;">*</span>
                       <input type="text" id="companycode" name="data[companycode]" required="required" class="form-control" >
                   </div>
-                  <div class="col-sm-12 form-group">
-                    <h3>مواعيد العمل</h3>
-                    <span>خلال فترة الاجازة، ستكون منتجاتك غير متصلة بالانترنت، لكن لا يزال امكانك معالجة الطلبات المعلقةاو عرض بيانات حسابك. تشمل فترة العطلةتواريخ البدء والانتهاء</span>
+                  <div class="col-sm-12 form-group" style="text-align: center">
+                    <h4 style="text-align: right ; font-weight: bold"  >مواعيد العمل</h4>
+                    <p >خلال فترة الاجازة، ستكون منتجاتك غير متصلة بالانترنت، لكن لا يزال امكانك معالجة الطلبات المعلقةاو عرض بيانات حسابك. تشمل فترة العطلة تواريخ البدء والانتهاء</p>
                   </div>
-                  <div class="col-sm-7 form-group" style="text-align:center;padding:0px;">
-                    <h3>مواعيد ساعات العمل<span style="color:red;">*</span></h3>
+                  <div class="col-sm-5 form-group" style="text-align:center;padding:0px;">
+                    <h4> مواعيد ساعات العمل <span style="color:red;"> * </span></h4>
                     <label>من</label> <input type="text" id="fromhour" name="fromhour" style="width:50px;"/> <label>صباحا</label>
                     &nbsp;&nbsp;<label>إلى</label> <input type="text" id="tohour" name="tohour" style="width:50px;"/> <label>مساءا</label>
                   </div>
-                  <div class="col-sm-5 form-group" style="padding:0px;">
-                    <h3 style="text-align:center;">أختر ايام العطلة<span style="color:red;">*</span></h3>
-                    <label style="text-align:center;width:100%;">أيام الاسبوع</label>
+                  <div class="col-sm-7 form-group" style="padding:0px;">
+                    <h4 style="text-align:center;  width: 80%;"> أختر ايام العطلة <span style="color:red;"> * </span></h4>
+                    <label style="text-align:center;width:70%;border: 1px solid #ccc;padding: 5px; margin: 5px 15px;">أيام الاسبوع</label>
+                    
+                    <div class="col-md-12">
 
-                    <div class="col-sm-6 form-group"style="padding:0px;">
-                      <input type="checkbox" id="day1" name="day1"/>
-                      <label for="day1">السبت</label>
+                      <div class="col-sm-6 " style="padding:0px;">
+                        <input type="checkbox" id="day5" name="day5"/>
+                      <label for="day5"> الاربعاء</label>
+                      </div>
+
+                      <div class="col-sm-6" style="padding:0px;">
+                        <input type="checkbox" id="day1" name="day1"/>
+                        <label for="day1">  السبت </label>
+                      </div>
+
+                      <div class="col-sm-6 " style="padding:0px;">
+                        <input type="checkbox" id="day6" name="day6"/>
+                        <label for="day6">  الخميس </label>
+                      </div>
+
+                      <div class="col-sm-6 " style="padding:0px;">
+                        <input type="checkbox" id="day2" name="day2"/>
+                        <label for="day2"> الاحد</label>
+                      </div>
+
+                      <div class="col-sm-6" style="padding:0px;">
+                        <input type="checkbox" id="day2" name="day2"/>
+                        <label for="day2">  الجمعة </label>
+                      </div>
+
+                      <div class="col-sm-6" style="padding:0px;">
+                        <input type="checkbox" id="day3" name="day3"/>
+                        <label for="day3">الاثنين</label>
+                      </div>
+
+                      <div class="col-sm-6" style="padding:0px;">
+                        <input type="checkbox" id="vac" name="vac"/>
+                        <label for="vac">أيام الاجازات الرسمية</label>
+                      </div>
+
+                      <div class="col-sm-6 " style="padding:0px;">
+                        <input type="checkbox" id="day4" name="day4"/>
+                        <label for="day4">الثلاثاء</label>
+                      </div>
+
+
                     </div>
-                    <div class="col-sm-6 form-group" style="padding:0px;">
-                      <input type="checkbox" id="day2" name="day2"/>
-                      <label for="day2">الاحد</label>
-                    </div>
-                    <div class="col-sm-6 form-group"style="padding:0px;">
-                      <input type="checkbox" id="day3" name="day3"/>
-                      <label for="day3">الاثنين</label>
-                    </div>
-                    <div class="col-sm-6 form-group"style="padding:0px;">
-                      <input type="checkbox" id="day4" name="day4"/>
-                      <label for="day2">الثلاثاء</label>
-                    </div>
-                    <div class="col-sm-6 form-group"style="padding:0px;">
-                      <input type="checkbox" id="day5" name="day5"/>
-                      <label for="day5">الاربعاء</label>
-                    </div>
-                    <div class="col-sm-6 form-group"style="padding:0px;">
-                      <input type="checkbox" id="day6" name="day6"/>
-                      <label for="day6">الخميس</label>
-                    </div>
-                    <div class="col-sm-6 form-group"style="padding:0px;">
-                      <input type="checkbox" id="day7" name="day7"/>
-                      <label for="day7">الجمعة</label>
-                    </div>
-                    <div class="col-sm-6 form-group"style="padding:0px;">
-                      <input type="checkbox" id="vac" name="vac"/>
-                      <label for="vac">أيام الاجازات الرسمية</label>
-                    </div>
+
                   </div>
+                    
 
-                  <div class="col-sm-12 form-group">
-                    <br/>
-                    <br/>
-                  </div>
+             
 
-                      <button class="btn form-control btn-yellow-white">إنشاء حساب</button>
-
-                      <br/>
-                      <br/>
+                  <button class="btn form-control btn-yellow-white">إنشاء حساب</button>
+                  <br><br>
+                   
                 </form>
               </div>
+              <div class="col-sm-3">
+
+              </div>
+
             </div>
         </div>
     </section><!--/form-->

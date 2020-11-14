@@ -14,9 +14,9 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 @if(isset($products))
 <div class="row">
     <div class="col-md-2"></div>
-    <div class="col-md-8" style="height: 80px ; padding: 15px; border: 1px solid #dad6d6;">
+    <div class="col-md-8" style="height: 80px ; padding: 15px; ">
         <div class="carousel slide" id="myCarouse2" >
-            <div class="carousel-inner" style="height: 80px ;" >
+            <div class="carousel-inner"  style="height: 100%;border: 1px solid #dad6d6 ;padding: 0;margin: 0 30px 0 85px;width: 93%;" >
                 @php
                 $index = 0;
                 @endphp

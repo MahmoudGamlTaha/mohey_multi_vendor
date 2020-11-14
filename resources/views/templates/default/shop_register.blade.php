@@ -14,7 +14,6 @@
                 <form action="post" >
                   {!! csrf_field() !!}
                   <div class="col-sm-12">
-
                     <h3 style="text-align: center;color:#F68C31;">{{ trans('language.registerMerchant.account') }}</h3>
                     <br/>
                   </div>
