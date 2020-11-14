@@ -213,12 +213,18 @@ class ShopFront extends GeneralController
             $sortOrder = request('sortOrder') ?? 'asc';
 
             //Rate
-            $productLike = ShopProductLike::select(DB::raw("IFNULL(sum(rate),0) as rate, count(users_id) as user_count"))->where('product_id', $id)->first();
-            $userCount = $productLike['user_count'];
-            $rateSum   = $productLike['rate'];
+            //$productLike = ShopProductLike::select(DB::raw("IFNULL(sum(rate),0) as rate, count(users_id) as user_count"))->where('product_id', $id)->first();
+            $productLikes = ShopProductLike::select(DB::raw("rate, count(users_id) as user_count"))->where('product_id', $id)->groupBy('rate')->get();
+            for($i=0;$i<count($productLikes);$i++)
+            {
+                $rate_arr[$i] = $productLikes[$i]['rate']* $productLikes[$i]['user_count'];
+                $user_arr[$i] = $productLikes[$i]['user_count'];
+            }
+            $rateSum  = array_sum($rate_arr ?? [0]);
+            $userCount = array_sum($user_arr ?? [0]);
             if($rateSum > 0) {
-                $percent = round( $rateSum / ($userCount ), 1);
-                $ratePercentage = round(100 * $rateSum / ($userCount * 5), 1);
+                $percent = round( $rateSum/$userCount , 1);
+                $ratePercentage = round(100 * $rateSum/($userCount * 5), 1);
             }
             //Check product available
             return view($this->theme . '.shop_product_detail',
@@ -236,6 +242,8 @@ class ShopFront extends GeneralController
                     'rateSum'            => $rateSum,
                     'ratePercentage'     => $ratePercentage ?? 'لا يوجد تقييم',
                     'percent'            => $percent?? 'لا يوجد تقييم',
+                    'productLikes'       => $productLikes,
+
                 )
             );
         } else {
@@ -270,13 +278,17 @@ class ShopFront extends GeneralController
                     'rate'      => Request('ratedIndex')+1,
                     ]);
             }
-        //Rate
-        $productLike = ShopProductLike::select(DB::raw("IFNULL(sum(rate),0) as rate, count(users_id) as user_count"))->where('product_id', Request('productID'))->first();
-        $userCount = $productLike['user_count'];
-        $rateSum   = $productLike['rate'];
+        $productLikes = ShopProductLike::select(DB::raw("rate, count(users_id) as user_count"))->where('product_id', Request('productID'))->groupBy('rate')->get();
+        for($i=0;$i<count($productLikes);$i++)
+        {
+            $rate_arr[$i] = $productLikes[$i]['rate']* $productLikes[$i]['user_count'];
+            $user_arr[$i] = $productLikes[$i]['user_count'];
+        }
+        $rateSum  = array_sum($rate_arr);
+        $userCount = array_sum($user_arr);
         if($rateSum > 0) {
-            $percent = round( $rateSum / $userCount, 1);
-            $ratePercentage = round(100 * $rateSum / ($userCount * 5), 1);
+            $percent = round( $rateSum/$userCount , 1);
+            $ratePercentage = round(100 * $rateSum/($userCount * 5), 1);
         }
 
         return response()->json([
@@ -284,6 +296,7 @@ class ShopFront extends GeneralController
             'rateSum'            => $rateSum,
             'ratePercentage'     => $ratePercentage ?? 'لا يوجد تقييم',
             'percent'            => $percent?? 'لا يوجد تقييم',
+            'productLikes'       => $productLikes ?? array(),
         ]);
     }
 /**
