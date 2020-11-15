@@ -190,7 +190,7 @@
                 <div class="col-sm-4">
                   <br/>
                   <span><p class="ratePercentage2">{{$ratePercentage.'%'}} من المستخدمين ينصحون بهذا المنتج لصديق.</p></span>
-                  <h3>قيم هذا المنتج:</h3>
+                  <h4>قيم هذا المنتج:</h4>
                     <div align="center" style="color:white;">
                         <i class="fa fa-star fstar fa-2x" data-index="0"></i>
                         <i class="fa fa-star fstar fa-2x" data-index="1"></i>
@@ -200,30 +200,39 @@
                         <br><br>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                  <br/>
+                  <br>
+                  <div class = "vertical" style="border-left: .3px solid lightgray;height: 180px;position:absolute;left: 34.5%; "></div>
+                <div class="col-sm-5">
+                    @for($i=1;$i<=5;$i++)
                     <div class="row">
-                      <div class="col-sm">
-                        <span class="ratePercentage">({{$ratePercentage.'%'}})</span>
+                          <div class="col-sm-2">
+                              <span data-index="{{$i}}" id="label-{{$i}}" class="user-count">
+                                  @foreach($productLikes as $productLike)
+                                  @if(isset($productLike['rate']) && $productLike['rate'] == $i) ({{$productLike['user_count']}}) @break @endif
+                                  @endforeach
+                              </span>
+                          </div>
+                          <div class="col-sm-6">
+                              <div class="progress" style="margin-bottom: 10px;">
+                                  <div data-index="{{$i}}" id="star-{{$i}}" class="progress-bar progress-bar-warning progress-bar" role="progressbar" aria-valuenow="70"
+                                   aria-valuemin="0" aria-valuemax="100" style="width:
+                                  @if(isset($productLike['rate']) && $productLike['rate'] == $i){{100 * $productLike['user_count']/$userCount}}% @endif">
+                                   </div>
+                              </div>
+                          </div>
+                      <div class="col-sm-3">
+                        <span>{{$i}} نجوم</span>
                       </div>
-                      <div class="col-sm-8">
-                      <div class="progress">
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-                           aria-valuemin="0" aria-valuemax="100" style="width:{{$ratePercentage}}%">
-                           </div>
-                     </div>
                     </div>
-                    <div class="col-sm">
-                      <span class="starCount"> {{$percent}} نجوم </span>
-                    </div>
-                  </div>
+                    @endfor
               </div>
-                <div class="col-sm-4" >
+                  <div class = "vertical" style="border-left: .3px solid lightgray;height: 180px;position:absolute;left: 70%; "></div>
+                <div class="col-sm-3" >
                   <div class="col-sm-12" style="text-align:center;" >
-                    <div style="width: 200px;">
+                    <div style="width: 155px;">
                       <br/>
                       <br/>
-                        <span class="percent" style="font-size:20pt;font-style:bold;border: 1px solid #bbb;border-radius:50px;width:100px;height:100px;padding:30px;">{{$percent}}</span>
+                        <span class="percent" style="font-size:15pt;font-style:bold;border: 1px solid #bbb;border-radius:50px;width:90px;height:90px;padding:25px;">{{$percent}}</span>
                         <br/>
                         <br/>
                     </div>
@@ -364,21 +373,34 @@
                     ratedIndex: ratedIndex,
                     productID:  {{ $product->id }} ,
                     companyID: {{ $product->company()->first()->id }},
-                }, success: function (result) {
+                },
+                success: function (result) {
                     uID = result.id;
                     localStorage.setItem('uID', uID);
                     $(".ratePercentage").html(result.ratePercentage+'%');
                     $(".ratePercentage2").html(result.ratePercentage+'%'+' من المستخدمين ينصحون بهذا المنتج لصديق.');
                     $(".percent").html(result.percent);
                     $(".userCount").html(result.userCount);
-                    $(".progress-bar").css('width', result.ratePercentage+'%');
-                    $(".starCount").html(result.percent +'نجوم');
-                    for (var i=0; i <= 5; i++){
+                    for (var i=0; i <= 4; i++){
                         if($(".rateStar-"+i).data('index') < result.percent){
                             $(".rateStar-"+i).css('color', '#FFBC41');
                         }else{
                             $(".rateStar-"+i).css('color', 'wheat');
                         }
+                    }
+                    function reset() {
+                        for (let j = 1; j <= 5; j++) {
+                            $("#star-" + j).css("width", 0 + "%");
+                            $("#label-" + j).html("(" + 0 + ")");
+                        }
+                    }
+                    reset();
+                    for (let i=0;i< result.productLikes.length;i++)
+                    {
+                        let star = result.productLikes[i];
+                        let percent = star.user_count * 100 / result.userCount;
+                        $("#label-"+star.rate).html("("+star.user_count+")");
+                        $("#star-"+star.rate).css("width", percent+"%");
                     }
                 },
             });
