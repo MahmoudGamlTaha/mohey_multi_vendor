@@ -208,7 +208,7 @@
                           <div class="col-sm-2">
                               <span data-index="{{$i}}" id="label-{{$i}}" class="user-count">
                                   @foreach($productLikes as $productLike)
-                                  @if(isset($productLike['rate']) && $productLike['rate'] == $i) ({{$productLike['user_count']}}) @endif
+                                  @if(isset($productLike['rate']) && $productLike['rate'] == $i) ({{$productLike['user_count']}}) @break @endif
                                   @endforeach
                               </span>
                           </div>
