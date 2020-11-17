@@ -42,6 +42,12 @@ class CartItem implements Arrayable, Jsonable
      * @var float
      */
     public $price;
+    /**
+     * 
+     * @var int 
+     */
+
+    public $uofm;
 
     /**
      * The options for this cart item.
@@ -75,7 +81,7 @@ class CartItem implements Arrayable, Jsonable
      * @param float      $price
      * @param array      $options
      */
-    public function __construct($id, $name, $price, array $options = [])
+    public function __construct($id, $name, $price, $uofm, array $options = [])
     {
         if(empty($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
@@ -91,6 +97,7 @@ class CartItem implements Arrayable, Jsonable
         $this->name     = $name;
         $this->price    = floatval($price);
         $this->options  = new CartItemOptions($options);
+        $this->uofm = $uofm;
         $this->rowId = $this->generateRowId($id, $options);
     }
 
@@ -199,6 +206,7 @@ class CartItem implements Arrayable, Jsonable
         $this->name     = $item->getBuyableDescription($this->options);
         $this->price    = $item->getBuyablePrice($this->options);
         $this->priceTax = $this->price + $this->tax;
+       // $this->uofm     = $item->
     }
 
     /**
@@ -213,6 +221,7 @@ class CartItem implements Arrayable, Jsonable
         $this->qty      = array_get($attributes, 'qty', $this->qty);
         $this->name     = array_get($attributes, 'name', $this->name);
         $this->price    = array_get($attributes, 'price', $this->price);
+        $this->uofm     = array_get($attributes, 'uofm', $this->uofm);
         $this->priceTax = $this->price + $this->tax;
         $this->options  = new CartItemOptions(array_get($attributes, 'options', $this->options));
 
@@ -291,7 +300,7 @@ class CartItem implements Arrayable, Jsonable
      * @param array                                      $options
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public static function fromBuyable(Buyable $item, array $options = [])
+    public static function fromBuyable(Buyable $item, $uofm, array $options = [])
     {
         return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $options);
     }
@@ -318,9 +327,9 @@ class CartItem implements Arrayable, Jsonable
      * @param array      $options
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public static function fromAttributes($id, $name, $price, array $options = [])
+    public static function fromAttributes($id, $name, $price, $uofm, array $options = [])
     {
-        return new self($id, $name, $price, $options);
+        return new self($id, $name, $price, $uofm, $options); 
     }
 
     /**

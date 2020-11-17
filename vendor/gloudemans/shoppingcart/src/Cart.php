@@ -111,6 +111,31 @@ class Cart
         return $cartItem;
     }
 
+    public function addWithUofm($id, $name = null, $qty = null, $price = null, $uofm, array $options = [])
+    {
+        if ($this->isMulti($id)) {
+            return array_map(function ($item) {
+                return $this->add($item);
+            }, $id);
+        }
+
+        $cartItem = $this->createCartItem($id, $name, $qty, $price, $uofm, $options);
+
+        $content = $this->getContent();
+
+        if ($content->has($cartItem->rowId)) {
+            $cartItem->qty += $content->get($cartItem->rowId)->qty;
+        }
+
+        $content->put($cartItem->rowId, $cartItem);
+        
+        $this->events->fire('cart.added', $cartItem);
+
+        $this->session->put($this->instance, $content);
+
+        return $cartItem;
+    }
+
     /**
      * Update the cart item with the given rowId.
      *
@@ -447,17 +472,17 @@ class Cart
      * @param array     $options
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    private function createCartItem($id, $name, $qty, $price, array $options)
+    private function createCartItem($id, $name, $qty, $price, $uofm, array $options)
     {
         if ($id instanceof Buyable) {
-            $cartItem = CartItem::fromBuyable($id, $qty ?: []);
+            $cartItem = CartItem::fromBuyable($id, $uofm, $qty ?: []);
             $cartItem->setQuantity($name ?: 1);
             $cartItem->associate($id);
         } elseif (is_array($id)) {
             $cartItem = CartItem::fromArray($id);
             $cartItem->setQuantity($id['qty']);
         } else {
-            $cartItem = CartItem::fromAttributes($id, $name, $price, $options);
+            $cartItem = CartItem::fromAttributes($id, $name, $price, $uofm, $options);  // developed by eng abeer 
             $cartItem->setQuantity($qty);
         }
 

@@ -238,7 +238,7 @@ class ShopCart extends GeneralController
         session()->forget('paymentMethod'); //destroy paymentMethod
         session()->forget('shippingMethod'); //destroy shippingMethod
         session()->forget('paymentTerm');
-        dd(Cart::content());
+        
         return view($this->theme . '.shop_checkout',
             array(
                 'title'           => trans('language.checkout_title'),
