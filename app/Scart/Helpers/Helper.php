@@ -123,6 +123,7 @@ class Helper
                     'qty'       => $item->qty,
                     'image'     => asset($product->getThumb()),
                     'price'     => $product->getPrice(),
+                    'uofm'      => $product->getUnit(),
                     'showPrice' => $product->showPrice(),
                     'url'       => $product->getUrl(),
                     'rowId'     => $item->rowId,

@@ -10,6 +10,7 @@ use App\Models\ShopProductOption;
 use App\Models\ShopSpecialPrice;
 use Illuminate\Database\Eloquent\Model;
 use  App\Models\ProductPriceList;
+use App\Models\UofmGroups;
 
 class ShopProduct extends Model
 {
@@ -42,6 +43,7 @@ class ShopProduct extends Model
         
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }//sprint 3
+
     public function priceList(){
        return $this->hasMany(ProductPriceList::class, 'product_id', 'id');
     }
@@ -77,6 +79,10 @@ class ShopProduct extends Model
     {
         return $this->hasMany(ShopAttributeDetail::class, 'product_id', 'id');
     }
+    public function getUnit()
+    {
+        return UofmGroups::where('id', $this->uofm_groups)->first();
+    }
 
 /**
  * [getPrice description]
@@ -91,6 +97,8 @@ class ShopProduct extends Model
         /*
         if product have type, will use price of type
          */
+       //$priceUofm = $this->priceList()->where("uofm", 0)->first();
+       //if($)
         if ($opt_sku) {
             return ShopProductOption::where('product_id', $id)->where('opt_sku', $opt_sku)->first()->opt_price;
         }
@@ -110,6 +118,7 @@ class ShopProduct extends Model
         if ($special) {
             return $special->price;
         } else {
+            //
             return $this->find($id)->price;
         }
     }

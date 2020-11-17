@@ -9,6 +9,7 @@ use App\Models\ShopOrderDetail;
 use App\Models\ShopOrderHistory;
 use App\Models\ShopOrderTotal;
 use App\Models\ShopProduct;
+use App\Models\UofmGroups;
 use App\User;
 use Cart;
 use DB;
@@ -116,8 +117,9 @@ class ShopCart extends GeneralController
          } 
          session(['paymentTerm' => $paymentTerm]);
         }
-       
+
         $cart = Cart::instance($instance)->content();
+        //dd($cart);
         return view($this->theme . '.shop_cart',
             array(
                 'title'             => trans('language.cart_title'),
@@ -136,7 +138,8 @@ class ShopCart extends GeneralController
                 'wishlist'          => $wishlist,
                 'layout_page'       => 'shop_cart',
                 'lastViewed'         => $lastviewed,
-                'payment_term'      => $paymentTerm
+                'payment_term'      => $paymentTerm,
+                'units'             => UofmGroups::all(),
             )
         );
     }
@@ -235,6 +238,7 @@ class ShopCart extends GeneralController
         session()->forget('paymentMethod'); //destroy paymentMethod
         session()->forget('shippingMethod'); //destroy shippingMethod
         session()->forget('paymentTerm');
+        dd(Cart::content());
         return view($this->theme . '.shop_checkout',
             array(
                 'title'           => trans('language.checkout_title'),
@@ -263,6 +267,8 @@ class ShopCart extends GeneralController
  */
     public function postCart(Request $request)
     {
+        $instance = request('instance') ?? 'default';
+        $cart     = \Cart::instance($instance);
         $data       = $request->all();
         $payment    = $request['payment']?? null;
         $product_id = $data['product_id'];
@@ -278,13 +284,14 @@ class ShopCart extends GeneralController
             $options        = array();
             $options['opt'] = $opt_sku;
             $options['att'] = $attribute;
-            Cart::add(
+            $cart->addWithUofm(
                 array(
                     'id'      => $product_id,
                     'name'    => $product->name,
                     'qty'     => $qty,
                     'price'   => (new ShopProduct)->getPrice($product_id, $opt_sku),
-                    'options' => $options
+                    'uofm'    => 11,
+                    'options' => $options,
                 )
             );
             return redirect()->route('cart', ["payment" => $payment])
@@ -345,13 +352,13 @@ class ShopCart extends GeneralController
                 $subtotal = $value->price * $value->qty;
                 $total = $subtotal + $shipping;
                 if($productCount == 0){
-                    $order = 
-											$this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);
+                    $order = $this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);
 
                 } else {
                     $order = clone $this->createOrder($order->id, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);
 
                 }//
+
                 if(!in_array($order->id, $set)){
                     array_push($set, $order->id);
                 }
@@ -535,12 +542,13 @@ class ShopCart extends GeneralController
         switch ($instance) {
             case 'default':
                 if ($product->allowSale()) {
-                    $cart->add(
+                    $cart->addWithUofm(
                         array(
                             'id'      => $id,
                             'name'    => $product->name,
                             'qty'     => 1,
                             'price'   => $product->getPrice($id),
+                            'uofm'    => 11,
                             'options' => $options,
                         )
                     );
@@ -559,12 +567,13 @@ class ShopCart extends GeneralController
                 ${'arrID' . $instance} = array_keys($cart->content()->groupBy('id')->toArray());
                 if (!in_array($id, ${'arrID' . $instance})) {
                     try {
-                        $cart->add(
+                        $cart->addWithUofm(
                             array(
                                 'id'    => $id,
                                 'name'  => $product->name,
                                 'qty'   => 1,
                                 'price' => $product->getPrice($id),
+                                'uofm'    => 11,
                             )
                         );
                     } catch (\Exception $e) {
@@ -635,7 +644,14 @@ class ShopCart extends GeneralController
         $rowId   = $request->get('rowId');
         $product = ShopProduct::find($id);
         $new_qty = $request->get('new_qty');
-       
+        $unitId    = $request->get('unitId');
+
+        Cart::update($rowId, [
+            'options' => [
+                'unit' => $unitId
+            ],
+        ]);
+
         if ($product->stock < $new_qty && !$this->configs['product_buy_out_of_stock']) {
             return response()->json(
                 [
@@ -652,7 +668,7 @@ class ShopCart extends GeneralController
            catch(\Exception $e){
             return response()->json(
                 ['error' => 1,
-                 'data' => $e->message()
+                 'data' => $e->getMessage()
                 ]);
             }
         }
