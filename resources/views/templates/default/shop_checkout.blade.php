@@ -27,7 +27,7 @@
     }
 </style>
 <div class="table-responsive">
-<table class="table box table-bordered">
+<table style="width: 90%;text-align: center;" class="table box table-bordered">
     <thead>
       <tr  style="background: #eaebec">
         <th style="width: 50px;">No.</th>
@@ -35,7 +35,8 @@
         <th style="width: 20%;">{{ trans('language.product.name') }}</th>
         <th style="width: 10%;text-align:center;">{{ trans('language.product.price') }}</th>
         <th style="width: 10%;text-align:center;">{{ trans('language.product.quantity') }}</th>
-        <th>{{ trans('language.product.total_price') }}</th>
+        <th style="width: 20%;text-align:center;">{{ trans('language.product.unit') }}</th>
+        <th style="text-align:center;">{{ trans('language.product.total_price') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -64,7 +65,8 @@
         </td>
         <td>{!! $product->showPrice() !!}</td>
         <td>{{$item->qty}}</td>
-        <td align="right">{{\Helper::currencyRender($item->subtotal)}}</td>
+        <td>{{$product->getUnit()->name ."/". $product->getUnit()->getUnits()->where('id', $item->uofm['uofm'])->first()->name}}</td>
+        <td style="width:10%">{{\Helper::currencyRender($item->subtotal)}}</td>
     </tr>
     @endforeach
     </tbody>
@@ -78,9 +80,12 @@
     <input type="hidden" name="shipping" value="{{ $shipping }}">
     <div class="row">
         
-         
+    <div style="margin-left:8%" class="grid col-md-5">
+        <div style="margin-bottom: 15px;">
+            <span><b>نظام الدفع</b></span>
+        </div>
         @if(isset($payment_term))
-        <div class="col-md-5">
+        <div style="margin-left:4%">
         <select class="form-control" name="paymentTerm">
             <option>none</option>
           @foreach($payment_term as $key => $term)
@@ -88,16 +93,14 @@
           @endforeach
          </select>
         </div>
-        <div class="col-md-1">
-        <span><b>نظام الدفع</b></span>
-        </div>
+    </div>
        
         @endif
     </div>
     <div class="row">
     <div class="col-md-6">
         <h3 class="control-label"><i class="fa fa-credit-card-alt"></i> {{ trans('language.cart.shipping_address') }}:<br></h3>
-        <table class="table box table-bordered" id="showTotal">
+        <table style="width: 90%;text-align: center;" class="table box table-bordered" id="showTotal">
             <tr>
                 <th>{{ trans('language.cart.to_name') }}:</td>
                 <td>{{ $address['toname'] }}</td>

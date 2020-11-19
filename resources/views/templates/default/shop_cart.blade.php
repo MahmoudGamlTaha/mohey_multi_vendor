@@ -62,13 +62,14 @@
                 </td>
                 <td style="width:20%;padding:33px;" class="col-md-12">
                     <div class="form-group">
-                        <select style="font-size:15px;padding:3px;border-style:none;color:black;" class="form-control" onclick="units('{{$item->rowId}}', {{ $item->id }});">
+                        <select id="units-{{$item->id}}" style="font-size:15px;padding:3px;border-style:none;color:black;" class="form-control" onclick="units('{{$item->rowId}}', {{ $item->id }});">
                             @if($uofms !== null)
                                 @php
                                     $uofm = $uofms->getUnits()->get();
                                 @endphp
+                                <option hidden disabled selected>{{$product->getUnit()->name ."/". $product->getUnit()->getUnits()->where('id', $item->uofm['uofm'])->first()->name}}</option>
                                 @foreach($uofm as $unit)
-                                <option id="units-{{$item->id}}" value="{{$unit->id ?? 0}}">{{$product->getUnit()->name ."/".$unit->name ?? 0}}</option>
+                                <option class="test-{{$item->id}}" data-index="{{$product->getUnit()->id}}" value="{{$unit->id ?? 0}}">{{$product->getUnit()->name ."/".$unit->name ?? 0}}</option>
                                 @endforeach
                             @else
                                 <option>لا يوجد</option>
@@ -166,7 +167,7 @@
             @if($element['code']=='total')
             <div style="margin-top: 12px; margin-bottom: -5px;">
               <span style="text-align:center; color: #b0b0b0; margin: 20px;">  الاجمالى : </span>
-              <span style="text-align:center; color: #000;">   {{$element['text'] }}</span>
+              <span style="text-align:center; color: #000;">{{$element['text'] }}</span>
             </div>
             <hr/>
             
@@ -320,7 +321,9 @@ function increaseAmount(rowId, item_id) {
     function units(rowId, item_id)
     {
         var unitId = $('#units-'+item_id).val();
+        var uofm_group = $(".test-"+item_id).data('index');
         console.log(unitId);
+        console.log(uofm_group);
         $.ajax({
             url: '{{ route('updateToCart') }}',
             type: 'POST',
@@ -329,9 +332,16 @@ function increaseAmount(rowId, item_id) {
                 id     : item_id,
                 rowId  : rowId,
                 unitId : unitId,
+                uofm_group : uofm_group,
                 _token:'{{ csrf_token() }}'
             },
             success : function (result){
+                error= parseInt(result.error);
+               if(error ===0)
+                {
+                     window.location.replace(location.href);
+                    console.log(result.new_price);
+                }
             },
     });
     }

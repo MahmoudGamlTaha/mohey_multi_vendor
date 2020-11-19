@@ -86,32 +86,7 @@ class Cart
      * @param array     $options
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public function add($id, $name = null, $qty = null, $price = null, array $options = [])
-    {
-        if ($this->isMulti($id)) {
-            return array_map(function ($item) {
-                return $this->add($item);
-            }, $id);
-        }
-
-        $cartItem = $this->createCartItem($id, $name, $qty, $price, $options);
-
-        $content = $this->getContent();
-
-        if ($content->has($cartItem->rowId)) {
-            $cartItem->qty += $content->get($cartItem->rowId)->qty;
-        }
-
-        $content->put($cartItem->rowId, $cartItem);
-        
-        $this->events->fire('cart.added', $cartItem);
-
-        $this->session->put($this->instance, $content);
-
-        return $cartItem;
-    }
-
-    public function addWithUofm($id, $name = null, $qty = null, $price = null, $uofm, array $options = [])
+    public function add($id, $name = null, $qty = null, $price = null, array $uofm = [], array $options = [])
     {
         if ($this->isMulti($id)) {
             return array_map(function ($item) {
@@ -472,7 +447,7 @@ class Cart
      * @param array     $options
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    private function createCartItem($id, $name, $qty, $price, $uofm, array $options)
+    private function createCartItem($id, $name, $qty, $price, array $uofm, array $options)
     {
         if ($id instanceof Buyable) {
             $cartItem = CartItem::fromBuyable($id, $uofm, $qty ?: []);
@@ -482,7 +457,7 @@ class Cart
             $cartItem = CartItem::fromArray($id);
             $cartItem->setQuantity($id['qty']);
         } else {
-            $cartItem = CartItem::fromAttributes($id, $name, $price, $uofm, $options);  // developed by eng abeer 
+            $cartItem = CartItem::fromAttributes($id, $name, $price, $uofm, $options);  
             $cartItem->setQuantity($qty);
         }
 

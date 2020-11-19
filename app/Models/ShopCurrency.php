@@ -161,6 +161,19 @@ class ShopCurrency extends Model
             return self::format($money) . $space_symbol . $symbol;
         }
     }
+
+    /*public function uofm()
+    {
+        $unit    = ProductPriceList::where('uof_id', $this->uofm['uofm'])->where('product_id', $this->id)->first();
+        if(!$unit){
+           $unit = Uofms::where('id', $this->uofm['uofm'])->first(); 
+           $unitSum = $unit->amount_in_base;
+        }else{
+            $unitSum = $unit->price;
+        }
+        return $unitSum;
+    }*/
+
 /**
  * [sumCart description]
  * @param  [type]     $details [description]
@@ -172,7 +185,14 @@ class ShopCurrency extends Model
         $sum  = 0;
         $rate = ($rate) ? $rate : self::$exchange_rate;
         foreach ($details as $detail) {
-            $sum += $detail->qty * self::getValue($detail->price, $rate);
+            $unit  = ProductPriceList::where('uof_id', $detail->uofm['uofm'])->where('product_id', $detail->id)->first();
+            if(!$unit){
+               $unit = Uofms::where('id', $detail->uofm['uofm'])->first(); 
+               $unitSum = $unit->amount_in_base;
+            }else{
+                $unitSum = $unit->price;
+            }
+            $sum += $unitSum * $detail->qty * self::getValue($detail->price, $rate);
         }
         return $sum;
 

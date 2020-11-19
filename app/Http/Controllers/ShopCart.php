@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Uofms;
 
 class ShopCart extends GeneralController
 {
@@ -119,7 +120,6 @@ class ShopCart extends GeneralController
         }
 
         $cart = Cart::instance($instance)->content();
-        //dd($cart);
         return view($this->theme . '.shop_cart',
             array(
                 'title'             => trans('language.cart_title'),
@@ -139,7 +139,6 @@ class ShopCart extends GeneralController
                 'layout_page'       => 'shop_cart',
                 'lastViewed'         => $lastviewed,
                 'payment_term'      => $paymentTerm,
-                'units'             => UofmGroups::all(),
             )
         );
     }
@@ -238,7 +237,6 @@ class ShopCart extends GeneralController
         session()->forget('paymentMethod'); //destroy paymentMethod
         session()->forget('shippingMethod'); //destroy shippingMethod
         session()->forget('paymentTerm');
-        
         return view($this->theme . '.shop_checkout',
             array(
                 'title'           => trans('language.checkout_title'),
@@ -280,17 +278,18 @@ class ShopCart extends GeneralController
         }
 
         $product    = ShopProduct::find($product_id);
+        $unit       = $product->getUnit()->getUnits()->where('amount_in_base', 1)->first()->id;
         if ($product->allowSale()) {
             $options        = array();
             $options['opt'] = $opt_sku;
             $options['att'] = $attribute;
-            $cart->addWithUofm(
+            $cart->add(
                 array(
                     'id'      => $product_id,
                     'name'    => $product->name,
                     'qty'     => $qty,
                     'price'   => (new ShopProduct)->getPrice($product_id, $opt_sku),
-                    'uofm'    => 11,
+                    'uofm'    => ['uofm_groups'=>$product->uofm_groups, 'uofm' => $unit],
                     'options' => $options,
                 )
             );
@@ -526,107 +525,114 @@ class ShopCart extends GeneralController
  */
     public function addToCart(Request $request)
     {
-        $instance = request('instance') ?? 'default';
-        $cart     = \Cart::instance($instance);
-        if (!$request->ajax()) {
-            return redirect()->route('cart');
-        }
-        $id             = request('id');
-        $attribute      = request('attribute') ?? null;
-        $opt_sku        = request('opt_sku') ?? null;
-        $options        = [];
-        $options['att'] = $attribute;
-        $options['opt'] = $opt_sku;
-        $product        = ShopProduct::find($id);
-        $html           = '';
-        switch ($instance) {
-            case 'default':
-                if ($product->allowSale()) {
-                    $cart->addWithUofm(
-                        array(
-                            'id'      => $id,
-                            'name'    => $product->name,
-                            'qty'     => 1,
-                            'price'   => $product->getPrice($id),
-                            'uofm'    => 11,
-                            'options' => $options,
-                        )
-                    );
-                } else {
-                    return response()->json(
-                        [
-                            'error' => 1,
-                            'msg'   => trans('language.cart.dont_allow_sale'),
-                        ]
-                    );
-                }
-                break;
-
-            default:
-                //Wishlist or Compare...
-                ${'arrID' . $instance} = array_keys($cart->content()->groupBy('id')->toArray());
-                if (!in_array($id, ${'arrID' . $instance})) {
-                    try {
-                        $cart->addWithUofm(
+        try{
+            $instance = request('instance') ?? 'default';
+            $cart     = \Cart::instance($instance);
+            if (!$request->ajax()) {
+                return redirect()->route('cart');
+            }
+            $id             = request('id');
+            $attribute      = request('attribute') ?? null;
+            $opt_sku        = request('opt_sku') ?? null;
+            $options        = [];
+            $options['att'] = $attribute;
+            $options['opt'] = $opt_sku;
+            $product        = ShopProduct::find($id);
+            $unit           = $product->getUnit()->getUnits()->where('amount_in_base', 1)->first()->id;
+            $html           = '';
+            switch ($instance) {
+                case 'default':
+                    if ($product->allowSale()) {
+                        $cart->add(
                             array(
-                                'id'    => $id,
-                                'name'  => $product->name,
-                                'qty'   => 1,
-                                'price' => $product->getPrice($id),
-                                'uofm'    => 11,
+                                'id'      => $id,
+                                'name'    => $product->name,
+                                'qty'     => 1,
+                                'price'   => $product->getPrice($id),
+                                'uofm'    => ['uofm_groups'=>$product->uofm_groups, 'uofm' => $unit],
+                                'options' => $options,
                             )
                         );
-                    } catch (\Exception $e) {
+                    } else {
                         return response()->json(
                             [
                                 'error' => 1,
-                                'msg'   => $e->getMessage(),
+                                'msg'   => trans('language.cart.dont_allow_sale'),
                             ]
                         );
                     }
+                    break;
 
-                } else {
-                    return response()->json(
-                        [
-                            'error' => 1,
-                            'msg'   => trans('language.cart.exist', ['instance' => $instance]),
-                        ]
-                    );
-                }
-                break;
-        }
+                default:
+                    //Wishlist or Compare...
+                    ${'arrID' . $instance} = array_keys($cart->content()->groupBy('id')->toArray());
+                    if (!in_array($id, ${'arrID' . $instance})) {
+                        try {
+                            $cart->add(
+                                array(
+                                    'id'    => $id,
+                                    'name'  => $product->name,
+                                    'qty'   => 1,
+                                    'price' => $product->getPrice($id),
+                                    'uofm'    => ['uofm_groups'=>$product->uofm_groups, 'uofm' => $unit],
+                                )
+                            );
+                        } catch (\Exception $e) {
+                            return response()->json(
+                                [
+                                    'error' => 1,
+                                    'msg'   => $e->getMessage(),
+                                ]
+                            );
+                        }
 
-        $carts = \Helper::getListCart($instance);
-        if ($instance == 'default' && $carts['count']) {
-            $html .= '<div><div class="shopping-cart-list">';
-            foreach ($carts['items'] as $item) {
-                $html .= '<div class="product product-widget"><div class="product-thumb">';
-                $html .= '<img src="' . $item['image'] . '" alt="">';
-                $html .= '</div>';
-                $html .= '<div class="product-body">';
-                $html .= '<h3 class="product-price">' . $item['price'] . ' <span class="qty">x' . $item['qty'] . '</span></h3>';
-                $html .= '<h2 class="product-name"><a href="' . $item['url'] . '">' . $item['name'] . '</a></h2>';
-                $html .= '</div>';
-                $html .= '<a href="' . route("removeItem", ['id' => $item['rowId']]) . '"><button class="cancel-btn"><i class="fa fa-trash"></i></button></a>';
-                $html .= '</div>';
+                    } else {
+                        return response()->json(
+                            [
+                                'error' => 1,
+                                'msg'   => trans('language.cart.exist', ['instance' => $instance]),
+                            ]
+                        );
+                    }
+                    break;
             }
-            $html .= '</div></div>';
-            $html .= '<div class="shopping-cart-btns">
-                    <a href="' . route('cart') . '"><button class="main-btn">' . trans('language.cart_title') . '</button></a>
-                    <a href="' . route('checkout') . '"><button class="primary-btn">' . trans('language.checkout_title') . ' <i class="fa fa-arrow-circle-right"></i></button></a>
-                  </div>';
-        }
-        return response()->json(
-            [
-                'error'      => 0,
-                'count_cart' => $carts['count'],
-                'instance'   => $instance,
-                'subtotal'   => $carts['subtotal'],
-                'html'       => $html,
-                'msg'        => trans('language.cart.success', ['instance' => ($instance == 'default') ? 'cart' : $instance]),
-            ]
-        );
 
+            $carts = \Helper::getListCart($instance);
+            if ($instance == 'default' && $carts['count']) {
+                $html .= '<div><div class="shopping-cart-list">';
+                foreach ($carts['items'] as $item) {
+                    $html .= '<div class="product product-widget"><div class="product-thumb">';
+                    $html .= '<img src="' . $item['image'] . '" alt="">';
+                    $html .= '</div>';
+                    $html .= '<div class="product-body">';
+                    $html .= '<h3 class="product-price">' . $item['price'] . ' <span class="qty">x' . $item['qty'] . '</span></h3>';
+                    $html .= '<h2 class="product-name"><a href="' . $item['url'] . '">' . $item['name'] . '</a></h2>';
+                    $html .= '</div>';
+                    $html .= '<a href="' . route("removeItem", ['id' => $item['rowId']]) . '"><button class="cancel-btn"><i class="fa fa-trash"></i></button></a>';
+                    $html .= '</div>';
+                }
+                $html .= '</div></div>';
+                $html .= '<div class="shopping-cart-btns">
+                        <a href="' . route('cart') . '"><button class="main-btn">' . trans('language.cart_title') . '</button></a>
+                        <a href="' . route('checkout') . '"><button class="primary-btn">' . trans('language.checkout_title') . ' <i class="fa fa-arrow-circle-right"></i></button></a>
+                      </div>';
+            }
+            return response()->json(
+                [
+                    'error'      => 0,
+                    'count_cart' => $carts['count'],
+                    'instance'   => $instance,
+                    'subtotal'   => $carts['subtotal'],
+                    'html'       => $html,
+                    'msg'        => trans('language.cart.success', ['instance' => ($instance == 'default') ? 'cart' : $instance]),
+                ]
+            );
+        }catch(\Exception $e){
+            return response()->json(
+                ['error' => 1,
+                 'data' => $e->getMessage()
+                ]);
+            }
     }
 
 /**
@@ -639,37 +645,43 @@ class ShopCart extends GeneralController
         if (!$request->ajax()) {
             return redirect()->route('cart');
         }
-       //id =6
-        $id      = $request->get('id');
-        $rowId   = $request->get('rowId');
-        $product = ShopProduct::find($id);
-        $new_qty = $request->get('new_qty');
-        $unitId    = $request->get('unitId');
+       
+        $id          = $request->get('id');
+        $rowId       = $request->get('rowId');
+        $product     = ShopProduct::find($id);
+        $new_qty     = $request->get('new_qty');
+        $unitId      = $request->get('unitId');
+        $uofm_group = $request->get('uofm_group');
 
-        Cart::update($rowId, [
-            'options' => [
-                'unit' => $unitId
-            ],
-        ]);
+        if($unitId !== null)
+        {
+            Cart::update($rowId, ['uofm' => ['uofm_groups' => $uofm_group, 'uofm' => $unitId]]);
+            return response()->json(
+                    [
+                        'error' => 0,
+                    ]);
+        }elseif($new_qty !== null){
 
-        if ($product->stock < $new_qty && !$this->configs['product_buy_out_of_stock']) {
-            return response()->json(
-                [
-                    'error' => 1,
-                    'msg'   => trans('language.cart.over', ['item' => $product->sku]),
-                ]);
-        } else {
-           try{
-              Cart::update($rowId, ($new_qty) ? $new_qty : 0);
-              return response()->json(
-                ['error' => 0,
-                ]);
-           }
-           catch(\Exception $e){
-            return response()->json(
-                ['error' => 1,
-                 'data' => $e->getMessage()
-                ]);
+            if ($product->stock < $new_qty && !$this->configs['product_buy_out_of_stock']) {
+                return response()->json(
+                    [
+                        'error' => 1,
+                        'msg'   => trans('language.cart.over', ['item' => $product->sku]),
+                    ]);
+
+            } else {
+               try{
+                  Cart::update($rowId, ($new_qty) ? $new_qty : 0);
+                  return response()->json(
+                    ['error' => 0,
+                    ]);
+               }
+               catch(\Exception $e){
+                return response()->json(
+                    ['error' => 1,
+                     'data' => $e->getMessage()
+                    ]);
+                }
             }
         }
 

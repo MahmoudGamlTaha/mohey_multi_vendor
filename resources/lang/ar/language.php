@@ -372,6 +372,7 @@ return [
         'product'          => 'اسم المنتج',
         'lastViewd'        => 'المنتجات التى قمت بمشاهدتها سابقا',
         'unitError'        => 'هذه الكميه غير متوفره',
+        'small'            => 'صغيره',
     ],
     'profile'            => [
         'empty_order'  => 'You have no orders!',

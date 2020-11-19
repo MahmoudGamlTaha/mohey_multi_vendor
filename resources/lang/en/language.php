@@ -332,6 +332,7 @@ return [
         'address1'         => 'Address 1',
         'address2'         => 'Address 2',
         'note'             => 'Note',
+        'small'            => 'Small',
     ],
     'profile'            => [
         'empty_order'  => 'You have no orders!',
