@@ -117,12 +117,14 @@ class Helper
         $arrCart['items']    = [];
         if ($cart->count()) {
             foreach ($cart->content() as $key => $item) {
-                $product            = \App\Models\ShopProduct::find($item->id);
+                $product    = \App\Models\ShopProduct::find($item->id);
+                $unit       = $product->getUnit()->getUnits()->where('code', 'small')->first()->id;
                 $arrCart['items'][] = [
                     'id'        => $item->id,
                     'qty'       => $item->qty,
                     'image'     => asset($product->getThumb()),
                     'price'     => $product->getPrice(),
+                    'uofm'      => ['uofm_groups'=>$product->uofm_groups, 'uofm' => $unit],
                     'showPrice' => $product->showPrice(),
                     'url'       => $product->getUrl(),
                     'rowId'     => $item->rowId,

@@ -276,6 +276,7 @@ return [
         'in_stock'     => 'In stock',
         'overview'     => 'Quick Overview',
         'comment'      => 'Comment',
+        'unit'         => 'الوحده',
     ],
     'category'           => [
         'name'        => 'Name',
@@ -370,6 +371,8 @@ return [
         'note'             => 'Note',
         'product'          => 'اسم المنتج',
         'lastViewd'        => 'المنتجات التى قمت بمشاهدتها سابقا',
+        'unitError'        => 'هذه الكميه غير متوفره',
+        'small'            => 'صغيره',
     ],
     'profile'            => [
         'empty_order'  => 'You have no orders!',

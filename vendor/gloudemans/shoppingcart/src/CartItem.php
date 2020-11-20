@@ -5,6 +5,8 @@ namespace Gloudemans\Shoppingcart;
 use Illuminate\Contracts\Support\Arrayable;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Contracts\Support\Jsonable;
+use App\models\Uofms;
+use App\Models\ProductPriceList;
 
 class CartItem implements Arrayable, Jsonable
 {
@@ -42,6 +44,12 @@ class CartItem implements Arrayable, Jsonable
      * @var float
      */
     public $price;
+    /**
+     * 
+     * @var int 
+     */
+
+    public $uofm;
 
     /**
      * The options for this cart item.
@@ -75,7 +83,7 @@ class CartItem implements Arrayable, Jsonable
      * @param float      $price
      * @param array      $options
      */
-    public function __construct($id, $name, $price, array $options = [])
+    public function __construct($id, $name, $price, array $uofm = [], array $options = [])
     {
         if(empty($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
@@ -91,7 +99,8 @@ class CartItem implements Arrayable, Jsonable
         $this->name     = $name;
         $this->price    = floatval($price);
         $this->options  = new CartItemOptions($options);
-        $this->rowId = $this->generateRowId($id, $options);
+        $this->uofm     = new CartItemOptions($uofm);
+        $this->rowId    = $this->generateRowId($id, $options);
     }
 
     /**
@@ -174,6 +183,38 @@ class CartItem implements Arrayable, Jsonable
         return $this->numberFormat($this->taxTotal, $decimals, $decimalPoint, $thousandSeperator);
     }
 
+    public function uofm()
+    {
+        $unitprices = ProductPriceList::select("uof_id","price")->where('product_id', $this->id)->get();
+        $targetUnit = null;
+        $baseUnitPrice = null;
+       foreach($unitprices as $unitprice){
+         if( $this->uofm['uofm'] == $unitprice->uof_id){
+              $targetUnit = clone $unitprice;
+              break;
+          }
+
+        }
+        if($targetUnit == null){
+        $units = Uofms::select("name", "amount_in_base", "id")->where('group_id', $this->uofm['uofm_groups'])->get();
+        $factor = 1;
+        $uofm = null;
+        foreach($units as $unit){
+            if($unit->id ==  $this->uofm['uofm']){
+                $factor = $unit->amount_in_base;
+            }
+             if ($unit->amount_in_base == 1){
+                  $baseUnitPrice = $unitprice; 
+           } 
+        } 
+        $price = $baseUnitPrice->price * $factor;
+    
+        }else{
+            $price = $targetUnit->price;
+        }
+        return $price;
+    }
+
     /**
      * Set the quantity for this cart item.
      *
@@ -213,10 +254,11 @@ class CartItem implements Arrayable, Jsonable
         $this->qty      = array_get($attributes, 'qty', $this->qty);
         $this->name     = array_get($attributes, 'name', $this->name);
         $this->price    = array_get($attributes, 'price', $this->price);
+        $this->uofm     =  new CartItemOptions(array_get($attributes, 'uofm', $this->uofm));
         $this->priceTax = $this->price + $this->tax;
         $this->options  = new CartItemOptions(array_get($attributes, 'options', $this->options));
 
-        $this->rowId = $this->generateRowId($this->id, $this->options->all());
+        $this->rowId    = $this->generateRowId($this->id, $this->options->all());
     }
 
     /**
@@ -262,7 +304,7 @@ class CartItem implements Arrayable, Jsonable
         }
         
         if($attribute === 'subtotal') {
-            return $this->qty * $this->price;
+            return $this->qty * $this->uofm();
         }
         
         if($attribute === 'total') {
@@ -291,9 +333,9 @@ class CartItem implements Arrayable, Jsonable
      * @param array                                      $options
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public static function fromBuyable(Buyable $item, array $options = [])
+    public static function fromBuyable(Buyable $item, $uofm, array $options = [])
     {
-        return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $options);
+        return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $uofm, $options);
     }
 
     /**
@@ -305,8 +347,8 @@ class CartItem implements Arrayable, Jsonable
     public static function fromArray(array $attributes)
     {
         $options = array_get($attributes, 'options', []);
-
-        return new self($attributes['id'], $attributes['name'], $attributes['price'], $options);
+        $uofm = array_get($attributes, 'uofm', []);
+        return new self($attributes['id'], $attributes['name'], $attributes['price'], $uofm, $options);
     }
 
     /**
@@ -318,9 +360,9 @@ class CartItem implements Arrayable, Jsonable
      * @param array      $options
      * @return \Gloudemans\Shoppingcart\CartItem
      */
-    public static function fromAttributes($id, $name, $price, array $options = [])
+    public static function fromAttributes($id, $name, $price, $uofm, array $options = [])
     {
-        return new self($id, $name, $price, $options);
+        return new self($id, $name, $price, $uofm, $options); 
     }
 
     /**
@@ -350,6 +392,7 @@ class CartItem implements Arrayable, Jsonable
             'name'     => $this->name,
             'qty'      => $this->qty,
             'price'    => $this->price,
+            'uofm'     => $this->uofm->toArray(),
             'options'  => $this->options->toArray(),
             'tax'      => $this->tax,
             'subtotal' => $this->subtotal

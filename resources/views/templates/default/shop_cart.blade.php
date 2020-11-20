@@ -1,5 +1,9 @@
 @extends($theme.'.shop_layout')
-
+@if(session()->has('error'))
+    <div class="alert alert-danger">
+        {{ session()->get('error') }}
+    </div>
+@endif
 @section('main')
 <section>
     <div class="container">
@@ -19,6 +23,7 @@
                 <th style="width: 25%;text-align:right;">{{ trans('language.cart.product') }}</th>
                 <th style="width: 15%;text-align:center;">{{ trans('language.product.price') }}</th>
                 <th style="width: 20%;text-align:center;">{{ trans('language.product.quantity') }}</th>
+                <th style="width: 20%;text-align:center;">{{ trans('language.product.unit') }}</th>
                 <th style="width: 12%;text-align:center;">{{ trans('language.product.total_price') }}</th>
                 @if($payment_term != null)
                 <th style="width: 15%;text-align:center;">{{ trans('language.payments.payment_term') }}</th>
@@ -29,6 +34,7 @@
             @foreach($cart as $item)
             @php
             $product = App\Models\ShopProduct::find($item->id);
+            $uofms = $product->getUnit();
            @endphp
               <tr>
                 <td style="text-align:center;">
@@ -53,6 +59,23 @@
                   <button name="decrease" style="border:none; height:28px;width:30px;border: 1px solid #dad9d9"  id="decrease" onClick="decreseAmount('{{$item->rowId}}', {{ $item->id }});">-</button>
                   <input type="text" id="item-{{$item->id}}" onChange="updateCart('{{$item->rowId}}', {{ $item->id }});" class="item-qty" value="{{$item->qty}}" name="qty-{{$item->id}}" style="width:30px;text-align:center; margin:-3px ;height:28px;border:1px solid #dad9d9">
                   <button style="border:none; height:28px;width:30px; border:1px solid #dad9d9" name="increase" id="increase" onClick="increaseAmount('{{$item->rowId}}', {{ $item->id }});">+</button>
+                </td>
+                <td style="width:20%;padding:33px;" class="col-md-12">
+                    <div class="form-group">
+                        <select id="units-{{$item->id}}" style="font-size:15px;padding:3px;border-style:none;color:black;" class="form-control" onclick="units('{{$item->rowId}}', {{ $item->id }});">
+                            @if($uofms !== null)
+                                @php
+                                    $uofm = $uofms->getUnits()->get();
+                                @endphp
+                                <option hidden disabled selected>{{$product->getUnit()->name ."/". $product->getUnit()->getUnits()->where('id', $item->uofm['uofm'])->first()->name}}</option>
+                                @foreach($uofm as $unit)
+                                <option class="test-{{$item->id}}" data-index="{{$product->getUnit()->id}}" value="{{$unit->id ?? 0}}">{{$product->getUnit()->name ."/".$unit->name ?? 0}}</option>
+                                @endforeach
+                            @else
+                                <option>لا يوجد</option>
+                            @endif
+                        </select>
+                    </div>
                 </td>
                 <td>
                   <span style="color:#10243f;width: 12%;text-align:center; font-size: 16px;line-height: 5;"><b>{{\Helper::currencyRender($item->subtotal)}}</b></span>
@@ -144,7 +167,7 @@
             @if($element['code']=='total')
             <div style="margin-top: 12px; margin-bottom: -5px;">
               <span style="text-align:center; color: #b0b0b0; margin: 20px;">  الاجمالى : </span>
-              <span style="text-align:center; color: #000;">   {{$element['text'] }}</span>
+              <span style="text-align:center; color: #000;">{{$element['text'] }}</span>
             </div>
             <hr/>
             
@@ -262,9 +285,9 @@ function increaseAmount(rowId, item_id) {
 }
 
     function updateCart(rowId,id){
-      console.log(rowId);
+      //console.log(rowId);
         var new_qty = $('#item-'+id).val();
-       
+
             $.ajax({
             url: '{{ route('updateToCart') }}',
             type: 'POST',
@@ -279,20 +302,45 @@ function increaseAmount(rowId, item_id) {
             success: function(data){
               
                 error= parseInt(data.error);
-                
+
                 if(error ===0)
                 {
                         window.location.replace(location.href);
                 }else{
-                 
+
                     $('.item-qty-'+id).css('display','block').html(data.msg);
                 }
 
                 },
                 error: function(err){
-                  console.log(err);
+                  //console.log(err);
                 }
         });
+    }
+
+    function units(rowId, item_id)
+    {
+        var unitId = $('#units-'+item_id).val();
+        var uofm_group = $(".test-"+item_id).data('index');
+        $.ajax({
+            url: '{{ route('updateToCart') }}',
+            type: 'POST',
+            dataType : 'json',
+            data : {
+                id     : item_id,
+                rowId  : rowId,
+                unitId : unitId,
+                uofm_group : uofm_group,
+                _token:'{{ csrf_token() }}'
+            },
+            success : function (result){
+                error= parseInt(result.error);
+               if(error ===0)
+                {
+                     window.location.replace(location.href);
+                }
+            },
+    });
     }
 
 $('#submit-order').click(function(){
@@ -336,7 +384,7 @@ $('#submit-order').click(function(){
                 }
             })
             .fail(function() {
-                console.log("error");
+                //console.log("error");
             })
            $('#coupon-button').button('reset');
        }, 2000);
@@ -362,7 +410,7 @@ $('#submit-order').click(function(){
                     $('#showTotal').prepend(result.html);
             })
             .fail(function() {
-                console.log("error");
+                //console.log("error");
             })
             // .always(function() {
             //     console.log("complete");
