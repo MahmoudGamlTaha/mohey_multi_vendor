@@ -185,14 +185,34 @@ class CartItem implements Arrayable, Jsonable
 
     public function uofm()
     {
-        $unit    = ProductPriceList::where('uof_id', $this->uofm['uofm'])->where('product_id', $this->id)->first();
-        if(!$unit){
-           $unit = Uofms::where('id', $this->uofm['uofm'])->first(); 
-           $unitSum = $unit->amount_in_base;
-        }else{
-            $unitSum = $unit->price;
+        $unitprices = ProductPriceList::select("uof_id","price")->where('product_id', $this->id)->get();
+        $targetUnit = null;
+        $baseUnitPrice = null;
+       foreach($unitprices as $unitprice){
+         if( $this->uofm['uofm'] == $unitprice->uof_id){
+              $targetUnit = clone $unitprice;
+              break;
+          }
+
         }
-        return $unitSum;
+        if($targetUnit == null){
+        $units = Uofms::select("name", "amount_in_base", "id")->where('group_id', $this->uofm['uofm_groups'])->get();
+        $factor = 1;
+        $uofm = null;
+        foreach($units as $unit){
+            if($unit->id ==  $this->uofm['uofm']){
+                $factor = $unit->amount_in_base;
+            }
+             if ($unit->amount_in_base == 1){
+                  $baseUnitPrice = $unitprice; 
+           } 
+        } 
+        $price = $baseUnitPrice->price * $factor;
+    
+        }else{
+            $price = $targetUnit->price;
+        }
+        return $price;
     }
 
     /**
@@ -284,11 +304,11 @@ class CartItem implements Arrayable, Jsonable
         }
         
         if($attribute === 'subtotal') {
-            return $this->qty * $this->price * $this->uofm();
+            return $this->qty * $this->uofm();
         }
         
         if($attribute === 'total') {
-            return $this->qty * ($this->priceTax) * $this->uofm();
+            return $this->qty * ($this->priceTax);
         }
 
         if($attribute === 'tax') {

@@ -162,38 +162,48 @@ class ShopCurrency extends Model
         }
     }
 
-    /*public function uofm()
-    {
-        $unit    = ProductPriceList::where('uof_id', $this->uofm['uofm'])->where('product_id', $this->id)->first();
-        if(!$unit){
-           $unit = Uofms::where('id', $this->uofm['uofm'])->first(); 
-           $unitSum = $unit->amount_in_base;
-        }else{
-            $unitSum = $unit->price;
-        }
-        return $unitSum;
-    }*/
-
 /**
  * [sumCart description]
  * @param  [type]     $details [description]
  * @param  float|null $rate    [description]
  * @return [type]              [description]
  */
-    public static function sumCart($details, float $rate = null)
+     public static function sumCart($details, float $rate = null)
     {
         $sum  = 0;
         $rate = ($rate) ? $rate : self::$exchange_rate;
         foreach ($details as $detail) {
-            $unit  = ProductPriceList::where('uof_id', $detail->uofm['uofm'])->where('product_id', $detail->id)->first();
-            if(!$unit){
-               $unit = Uofms::where('id', $detail->uofm['uofm'])->first(); 
-               $unitSum = $unit->amount_in_base;
-            }else{
-                $unitSum = $unit->price;
+            $unitprices = ProductPriceList::select("uof_id","price")->where('product_id', $detail->id)->get();
+            $targetUnit = null;
+            $baseUnitPrice = null;
+           foreach($unitprices as $unitprice){
+             if( $detail->uofm['uofm'] == $unitprice->uof_id){
+                  $targetUnit = clone $unitprice;
+                  break;
+              }
+
             }
-            $sum += $unitSum * $detail->qty * self::getValue($detail->price, $rate);
+            if($targetUnit == null){
+            $units = Uofms::select("name", "amount_in_base", "id")->where('group_id', $detail->uofm['uofm_groups'])->get();
+            $factor = 1;
+            $uofm = null;
+            foreach($units as $unit){
+                if($unit->id ==  $detail->uofm['uofm']){
+                    $factor = $unit->amount_in_base;
+                }
+                 if ($unit->amount_in_base == 1){
+                      $baseUnitPrice = $unitprice; 
+               } 
+            } 
+            $price = $baseUnitPrice->price * $factor;
+        
+        }else{
+            $price = $targetUnit->price;
         }
+
+            $sum += $detail->qty * self::getValue($price, $rate);
+        }
+
         return $sum;
 
     }

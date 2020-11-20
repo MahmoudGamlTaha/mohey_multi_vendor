@@ -94,11 +94,7 @@ class ShopProduct extends Model
     {
         $id = ($id == null) ? $this->id : $id;
 //Process product type
-        /*
-        if product have type, will use price of type
-         */
-       //$priceUofm = $this->priceList()->where("uofm", 0)->first();
-       //if($)
+        
         if ($opt_sku) {
             return ShopProductOption::where('product_id', $id)->where('opt_sku', $opt_sku)->first()->opt_price;
         }

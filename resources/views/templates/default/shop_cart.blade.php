@@ -313,7 +313,7 @@ function increaseAmount(rowId, item_id) {
 
                 },
                 error: function(err){
-                  console.log(err);
+                  //console.log(err);
                 }
         });
     }
@@ -322,8 +322,6 @@ function increaseAmount(rowId, item_id) {
     {
         var unitId = $('#units-'+item_id).val();
         var uofm_group = $(".test-"+item_id).data('index');
-        console.log(unitId);
-        console.log(uofm_group);
         $.ajax({
             url: '{{ route('updateToCart') }}',
             type: 'POST',
@@ -340,7 +338,6 @@ function increaseAmount(rowId, item_id) {
                if(error ===0)
                 {
                      window.location.replace(location.href);
-                    console.log(result.new_price);
                 }
             },
     });
@@ -387,7 +384,7 @@ $('#submit-order').click(function(){
                 }
             })
             .fail(function() {
-                console.log("error");
+                //console.log("error");
             })
            $('#coupon-button').button('reset');
        }, 2000);
@@ -413,7 +410,7 @@ $('#submit-order').click(function(){
                     $('#showTotal').prepend(result.html);
             })
             .fail(function() {
-                console.log("error");
+                //console.log("error");
             })
             // .always(function() {
             //     console.log("complete");
