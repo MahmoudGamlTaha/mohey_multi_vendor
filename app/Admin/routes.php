@@ -52,7 +52,7 @@ Route::group([
     $router->resource('company', CompanyController::class)->names('company');
     $router->resource('item_units', UnitOfMeasureController::class)->names('item_units');
     $router->resource('activities', ActivityController::class)->names('activities');
-    $router->resource('price_list', ShopPriceListController::class)->names('priceList');
+    $router->resource('product_price_list', ShopPriceListController::class)->names('priceList');
    
    // $router->get('company', 'CompanyController@index');
     //$router->get('/company/{id}/edit','CompanyController@edit');
@@ -65,6 +65,8 @@ Route::group([
         $router->get('productInfo', 'ShopOrderController@getInfoProduct')->name('getInfoProduct');
         $router->get('userInfo', 'ShopOrderController@getInfoUser')->name('getInfoUser');
         $router->get('itemInfo', 'ShopOrderController@getInfoItem')->name('getInfoItem');
+        $router->get('priceInfo', 'ShopPriceListController@getInfoPrice')->name('getInfoPrice');
+        $router->get('uofm-details', 'ShopPriceListController@getUnitList')->name('uofm-details');
     });
  
    $router->group(['prefix' => 'item_units'], function ($router) {

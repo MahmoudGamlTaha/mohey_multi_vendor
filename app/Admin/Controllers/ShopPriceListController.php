@@ -5,13 +5,15 @@ namespace App\Admin\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\ProductPriceList;
 use App\Models\ShopProduct;
-use App\Models\ShopSpecialPrice;
+use App\Models\UofmGroups;
+use App\Models\Uofms;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Illuminate\Http\Request;
 
 class ShopPriceListController extends Controller
 {
@@ -28,7 +30,6 @@ class ShopPriceListController extends Controller
 
             $content->header(trans('language.admin.special_price_manager'));
             $content->description(' ');
-
             $content->body($this->grid());
         });
     }
@@ -77,17 +78,16 @@ class ShopPriceListController extends Controller
 
             $grid->id(trans('language.admin.sort'))->sortable();
             $grid->product(trans('language.admin.product'))->display(function ($product) {
-                return $product['name'] . "<br>(SKU: " . $product['sku'] . ")";
+                return $product['name'] . "-(SKU: " . $product['sku'] . ")";
             });
             $grid->price(trans('language.admin.special_price'))->display(function ($price) {
                 return number_format($price);
             });
-            $grid->date_start(trans('language.admin.date_start'))->display(function ($date) {
-                return ($date) ?? '<span style="color:red">NULL</span>';
-            })->sortable();
-            $grid->date_end(trans('language.admin.date_end'))->display(function ($date) {
-                return ($date) ?? '<span style="color:red">NULL</span>';
-            })->sortable();
+          
+            $grid->unit(trans('language.unit'))->display(function ($unit) {
+                return $unit;
+            });
+
             $grid->comment(trans('language.admin.comment'));
             $grid->status(trans('language.admin.status'))->switch();
             $grid->created_at(trans('language.admin.created_at'));
@@ -108,23 +108,73 @@ class ShopPriceListController extends Controller
      *
      * @return Form
      */
+    public function getUnitList(Request $request){
+          try{
+              if(is_numeric($request->id)){
+                $selected = Uofms::query()->where('group_id', $request->id)
+                ->pluck('name','id')->toArray();
+                return $this->sendResponse($selected, 200);
+              }
+              return $this->sendError("error id", 400);
+          }catch(\Exception $ex){
+             return $this->sendError("error", 400);
+          }
+    }
+    public function getInfoPrice(Request $request)
+    {
+        $id  = $request->input('id');
+        $uofm = $request->input('uofm');
+        if(!is_numeric($id)){
+            return $this->sendError("error id", 400);
+        }
+        $priceList = null;
+       
+        if($uofm){
+        $priceList = ProductPriceList::query()
+                                   ->where('product_id', $id)
+                                   ->where('uof_id', $uofm)
+                                   ->first();
+        } 
+       $product = ShopProduct::find($id);
+        if ($priceList) {
+            $product->price = $priceList->price;
+        } 
+    
+        $arrayReturn                     = $product->toArray();
+        $arrayReturn['renderAttDetails'] = $product->renderAttDetails();
+        return json_encode($arrayReturn);
+   // return $this->sendError('product not found', 400);
+    }
     protected function form()
     {
-        //Admin::script($this->jsProcess());
+        Admin::script($this->jsProcess());
         return Admin::form(ProductPriceList::class, function (Form $form) {
+            
             $company = $this->getUserCompany()[0]->id;
-            $products = ShopProduct::getArrayProductNameForCompany($company);
+            $products = null;
+            $uofmgs = null;
+            $units = null;
+            if(!$this->checkSuperUser()){
+              $products = ShopProduct::getArrayProductNameForCompany($company);
+              $uofmgs = UofmGroups::where('company_id', $company);
+            }
+            else{
+                $products = ShopProduct::query()->pluck('sku','id');
+                $uofmgs = UofmGroups::query()->pluck('name', 'id'); 
+            }
             $form->select('product_id', trans('language.admin.product'))->options($products)->rules(function ($form) {
                 return 'required|unique:shop_special_price,product_id,' . $form->model()->id . ',id';
             });
+            $form->select('uof_group', trans('language.admin.unit'))->options($uofmgs)->rules(function ($form) {
+                return 'required';
+            });
+            $form->select('uof_id', trans('language.admin.SecondaryUnit'))->options($units)->rules(function ($form) {
+                return 'required';
+            });
 
-            $form->html('
-        <div class="input-group">
-        <span class="input-group-addon">Bit</span><input disabled style="width: 120px; text-align: right;" type="text" id="price-old"  value="0" class="form-control price">
-        </div>', trans('language.admin.origin_price'));
+            //$form->html('', trans('language.product.price'));
             $form->model()->company_id =  $company ;
-            $form->currency('off', trans('language.admin.discount_percent'))->symbol('%')->options(['digits' => 0])->default(0);
-            $form->currency('price', trans('language.admin.special_price'))->symbol('')->options(['digits' => 0])->default(0);
+            $form->currency('price',  trans('language.product.price'))->symbol('')->options(['digits' => 0])->default(0);
             $form->switch('status', trans('language.admin.status'));
             $form->disableViewCheck();
             $form->disableEditingCheck();
@@ -136,7 +186,8 @@ class ShopPriceListController extends Controller
 
     public function jsProcess()
     {
-        $urlgetInfoProduct = route('getInfoProduct');
+        $urlgetInfoProduct = route('getInfoPrice');
+        $urlgetUofmList = route('uofm-details');
         return <<<JS
         $(document).ready(function(){
             var id = $('select[name*="product_id"]').val();
@@ -149,14 +200,36 @@ class ShopPriceListController extends Controller
                      id : id
                 },
                 success: function(result){
-                    console.log(result);
+                    console.log(result)
                     var returnedData = JSON.parse(result);
-                    $('#price-old').val(returnedData.price);
+                    $('input[name*="price"]').val(returnedData.price);
+                }
+            });
+            ///
+            var uofmg = $('select[name*="uof_group"]').val();
+            $.ajax({
+                url : '$urlgetUofmList',
+                type : "get",
+                datatype : "json",
+                dateType:"application/json; charset=utf-8",
+                data : {
+                     id : id
+                },
+                success: function(result){
+                    $('select[name*="uof_id"]').empty(); 
+                        for (const [key, value] of Object.entries(result.data)) {
+                            $('select[name*="uof_id"]').append(new Option(value, key));
+                        }
+                       
+                },
+                error:function(error){
+                    console.log(error);
                 }
             });
         });
-
-        $('[name*="product_id"]').change(function(){
+       //  $('')
+       $('[name*="product_id"]').change(function(){
+           console.log("fired");
             var id = $(this).val();
                 $.ajax({
                     url : '$urlgetInfoProduct',
@@ -168,11 +241,49 @@ class ShopPriceListController extends Controller
                     },
                     success: function(result){
                         var returnedData = JSON.parse(result);
-                        $('#price-old').val(returnedData.price);
-                        var newPrice = returnedData.price * (100 - parseInt($('#off').val())) /100;
-                        $('#price').val(newPrice);
+                        $('input[name*="price"]').val(returnedData.price);
+                    }
+                }) ;
+        });   
+        $('[name*="uof_group"]').change(function(){
+            var id = $(this).val();
+                $.ajax({
+                    url : '$urlgetUofmList',
+                    type : "get",
+                    datatype : "json",
+                    dateType:"application/json; charset=utf-8",
+                    data : {
+                         id : id
+                    },
+                    success: function(result){
+                        $('select[name*="uof_id"]').empty(); 
+                        for (const [key, value] of Object.entries(result.data)) {
+                            $('select[name*="uof_id"]').append(new Option(value, key));
+                        }
+                       
                     }
                 });
+        });
+
+        $('[name*="uof_id"').change(function(){
+        var id = $(this).val();
+        var prodId = $('[name*="product_id"]').children("option:selected").val();
+
+                $.ajax({
+                    url : '$urlgetInfoProduct',
+                    type : "get",
+                    datatype : "json",
+                    dateType:"application/json; charset=utf-8",
+                    data : {
+                         uofm:id,
+                         id : prodId
+                    },
+                    success: function(result){
+                        var returnedData = JSON.parse(result);
+                        $('input[name*="price"]').val(returnedData.price);
+                    }
+                });
+       
         });
 
     $('#off').change(function(){
@@ -180,8 +291,8 @@ class ShopPriceListController extends Controller
         if(offData ===''){
             $('#off').val(0);
         }
-    var newPrice = parseInt($('#price-old').val().replace(',','')) * (100 - parseInt($('#off').val())) /100;
-    $('#price').val(newPrice);
+  //  var newPrice = parseInt($('#price-old').val().replace(',','')) * (100 - parseInt($('#off').val())) /100;
+    //$('#price').val(newPrice);
     });
 
 
@@ -189,10 +300,45 @@ class ShopPriceListController extends Controller
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
   }
 
-
 JS;
     }
+  public function  update(Request $request, $id){
+    try{
+       $price = ProductPriceList::findOrFail($id);
+       $company_id = $this->getUserCompany()[0]->id;
+       if(isset($request->product_id)){
+          $product = ShopProduct::findOrFail($request->product_id);
+          if($product != null && $product->company_id != $company_id ){
+            if(!$this->checkSuperUser()){
+                abort(404);
+            }
+            if($product == null){
+                abort(404);
+            }
+         }
+        
+        $price->product_id = $request->product_id;
 
+       }
+
+       if(isset($request->uof_id)){
+           $price->uof_id = $request->uof_id; 
+       }
+       if(isset($request->status)){
+           $price->status = $request->status == "Off"?0:1;
+       }
+       if(isset($request->price)){
+           $price->price = $request->price;
+       }
+       if(isset($request->uof_group)){
+           $price->uof_group = $request->uof_group;
+       }
+       $price->save();
+    }catch(\Exception $e){
+        return $this->sendError($e->getMessage(), 400);
+    }
+
+  }
     public function getInfoProduct(Request $request)
     {
         $id = $request->input('id');
@@ -205,7 +351,7 @@ JS;
         return Admin::content(function (Content $content) use ($id) {
             $content->header('');
             $content->description('');
-            $content->body(Admin::show(ShopSpecialPrice::findOrFail($id), function (Show $show) {
+            $content->body(Admin::show(ProductPriceList::findOrFail($id), function (Show $show) {
                 $show->id('ID');
             }));
         });
