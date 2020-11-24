@@ -121,6 +121,17 @@ class ShopProductController extends Controller
             $productPriceList->company_id = $company;
             $productPriceList->save();
             }
+			if(array_key_exists('group', $arr)){
+                 $groups = $arr['group'];
+                 ShopAttributeDetail::where("product_id", $id)->delete();
+                 $groupsList = array();
+                 foreach($groups as $key => $attribs){
+                     $values = $attribs['name'];
+                     foreach( $values as $index => $value)
+                       $groupsList [] = array('name' => $value, 'product_id'=>$id, 'attribute_id' => $key);
+                 }
+                 ShopAttributeDetail::insert($groupsList);
+             }
 			 if(array_key_exists('images', $arr)){
                 $ImageData = array();
                 foreach($arr['images'] as $metaFile) {
