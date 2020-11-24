@@ -226,11 +226,22 @@ class ShopCategoryController extends Controller
         }
        // $languages     = Language::getLanguages();
        DB::beginTransaction(); 
+       DB::beginTransaction(); 
        if(isset($arr['ar__name'])) {
-          $descModel = ShopCategoryDescription::where('lang_id', 1)->where('category_id', $id);
+          $descModel = ShopCategoryDescription::where('lang_id', 1)->where('shop_category_id', $id)->delete();
+          $descModel = new ShopCategoryDescription();
+          $descModel->shop_category_id = $id;
+        //  $descModel->company_id = $model->company_id;
           $descModel->name = $arr['ar__name'];
+          $descModel->lang_id = 1;
+          $descModel->description = $arr['ar__description'];
+          $descModel->keyword = $arr['ar__keyword'];
+          //$descData = array('shop_category_id' => $id, )
           $descModel->save(); 
-             
+        }
+        $model->save();
+        DB::commit();
+        return redirect('shop_category/'. $id.'/edit');      
         }
         $model->save();
         DB::commit();
