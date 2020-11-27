@@ -67,10 +67,11 @@ Route::group([
         $router->get('itemInfo', 'ShopOrderController@getInfoItem')->name('getInfoItem');
         $router->get('priceInfo', 'ShopPriceListController@getInfoPrice')->name('getInfoPrice');
         $router->get('uofm-details', 'ShopPriceListController@getUnitList')->name('uofm-details');
+        $router->get('getUnit', 'ShopProductController@getUnit')->name('getUnit');
     });
  
    $router->group(['prefix' => 'item_units'], function ($router) {
-       $router->post('/{id}/addNewUofm','UnitOfMeasureController@addUnit');
+       $router->post('/{id}/addNewUofm','UnitOfMeasureController@addUnit')->name('addNewUofm');
    });
     $router->group(['prefix' => 'shop_order_edit'], function ($router) {
         $router->get('/{id}', 'ShopOrderController@detailOrder')->name('order_edit_get');

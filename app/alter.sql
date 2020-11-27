@@ -168,3 +168,5 @@ ALTER TABLE `admin_users` ADD `Cmanager_mobile` INT NULL AFTER `mobile`;
 
 --//
 ALTER TABLE `shop_product` ADD `uofm_groups` INT(11) NULL AFTER `price`;
+
+

@@ -8,4 +8,7 @@ class UofmGroups extends Model
   public function getUnits(){
     return $this->hasMany(Uofms::class,'group_id', 'id');
   }
+  public function category(){
+    return $this->belongsTo(ShopCategory::class, 'category_id', 'id');
+   }
 }

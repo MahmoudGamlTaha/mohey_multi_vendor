@@ -83,12 +83,16 @@ class ShopPriceListController extends Controller
             $grid->price(trans('language.admin.special_price'))->display(function ($price) {
                 return number_format($price);
             });
-          
-            $grid->unit(trans('language.unit'))->display(function ($unit) {
+            $grid->group(trans('language.admin.group'))->display(function ($group){
+                if(isset($group)){
+                    return $group['name'];
+                }
+            });
+            $grid->unit(trans('language.admin.unit'))->display(function ($unit) {
                 return $unit;
             });
 
-            $grid->comment(trans('language.admin.comment'));
+            //$grid->comment(trans('language.admin.comment'));
             $grid->status(trans('language.admin.status'))->switch();
             $grid->created_at(trans('language.admin.created_at'));
             $grid->model()->orderBy('id', 'desc');
@@ -165,16 +169,16 @@ class ShopPriceListController extends Controller
             $form->select('product_id', trans('language.admin.product'))->options($products)->rules(function ($form) {
                 return 'required|unique:shop_special_price,product_id,' . $form->model()->id . ',id';
             });
-            $form->select('uof_group', trans('language.admin.unit'))->options($uofmgs)->rules(function ($form) {
+            $form->select('uof_group', trans('language.admin.group'))->options($uofmgs)->rules(function ($form) {
                 return 'required';
             });
-            $form->select('uof_id', trans('language.admin.SecondaryUnit'))->options($units)->rules(function ($form) {
+            $form->select('uof_id', trans('language.admin.unit'))->options($units)->rules(function ($form) {
                 return 'required';
             });
 
             //$form->html('', trans('language.product.price'));
             $form->model()->company_id =  $company ;
-            $form->currency('price',  trans('language.product.price'))->symbol('')->options(['digits' => 0])->default(0);
+            $form->currency('price',  trans('language.product.price'))->options(['digits' => 0])->default(0);
             $form->switch('status', trans('language.admin.status'));
             $form->disableViewCheck();
             $form->disableEditingCheck();
@@ -200,7 +204,7 @@ class ShopPriceListController extends Controller
                      id : id
                 },
                 success: function(result){
-                    console.log(result)
+                    //console.log(result)
                     var returnedData = JSON.parse(result);
                     $('input[name*="price"]').val(returnedData.price);
                 }
@@ -325,7 +329,7 @@ JS;
            $price->uof_id = $request->uof_id; 
        }
        if(isset($request->status)){
-           $price->status = $request->status == "Off"?0:1;
+           $price->status = $request->status == "off"?0:1;
        }
        if(isset($request->price)){
            $price->price = $request->price;
@@ -353,6 +357,8 @@ JS;
             $content->description('');
             $content->body(Admin::show(ProductPriceList::findOrFail($id), function (Show $show) {
                 $show->id('ID');
+                $show->product_id();
+                $show->price();
             }));
         });
     }
