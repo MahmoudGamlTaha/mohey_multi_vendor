@@ -1,3 +1,5 @@
+
+
 @extends($theme.'.shop_layout')
 
 @section('center')
@@ -14,9 +16,9 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 @if(isset($products))
 <div class="row">
     <div class="col-md-2"></div>
-    <div class="col-md-8" style="height: 80px ; padding: 15px; border: 1px solid #dad6d6;">
-        <div class="carousel slide" id="myCarouse2" >
-            <div class="carousel-inner" style="height: 80px ;" >
+    <div class="col-md-8" style="height: 80px ; padding: 15px;">
+        <div class="carousel slide" id="myCarouse" data-ride="carousel" >
+            <div class="carousel-inner"   style="height: 100%;border: 1px solid #dad6d6 ;padding: 0;margin: 0 30px 0 85px;width: 93%;" >
                 @php
                 $index = 0;
                 @endphp
@@ -40,9 +42,9 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
     </div>
     <div class="col-md-2"></div>
 
-    <a class="left carousel-control" href="#myCarouse2" data-slide="prev"><i
+    <a class="left carousel-control" href="#myCarouse" data-slide="prev"><i
             class="glyphicon glyphicon-chevron-left"></i></a>
-    <a class="right carousel-control" href="#myCarouse2" data-slide="next"><i
+    <a class="right carousel-control" href="#myCarouse" data-slide="next"><i
             class="glyphicon glyphicon-chevron-right"></i></a>
 </div>
 </div>
@@ -140,7 +142,7 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 
     <div class="row" >
         <div class="col-sm-2" style="padding:0">
-            <div  style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
+            <div  style="background-color: #10243f;height: 35px;padding: 10px 5px;margin-bottom: 3px;">
                 <h2 class="title text-center center-block " style="color: white"> الاكثر مبيعا </h2>
             </div> 
             @for($i = 0; $i < count($products_most); $i++) @if($products_most[$i]->category_id == $value[0]->id && $countBest < 4)
@@ -163,7 +165,7 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 
 <div class="col-sm-8"  style=" " >
 
-    <div style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 15px;">
+    <div style="background-color: #10243f;height:35px;padding: 10px 5px;margin-bottom: 15px;">
         <a href="{{$value[0]->getUrl() }}">
             <h2 class="title text-center center-block"  style="color: white">{{ $value[0]->name }}</h2>
         </a>
@@ -221,7 +223,7 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 
 
 <div class="col-sm-2" style="padding: 0">
-    <div  style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
+    <div  style="background-color: #10243f;height: 35px;padding: 10px 5px;margin-bottom: 3px;">
         <h2 class="title text-center center-block "  style="color: white"> افضل عرض </h2>
         </div> 
 

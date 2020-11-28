@@ -62,13 +62,13 @@
           </div>
           <div class="col-sm-3">
             <div class="single-widget">
-              <h3 style="color: white"> بيع على دكانى</h3>
+              <h4 style="color: white"> بيع على دكانى</h4>
               <a href="" style="font-size: 18px;">كن بائعا معنا</>
             </div>
           </div>
           <div class="col-sm-3">
             <div class="single-widget">
-              <h3 style="color: white"> من نحن</h3>
+              <h4 style="color: white"> من نحن</h4>
               <ul class="nav nav-pills nav-stacked">
                     <li><a href="#">من</a></li>
                     <li><a href="#">انضم الى دكانى</a></li>
@@ -79,7 +79,7 @@
           </div>
           <div class="col-sm-3">
             <div class="single-widget">
-              <h3 style="color: white"> خدمة العملاء</h3>
+              <h4 style="color: white"> خدمة العملاء</h4>
               <ul class="nav nav-pills nav-stacked">
                     <li><a href="#">مركز المساعدة</a></li>
                     <li><a href="#">اتصل بنا</a></li>
@@ -97,7 +97,7 @@
           </div>
           <div class="col-sm-6">
             <div class="single-widget">
-              <h2>تواصل معنا</h2>
+              <h2 style="font-size: 20px">تواصل معنا</h2>
               <ul class="nav nav-pills nav-stacked contact">
                 <li><i class="fa fa-map-marker"></i><a href="#">{{ trans('language.shop_info.address') }}: {{ $configsGlobal['address'] }}</a></li>
                 <li><i class="fa fa-phone"></i><a href="#">{{ trans('language.shop_info.hotline') }}: {{ $configsGlobal['long_phone'] }}</a></li>
@@ -107,7 +107,7 @@
           </div>
           <div class="col-sm-3">
             <div class="single-widget">
-              <h2>تابعونا على</h2>
+              <h2 style="font-size: 20px">تابعونا على</h2>
               <img src="{{ asset($theme_asset.'/images/home/instagram.png') }}" style="width:45px;" alt="instagram"/>
               <img src="{{ asset($theme_asset.'/images/home/youtube.png') }}" style="width:30px;"alt="youtube"/>
               <img src="{{ asset($theme_asset.'/images/home/facebook.png') }}" style="width:30px;margin-right: 10px;" alt="facebook"/>

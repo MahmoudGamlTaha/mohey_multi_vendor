@@ -121,17 +121,15 @@
     <div class="first_header">
       <div class="container" >
       <div class="row">
-        <div class="col-sm-6">
+        {{-- <div class="col-sm-6">
           <div class="social">
             <a class="twitter" href="#" title="twitter"> <span class="fa fa-twitter"><span></a>
             <a class="google"  href="#" title="google"> <span class="fa fa-google-plus"><span></a>
             <a class="youtube"  href="#" title="youtube"> <span class="fa fa-youtube"><span></a>
             <a class="facebook" href="#" title="facebook"> <span class="fa fa-facebook"><span></a>
-
-
           </div>
-        </div>
-        <div class="col-sm-6" id="lang">
+        </div> --}}
+        {{-- <div class="col-sm-6" id="lang">
             <div class="btn-group pull-right">
               <div class="btn-group locale">
                 @if (count($languages)>1)
@@ -165,7 +163,7 @@
             </div>
 
           
-        </div>
+        </div> --}}
       </div>
       </div>
     </div>
@@ -174,7 +172,8 @@
       <div class="container">
         <div class="row">
 
-          <div class="col-sm-1"></div>
+        
+
           <div class="col-sm-3">
             <div class="contactinfo">
               <ul class="nav nav-pills">
@@ -213,6 +212,9 @@
             </div>
           </div>
 
+
+
+
           <div class="col-sm-6">
                   <div class="dropdown ">
                   
@@ -228,6 +230,49 @@
                     </div>
 
           </div>
+
+
+
+          <div class="col-sm-3">
+
+
+            <div class="btn-group pull-right" style="margin-top: -10px; ">
+              <div class="btn-group locale">
+                @if (count($languages)>1)
+                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown" style="background: #ffffff;color: #10243f;">
+                  <span class="caret" style="margin-left: 3px" ></span>
+                  <span>Arabic  <span>
+                    <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;"> 
+                </button>
+                <ul class="dropdown-menu">
+                  @foreach ($languages as $key => $language)
+                    <li><a href="{{ url('locale/'.$key) }}">
+                      <span>{{$key}} <span>
+                        <img src="{{ asset($path_file.'/'.$language['icon']) }}" style="height: 12px; margin: 5px;"></a></li>
+                  @endforeach
+                </ul>
+                @endif
+              </div>
+              @if (count($currencies)>1)
+               <div class="btn-group locale">
+                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown"  style="background: #ffffff;color: #10243f;">
+                  <span class="caret"></span>
+                  {{ \Helper::getCurrency()['name'] }}
+                </button>
+                <ul class="dropdown-menu">
+                  @foreach ($currencies as $key => $currency)
+                    <li><a href="{{ url('currency/'.$currency->code) }}">{{ $currency->name }}</a></li>
+                  @endforeach
+                </ul>
+              </div>
+              @endif
+            </div>
+
+          </div>
+
+
+
+
           
           
 
