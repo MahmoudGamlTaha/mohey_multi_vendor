@@ -15,6 +15,7 @@ use Encore\Admin\Layout\Row;
 use Encore\Admin\Widgets\Box;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Encore\Admin\Show;
 
 //sprint 3
 class UnitOfMeasureController extends Controller
@@ -80,10 +81,14 @@ class UnitOfMeasureController extends Controller
             $form->disableViewCheck();
             $form->disableEditingCheck();
             $form->divider();
+            $form->tools(function (Form\Tools $tools) {
+                $tools->disableView();
+            });
             $data= [];
             $fields = [];
-            $uofms = Uofms::where('group_id', $id)->get();
            
+            if($id !== null){
+            $uofms = Uofms::where('group_id', $id)->get();
             foreach($uofms as $key => $uofm){
                 $data["title"] = $uofm->code;  
                 $data['codeValue'] = $uofm->code;
@@ -105,8 +110,10 @@ class UnitOfMeasureController extends Controller
                 "datas" => $fields,
                 "Groupkey" =>$id
             ])->render());
-        
+            }
+
     });
+
 }
 
     public function updateUofm(Request $request)
@@ -122,12 +129,12 @@ class UnitOfMeasureController extends Controller
         try{
         $validate = Validator::make($request->all(),
         [
-            'ucode' => 'required',
-            'uname' => 'required',
-            'inbase' => 'required|integer'
+            'code' => 'required',
+            'name' => 'required',
+            'amount' => 'required|integer'
         ]);
         if($validate->fails()){
-            return $this->sendError("data error",400,400);
+            return $this->sendError("Please fill in all the fields",400,400);
         }
         $company = null;
         if($this->checkSuperUser()){
@@ -148,20 +155,24 @@ class UnitOfMeasureController extends Controller
           }
         }
         $check = Uofms::where(['amount_in_base'=>1,'group_id'=> $group_id])->first();
-        if(!$check && $request->inbase != 1){
+        if(!$check && $request->amount != 1){
             return $this->sendError("add base unit first amount_in_base = 1",400,400);
         }
-        $check = Uofms::where(['code'=>$request->ucode,'group_id'=> $group_id])->first();
+        if($check && $request->amount == 1)
+        {
+            return $this->sendError("the base amount has already been defined",400,400);
+        }
+        $check = Uofms::where(['code'=>$request->code,'group_id'=> $group_id])->first();
         if($check){
             if($check->company_id == $company){
                return $this->sendError("code already exist",400,400);
             }
         }
           $uofm = new Uofms();
-          $uofm->amount_in_base = $request->inbase;
+          $uofm->amount_in_base = $request->amount;
           $uofm->company_id = $company;
-          $uofm->code = $request->ucode;
-          $uofm->name = $request->uname;
+          $uofm->code = $request->code;
+          $uofm->name = $request->name;
           $uofm->group_id = $group_id;
           $uofm->save();
           return $this->sendResponse("added sucessflly", 200);

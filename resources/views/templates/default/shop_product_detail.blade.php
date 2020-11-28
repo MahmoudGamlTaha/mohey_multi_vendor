@@ -372,7 +372,7 @@
                     uID: "{{Auth::id() ?? 0}}",
                     ratedIndex: ratedIndex,
                     productID:  {{ $product->id }} ,
-                    companyID: {{ $product->company()->first()->id }},
+                    //companyID: {{ $product->company()->first()->id }},
                 },
                 success: function (result) {
                     uID = result.id;

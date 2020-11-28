@@ -195,6 +195,16 @@ return [
         'access_denied_msg'                 => 'Can\'t disable this language. Please change default language before do that.',
         'Orderdetail'                       => 'تفاصيل الطلب',
         'Orderdetail'                       => 'Order Detail',
+        'special_price_manager'             => 'قائمة الاسعار',
+        'product'                           => 'المنتج',
+        'special_price'                     => 'السعر',
+        'unit'                              => 'الحجم',
+        'created_at'                        => 'تاريخ الانشاء',
+        'group'                             => 'الوحده',
+        'code'                              => 'الكود',
+        'add_new_item'                      => 'اضافة وحده جديده',
+        'unit_name'                         => 'الاسم',
+        'amount'                            => ''
     ],
     'order'              => [
         'title'                 => 'Order',
