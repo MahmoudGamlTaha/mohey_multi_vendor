@@ -77,7 +77,7 @@ $(document).ready(function() {
       var name = $("#uofmName").val();
       var amount = $("#uofmAmount").val();
       saveToTheDB(code , name , amount);
-    });
+    }).attr('data-dismiss', 'modal');
 
     function saveToTheDB(code , name, amount) {
       $.ajaxSetup({

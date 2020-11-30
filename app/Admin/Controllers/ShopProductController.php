@@ -54,6 +54,7 @@ class ShopProductController extends Controller
             $shopProductModel->price = $arr['price'];
             $shopProductModel->cost = $arr['cost'];
             $shopProductModel->category_id = $arr['category_id'];
+            $shopProductModel->uofm_groups = $arr['uofm_groups'];
         //   $shopProductModel->vendor_id = $arr['vendor_id'];
             $shopProductModel->status = $arr['status'] == 'on' ? 1 : 0;
             $shopProductModel->stock  = $arr['stock'];
@@ -211,6 +212,11 @@ class ShopProductController extends Controller
             $grid->sku(trans('language.product.sku'))->sortable();
             $grid->name(trans('language.product.product_name'))->sortable();
             $grid->category()->name(trans('language.categories'));
+            $grid->group(trans('language.admin.group'))->display(function ($group){
+                if(isset($group)){
+                    return $group['name'];
+                }
+            });
             $grid->cost(trans('language.product.price_cost'))->display(function ($price) {
                 return number_format($price);
             });
@@ -317,8 +323,9 @@ class ShopProductController extends Controller
                $uofms = ProductPriceList::where('product_id', $idCheck)->pluck('id', 'uof_id');
                
             //select 
-               $form->inlineForm()->addSelectItem(UofmGroups::all(), $uofms);
-              
+               //$form->inlineForm()->addSelectItem(UofmGroups::all(), $uofms);
+                $uofm_groups = UofmGroups::pluck('name', 'id');
+                $form->select('uofm_groups', trans('language.admin.group'))->options($uofm_groups)->rules('required');
                 $form->ignore($arrFields);
 //end language
                 if(!$this->checkSuperUser())
@@ -326,7 +333,7 @@ class ShopProductController extends Controller
                   $arrBrand  = ShopBrand::where('company_id', $this->getUserCompany()[0]->id)->pluck('name', 'id')->all();
                 }
                 else {
-                    $arrBrand  = ShopBrand::pluck('name', 'id')->all();      
+                    $arrBrand  = ShopBrand::pluck('name', 'id')->all();
                 }
                 $arrBrand  = ['0' => '-- ' . trans('language.brands') . ' --'] + $arrBrand;
                 if(!$this->checkSuperUser())
