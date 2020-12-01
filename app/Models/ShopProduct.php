@@ -79,10 +79,10 @@ class ShopProduct extends Model
     {
         return $this->hasMany(ShopAttributeDetail::class, 'product_id', 'id');
     }
-    public function getUnit()
-    {
-        return UofmGroups::where('id', $this->uofm_groups)->first();
-    }
+    ///public function getUnit()
+    ///{
+    ///    return UofmGroups::where('id', $this->uofm_groups)->first();
+    //}
     public function group()
     {
         return $this->belongsTo(UofmGroups::class, 'uofm_groups', 'id');
