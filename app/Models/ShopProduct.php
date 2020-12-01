@@ -83,6 +83,10 @@ class ShopProduct extends Model
     {
         return UofmGroups::where('id', $this->uofm_groups)->first();
     }
+    public function group()
+    {
+        return $this->belongsTo(UofmGroups::class, 'uofm_groups', 'id');
+    }
 
 /**
  * [getPrice description]

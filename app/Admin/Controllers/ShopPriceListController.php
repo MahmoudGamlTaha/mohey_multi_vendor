@@ -143,10 +143,10 @@ class ShopPriceListController extends Controller
         if ($priceList) {
             $product->price = $priceList->price;
         } 
-    
+        $uofm_groups = UofmGroups::where('id', $product->uofm_groups)->first();
         $arrayReturn                     = $product->toArray();
         $arrayReturn['renderAttDetails'] = $product->renderAttDetails();
-        return json_encode($arrayReturn);
+        return json_encode([$arrayReturn, $uofm_groups]);
    // return $this->sendError('product not found', 400);
     }
     protected function form()
@@ -160,11 +160,11 @@ class ShopPriceListController extends Controller
             $units = null;
             if(!$this->checkSuperUser()){
               $products = ShopProduct::getArrayProductNameForCompany($company);
-              $uofmgs = UofmGroups::where('company_id', $company);
+              //$uofmgs = UofmGroups::where('company_id', $company);
             }
             else{
                 $products = ShopProduct::query()->pluck('sku','id');
-                $uofmgs = UofmGroups::query()->pluck('name', 'id'); 
+                //$uofmgs = UofmGroups::query()->pluck('name', 'id');
             }
             $form->select('product_id', trans('language.admin.product'))->options($products)->rules(function ($form) {
                 return 'required|unique:shop_special_price,product_id,' . $form->model()->id . ',id';
@@ -204,9 +204,17 @@ class ShopPriceListController extends Controller
                      id : id
                 },
                 success: function(result){
-                    //console.log(result)
                     var returnedData = JSON.parse(result);
-                    $('input[name*="price"]').val(returnedData.price);
+                    console.log(returnedData[0].price)
+                    $('input[name*="price"]').val(returnedData[0].price);
+                    $('select[name*="uof_group"]').empty();
+                    if(returnedData[1] !== null)
+                    {
+                        $('select[name*="uof_group"]').append(new Option(returnedData[1].name, returnedData[1].id)).val(returnedData[1].id);
+                        $('select[name*="uof_group"]').change();
+                    }else{
+                        $('select[name*="uof_id"]').empty(); 
+                    }
                 }
             });
             ///
@@ -245,11 +253,20 @@ class ShopPriceListController extends Controller
                     },
                     success: function(result){
                         var returnedData = JSON.parse(result);
-                        $('input[name*="price"]').val(returnedData.price);
+                        $('input[name*="price"]').val(returnedData[0].price);
+                        $('select[name*="uof_group"]').empty();
+                        if(returnedData[1] !== null)
+                        {
+                            $('select[name*="uof_group"]').append(new Option(returnedData[1].name, returnedData[1].id));
+                            $('select[name*="uof_group"]').change();
+                        }else{
+                            $('select[name*="uof_id"]').empty(); 
+                        }
                     }
                 }) ;
         });   
         $('[name*="uof_group"]').change(function(){
+            //console.log($(this).val());
             var id = $(this).val();
                 $.ajax({
                     url : '$urlgetUofmList',
@@ -284,7 +301,7 @@ class ShopPriceListController extends Controller
                     },
                     success: function(result){
                         var returnedData = JSON.parse(result);
-                        $('input[name*="price"]').val(returnedData.price);
+                        $('input[name*="price"]').val(returnedData[0].price);
                     }
                 });
        
