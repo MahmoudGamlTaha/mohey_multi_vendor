@@ -118,7 +118,7 @@ class Helper
         if ($cart->count()) {
             foreach ($cart->content() as $key => $item) {
                 $product    = \App\Models\ShopProduct::find($item->id);
-                $unit       = \App\Models\Uofms::where(['id' => $item->uofm['uofm'], 'amount_in_base' => 1])->first()->id;
+                $unit       = \App\Models\Uofms::where(['group_id' => $item->uofm['uofm_groups'], 'amount_in_base' => 1])->first()->id;
                 $arrCart['items'][] = [
                     'id'        => $item->id,
                     'qty'       => $item->qty,

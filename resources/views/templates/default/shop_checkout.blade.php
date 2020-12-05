@@ -66,7 +66,7 @@
         </td>
         <td>{!! $product->showPrice() !!}</td>
         <td>{{$item->qty}}</td>
-        <td>{{$uofms->name ."/". \App\Models\Uofms::where(['id' => $item->uofm['uofm'], 'amount_in_base' => 1])->first()->name}}</td>
+        <td>{{$uofms->name ."/". \App\Models\Uofms::where('id', $item->uofm['uofm'])->first()->name}}</td>
         <td style="width:10%">{{\Helper::currencyRender($item->subtotal)}}</td>
     </tr>
     @endforeach

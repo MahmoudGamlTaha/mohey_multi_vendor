@@ -67,7 +67,7 @@
                                 @php
                                     $uofm = \App\Models\Uofms::where('group_id', $item->uofm['uofm_groups'])->get();
                                 @endphp
-                                <option hidden disabled selected>{{$uofms->name ."/". \App\Models\Uofms::where(['id' => $item->uofm['uofm'], 'amount_in_base' => 1])->first()->name}}</option>
+                                <option hidden disabled selected>{{$uofms->name ."/". \App\Models\Uofms::where('id', $item->uofm['uofm'])->first()->name}}</option>
                                 @foreach($uofm as $unit)
                                 <option class="test-{{$item->id}}" data-index="{{$uofms->id}}" value="{{$unit->id ?? 0}}">{{$uofms->name ."/".$unit->name ?? 0}}</option>
                                 @endforeach
