@@ -46,6 +46,7 @@
             $n = (isset($n)?$n:0);
             $n++;
             $product = App\Models\ShopProduct::find($item->id);
+            $uofms = \App\Models\UofmGroups::where('id', $product->uofm_groups)->first();
         @endphp
     <tr class="row_cart">
         <td >{{ $n }}</td>
@@ -65,7 +66,7 @@
         </td>
         <td>{!! $product->showPrice() !!}</td>
         <td>{{$item->qty}}</td>
-        <td>{{$product->getUnit()->name ."/". $product->getUnit()->getUnits()->where('id', $item->uofm['uofm'])->first()->name}}</td>
+        <td>{{$uofms->name ."/". \App\Models\Uofms::where('id', $item->uofm['uofm'])->first()->name}}</td>
         <td style="width:10%">{{\Helper::currencyRender($item->subtotal)}}</td>
     </tr>
     @endforeach

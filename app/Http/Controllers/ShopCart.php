@@ -278,7 +278,7 @@ class ShopCart extends GeneralController
         }
 
         $product    = ShopProduct::find($product_id);
-        $unit       = $product->getUnit()->getUnits()->where('amount_in_base', 1)->first()->id;
+        $unit       = Uofms::where(['amount_in_base'=> 1, 'group_id' => $product->uofm_groups])->first()->id;
         if ($product->allowSale()) {
             $options        = array();
             $options['opt'] = $opt_sku;
@@ -538,7 +538,7 @@ class ShopCart extends GeneralController
             $options['att'] = $attribute;
             $options['opt'] = $opt_sku;
             $product        = ShopProduct::find($id);
-            $unit           = $product->getUnit()->getUnits()->where('amount_in_base', 1)->first()->id;
+            $unit           = Uofms::where(['amount_in_base'=> 1, 'group_id' => $product->uofm_groups])->first()->id;
             $html           = '';
             switch ($instance) {
                 case 'default':

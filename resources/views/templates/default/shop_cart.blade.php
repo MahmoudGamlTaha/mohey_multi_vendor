@@ -34,9 +34,9 @@
             @foreach($cart as $item)
             @php
             $product = App\Models\ShopProduct::find($item->id);
-            $uofms = $product->getUnit();
+            $uofms = \App\Models\UofmGroups::where('id', $product->uofm_groups)->first();
            @endphp
-              <tr>
+            <tr>
                 <td style="text-align:center;">
                 <a href="{{$product->getUrl() }}"><img width="100" src="{{asset($product->getImage())}}" alt=""></a>
                 </td>
@@ -63,13 +63,13 @@
                 <td style="width:20%;padding:33px;" class="col-md-12">
                     <div class="form-group">
                         <select id="units-{{$item->id}}" style="font-size:15px;padding:3px;border-style:none;color:black;" class="form-control" onclick="units('{{$item->rowId}}', {{ $item->id }});">
-                            @if($uofms !== null)
+                        @if($uofms !== null)
                                 @php
-                                    $uofm = $uofms->getUnits()->get();
+                                    $uofm = \App\Models\Uofms::where('group_id', $item->uofm['uofm_groups'])->get();
                                 @endphp
-                                <option hidden disabled selected>{{$product->getUnit()->name ."/". $product->getUnit()->getUnits()->where('id', $item->uofm['uofm'])->first()->name}}</option>
+                                <option hidden disabled selected>{{$uofms->name ."/". \App\Models\Uofms::where('id', $item->uofm['uofm'])->first()->name}}</option>
                                 @foreach($uofm as $unit)
-                                <option class="test-{{$item->id}}" data-index="{{$product->getUnit()->id}}" value="{{$unit->id ?? 0}}">{{$product->getUnit()->name ."/".$unit->name ?? 0}}</option>
+                                <option class="test-{{$item->id}}" data-index="{{$uofms->id}}" value="{{$unit->id ?? 0}}">{{$uofms->name ."/".$unit->name ?? 0}}</option>
                                 @endforeach
                             @else
                                 <option>لا يوجد</option>
