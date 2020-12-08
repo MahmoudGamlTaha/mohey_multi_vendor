@@ -327,12 +327,12 @@ class ShopCart extends GeneralController
         } else {
             $dataTotal = json_decode($data['dataTotal'], true);
             $address   = json_decode($data['address'], true);
-            $payment   = $data['payment'];
+            $payment   = $data['paymentTerm'];
             $shipping  = $data['shipping'];
         }
         try {
             //Process total
-            //$subtotal       = (new ShopOrderTotal)->sumValueTotal('subtotal', $dataTotal);
+            $subtotal       = (new ShopOrderTotal)->sumValueTotal('subtotal', $dataTotal);
             $shipping       = (new ShopOrderTotal)->sumValueTotal('shipping', $dataTotal); //sum shipping
             $discount       = (new ShopOrderTotal)->sumValueTotal('discount', $dataTotal); //sum discount
             $received       = (new ShopOrderTotal)->sumValueTotal('received', $dataTotal); //sum received
@@ -347,9 +347,14 @@ class ShopCart extends GeneralController
                 if(!is_numeric($value->id) || !is_numeric($value->qty)){
                     return $this->sendError("data error",400);
                 }
+                $paymentTerm = CustomerPaymentTerm::find($payment);
+                if($paymentTerm->user_id != auth()->user()->id){
+                    abort(404);
+                }
                 $product = ShopProduct::findOrFail($value->id);
-                $subtotal = $value->price * $value->qty;
-                $total = $subtotal + $shipping;
+                //$subtotal = $value->price * $value->qty;
+                $rate = $paymentTerm->rate * $subtotal;
+                $total = $subtotal + $shipping + $rate;
                 if($productCount == 0){
                     $order = $this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);
 
@@ -382,7 +387,8 @@ class ShopCart extends GeneralController
                 $arrDetail['qty']         = $value->qty;
                 $arrDetail['attribute']   = ($value->options->att) ? json_encode($value->options->att) : null;
                 $arrDetail['sku']         = $product->sku;
-                $arrDetail['total_price'] = \Helper::currencyValue($value->price) * $value->qty;
+                //$arrDetail['total_price'] = \Helper::currencyValue($value->price) * $value->qty;
+                $arrDetail['total_price'] = $total;
                 $arrDetail['created_at']  = date('Y-m-d H:i:s');
                 ShopOrderDetail::insert($arrDetail);
                 //If product out of stock

@@ -27,7 +27,7 @@ class CustomerPaymentTermController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header(trans('language.vendor'));
+            $content->header(trans('language.payments.client_payment_terms'));
             $content->description(' ');
 
             $content->body($this->grid());
@@ -44,7 +44,7 @@ class CustomerPaymentTermController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header(trans('language.payments.payment_terms'));
+            $content->header(trans('language.payments.client_payment_terms'));
             $content->description(' ');
 
             $content->body($this->form()->edit($id));
@@ -60,7 +60,7 @@ class CustomerPaymentTermController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header(trans('language.payment_terms'));
+            $content->header(trans('language.payments.client_payment_terms'));
             $content->description(' ');
 
             $content->body($this->form());
@@ -105,7 +105,7 @@ class CustomerPaymentTermController extends Controller
             $form->select('user_id', trans('language.admin.name'))->options($users)->rules('required');
             $form->select('payment_term_id', trans('language.payments.payment_term'))->options($paymentTerm)->rules('required');;
             $form->text('rate', trans('language.payments.benefit'));
-            $form->model()->company_id = $this->getUserCompany()[0]->id;
+            //$form->model()->company_id = $this->getUserCompany()[0]->id;
             $form->disableViewCheck();
             $form->disableEditingCheck();
             $form->tools(function (Form\Tools $tools) {

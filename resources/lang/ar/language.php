@@ -20,7 +20,8 @@ return [
     'payments'       =>[
      "payment_term"     => "نظام الدفع",
      "payment_terms"    =>"أنظمة الدفع",
-     "benefit"          => "الفائدة"
+     "benefit"          => "الفائدة",
+     "client_payment_terms" => "انظمه الدفع للعميل",
     ],
     'wishlist'           => 'المفضلة',
     'add_to_wishlist'    => 'الحفظ لوقت لاحق',
@@ -204,7 +205,8 @@ return [
         'code'                              => 'الكود',
         'add_new_item'                      => 'اضافة وحده جديده',
         'unit_name'                         => 'الاسم',
-        'amount'                            => ''
+        //'amount'                            => ''
+        'payment_benefit'                   => 'الفائده',
     ],
     'order'              => [
         'title'                 => 'Order',

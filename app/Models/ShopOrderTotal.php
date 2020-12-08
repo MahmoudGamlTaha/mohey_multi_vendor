@@ -224,9 +224,9 @@ class ShopOrderTotal extends Model
  */
     public static function insertTotal($data)
     {
-       $orderTotal = self::where("order_id", $order_id)->first();
+       $orderTotal = self::where("order_id", $data[0]['order_id'])->first();
        if($orderTotal != null) {
-           return self::updateSubTotal($order_id, $data[0]["value"]);
+           return self::updateSubTotal($data[0]['order_id'], $data[0]["value"]);
         }
 
         for ($i = 0; $i < count($data); $i++) {
