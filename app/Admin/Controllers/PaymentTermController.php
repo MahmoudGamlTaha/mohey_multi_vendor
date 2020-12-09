@@ -100,7 +100,7 @@ class PaymentTermController extends Controller
         return Admin::form(PaymentTerm::class, function (Form $form) {
 
             $form->text('name', trans('language.payments.payment_term'))->rules('required');
-            $form->text('rate', trans('language.admin.payment_benefit'))->rules('numeric|min:0')->default(0);
+            $form->text('rate', trans('language.admin.payment_benefit'))->rules('required|numeric|min:0')->default(0);
             //$form->model()->company_id = $this->getUserCompany()[0]->id;
             $form->disableViewCheck();
             $form->disableEditingCheck();

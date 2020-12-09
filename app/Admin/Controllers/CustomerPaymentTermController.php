@@ -101,10 +101,17 @@ class CustomerPaymentTermController extends Controller
     {
         return Admin::form(CustomerPaymentTerm::class, function (Form $form) {
             $users = User::where('active', 1)->pluck("username", "id");
-            $paymentTerm = PaymentTerm::pluck("name", "id");   
+            $paymentTerm = PaymentTerm::pluck("name", "id");
             $form->select('user_id', trans('language.admin.name'))->options($users)->rules('required');
             $form->select('payment_term_id', trans('language.payments.payment_term'))->options($paymentTerm)->rules('required');;
             $form->text('rate', trans('language.payments.benefit'));
+            $form->saving(function (Form $form) {
+                if($form->rate == null)
+                {
+                    $form->rate = PaymentTerm::where('id', $form->payment_term_id)->first()->rate;
+                }
+
+            });
             //$form->model()->company_id = $this->getUserCompany()[0]->id;
             $form->disableViewCheck();
             $form->disableEditingCheck();
@@ -112,6 +119,32 @@ class CustomerPaymentTermController extends Controller
                 $tools->disableView();
             });
         });
+    }
+
+    public function update(Request $request, $id){
+        $arr = $request->all();
+        if(!is_numeric($id)){
+            abort(404);
+        }
+        try{
+            $payment = CustomerPaymentTerm::findOrFail($id);
+            if(isset($arr['user_id'])){
+                $payment->user_id = $arr['user_id'];
+            }
+            if(isset($arr['rate'])){
+                $payment->rate = $arr['rate'];
+            }
+            if(isset($arr['payment_term_id'])){
+                $payment->payment_term_id = $arr['payment_term_id'];
+            }
+            if($arr['rate'] == null)
+            {
+                $payment->rate = PaymentTerm::where('id', $arr['payment_term_id'])->first()->rate;
+            }
+            $payment->save();
+        }catch(\Exception $ex){
+            return $this->sendError($ex->getMessage(), 400);
+        }
     }
 
     public function show($id)

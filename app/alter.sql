@@ -175,4 +175,7 @@ ALTER TABLE `customer_payment_term` CHANGE `id` `id` BIGINT(20) NOT NULL AUTO_IN
 ALTER TABLE `customer_payment_term` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL;
 ALTER TABLE `customer_payment_term` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
 
+--//
+ALTER TABLE `shop_order` ADD `payment_term` INT(11) NOT NULL AFTER `payment_method`;
+
 

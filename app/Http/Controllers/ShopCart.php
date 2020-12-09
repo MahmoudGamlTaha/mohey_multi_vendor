@@ -327,7 +327,8 @@ class ShopCart extends GeneralController
         } else {
             $dataTotal = json_decode($data['dataTotal'], true);
             $address   = json_decode($data['address'], true);
-            $payment   = $data['paymentTerm'];
+            $payment_method   = $data['payment'];
+            $payment_term   = $data['paymentTerm'];
             $shipping  = $data['shipping'];
         }
         try {
@@ -337,7 +338,6 @@ class ShopCart extends GeneralController
             $discount       = (new ShopOrderTotal)->sumValueTotal('discount', $dataTotal); //sum discount
             $received       = (new ShopOrderTotal)->sumValueTotal('received', $dataTotal); //sum received
             //$total          = (new ShopOrderTotal)->sumValueTotal('total', $dataTotal);
-            $payment_method = $payment;
             //end total
             DB::connection('mysql')->beginTransaction();
             $productCount = 0;
@@ -347,7 +347,7 @@ class ShopCart extends GeneralController
                 if(!is_numeric($value->id) || !is_numeric($value->qty)){
                     return $this->sendError("data error",400);
                 }
-                $paymentTerm = CustomerPaymentTerm::find($payment);
+                $paymentTerm = CustomerPaymentTerm::find($payment_term );
                 if($paymentTerm->user_id != auth()->user()->id){
                     abort(404);
                 }
@@ -356,10 +356,10 @@ class ShopCart extends GeneralController
                 $rate = $paymentTerm->rate * $subtotal;
                 $total = $subtotal + $shipping + $rate;
                 if($productCount == 0){
-                    $order = $this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);
+                    $order = $this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method, $payment_term);
 
                 } else {
-                    $order = clone $this->createOrder($order->id, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method);
+                    $order = clone $this->createOrder($order->id, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method, $payment_term);
 
                 }//
 
@@ -489,7 +489,7 @@ class ShopCart extends GeneralController
 
     }
 
-    private function createOrder($id, $company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method){
+    private function createOrder($id, $company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method, $payment_term){
         if($id != null){
             $shopOrder = ShopOrder::findOrFail($id);
             if($shopOrder->company_id == $company_id){
@@ -517,6 +517,7 @@ class ShopCart extends GeneralController
         $shopOrder->address2         = $address['address2'];
         $shopOrder->phone            = $address['phone'];
         $shopOrder->payment_method   = $payment_method;
+        $shopOrder->payment_term     = $payment_term;
         $shopOrder->comment          = $address['comment'];
         $shopOrder->created_at       = date('Y-m-d H:i:s');
         $shopOrder->save();
