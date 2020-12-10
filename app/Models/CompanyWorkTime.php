@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class CompanyWorkTime extends Model
 {
     protected $table ='company_work_time';
+    public $timestamps = false;
 }

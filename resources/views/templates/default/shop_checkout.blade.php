@@ -55,11 +55,11 @@
             {{ $product->getName() }}<br>
 {{-- Process attributes --}}
             @if ($item->options->att)
-            (
+
                 @foreach ($item->options->att as $keyAtt => $att)
                     <b>{{ $attributesGroup[$keyAtt]['name'] }}</b>: <i>{{ $att }}</i> ;
                 @endforeach
-            )<br>
+            <br>
             @endif
 {{-- //end Process attributes --}}
             <a href="{{$product->getUrl() }}"><img width="100" src="{{asset($product->getImage())}}" alt=""></a>
@@ -87,15 +87,14 @@
         </div>
         @if(isset($payment_term))
         <div style="margin-left:4%">
-        <select class="form-control" name="paymentTerm">
-            <option>none</option>
+        <select id="paymentTerm" class="form-control" name="paymentTerm">
+            <option>Cash</option>
           @foreach($payment_term as $key => $term)
-             <option>{{$term->paymentTerm()->first()->name}}</option>
+             <option value="{{$term->id}}">{{$term->paymentTerm()->first()->name}}</option>
           @endforeach
          </select>
         </div>
     </div>
-       
         @endif
     </div>
     <div class="row">
@@ -103,23 +102,23 @@
         <h3 class="control-label"><i class="fa fa-credit-card-alt"></i> {{ trans('language.cart.shipping_address') }}:<br></h3>
         <table style="width: 90%;text-align: center;" class="table box table-bordered" id="showTotal">
             <tr>
-                <th>{{ trans('language.cart.to_name') }}:</td>
+                <td>{{ trans('language.cart.to_name') }}:</td>
                 <td>{{ $address['toname'] }}</td>
             </tr>
             <tr>
-                <th>{{ trans('language.cart.phone') }}:</td>
+                <td>{{ trans('language.cart.phone') }}:</td>
                 <td>{{ $address['phone'] }}</td>
             </tr>
              <tr>
-                <th>{{ trans('language.cart.email') }}:</td>
+                <td>{{ trans('language.cart.email') }}:</td>
                 <td>{{ $address['email'] }}</td>
             </tr>
              <tr>
-                <th>{{ trans('language.cart.address') }}:</td>
+                <td>{{ trans('language.cart.address') }}:</td>
                 <td>{{ $address['address1'].' '.$address['address2'] }}</td>
             </tr>
              <tr>
-                <th>{{ trans('language.cart.note') }}:</td>
+                <td>{{ trans('language.cart.note') }}:</td>
                 <td>{{ $address['comment'] }}</td>
             </tr>
         </table>
@@ -133,16 +132,21 @@
                     @if ($element['value'] !=0)
 
                      @if ($element['code']=='total')
+                         @php
+                            $value = $element['value'];
+                         @endphp
                          <tr class="showTotal" style="background:#f5f3f3;font-weight: bold;">
                      @else
                         <tr class="showTotal">
                      @endif
                              <th>{!! $element['title'] !!}</th>
-                            <td style="text-align: right" id="{{ $element['code'] }}">{{$element['text'] }}</td>
+                            <td style="text-align: right" id="{{ $element['code'] }}" class="total">{{$element['text'] }}</td>
                         </tr>
                     @endif
 
                     @endforeach
+                        <th>الفائده المضافه</th>
+                        <td style="font-weight:bold" class="rate">0%</td>
                 </table>
         {{-- Payment method --}}
             <div class="row">
@@ -195,4 +199,19 @@
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function (){
+            console.log('hello bebo from outside the function');
+            $('#paymentTerm').change(function (){
+                console.log('hi bebo');
+                if($('#paymentTerm').val() === 'Cash') {
+                    $('.total').html({{$value}});
+                    $('.rate').html('0%');
+                }else{
+                    $('.total').html('ج'+{{($term->rate * $value)+$value}});
+                    $('.rate').html({{$term->rate}}+'%');
+                }
+            });
+        });
+    </script>
 @endpush

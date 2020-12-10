@@ -139,13 +139,13 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
 
                       </td>
               <td>
-                <span class="cart-total-span">EGP {{$order->price}}</span>
+                <span class="cart-total-span">EGP {{\App\Models\ShopProduct::where('id', $order->product_id)->first()->price}}</span>
               </td>
               <td>
                    {{$order->qty}}
               </td>
               <td>
-                <span style="color:#81C4E6;">EGP {{$order->price * $order->qty}}</span>
+                <span style="color:#81C4E6;">EGP {{$order->total_price}}</span>
               </td>
               <td>
                       
@@ -237,7 +237,7 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
               <td>
                 <span class="cart-total-span">EGP {{$product->price}}</span>
               </td>
-          
+
             </tr>
           @endforeach
           </tbody>
