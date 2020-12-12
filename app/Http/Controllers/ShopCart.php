@@ -347,13 +347,18 @@ class ShopCart extends GeneralController
                 if(!is_numeric($value->id) || !is_numeric($value->qty)){
                     return $this->sendError("data error",400);
                 }
-                $paymentTerm = CustomerPaymentTerm::find($payment_term );
-                if($paymentTerm->user_id != auth()->user()->id){
-                    abort(404);
+                ///////dd($payment_term);
+                $paymentTerm = 0;
+                $rate = 0;
+                if($payment_term != 0) {
+                    $paymentTerm = CustomerPaymentTerm::find($payment_term);
+                    if ($paymentTerm->user_id != auth()->user()->id) {
+                        abort(404);
+                    }
+                    $rate = $paymentTerm->rate * $subtotal;
                 }
                 $product = ShopProduct::findOrFail($value->id);
-                //$subtotal = $value->price * $value->qty;
-                $rate = $paymentTerm->rate * $subtotal;
+                //$subtotal = $value->price * $value->qty
                 $total = $subtotal + $shipping + $rate;
                 if($productCount == 0){
                     $order = $this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method, $payment_term);

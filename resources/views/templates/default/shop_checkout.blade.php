@@ -88,7 +88,7 @@
         @if(isset($payment_term))
         <div style="margin-left:4%">
         <select id="paymentTerm" class="form-control" name="paymentTerm">
-            <option>Cash</option>
+            <option value="0">Cash</option>
           @foreach($payment_term as $key => $term)
              <option value="{{$term->id}}">{{$term->paymentTerm()->first()->name}}</option>
           @endforeach
@@ -128,6 +128,8 @@
         <div class="row">
             <div class="col-md-12">
                 <table class="table box table-bordered" id="showTotal">
+                    <th>الفائده المضافه</th>
+                    <td style="font-weight:bold" class="rate">0%</td>
                     @foreach ($dataTotal as $key => $element)
                     @if ($element['value'] !=0)
 
@@ -145,8 +147,6 @@
                     @endif
 
                     @endforeach
-                        <th>الفائده المضافه</th>
-                        <td style="font-weight:bold" class="rate">0%</td>
                 </table>
         {{-- Payment method --}}
             <div class="row">
