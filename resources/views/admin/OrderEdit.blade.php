@@ -178,6 +178,12 @@
        </div>
       <div class="col-sm-6">
           <table   class="table table-bordered">
+              @php
+                  $CustomerPaymentTerm = \App\Models\CustomerPaymentTerm::where('id', $order['payment_term'])->first()->payment_term_id;
+                  $paymentTerm = \App\Models\paymentTerm::where('id', $CustomerPaymentTerm)->first();
+              @endphp
+              <tr><td><strong>{{trans('language.order.payment_term')}}</strong></td><td  align="right">{{$paymentTerm->name}}</td></tr>
+              <tr><td><strong>{{trans('language.order.rate')}}</strong></td><td  align="right">{{$paymentTerm->rate}}%</td></tr>
 @foreach ($dataTotal as $element)
   @if ($element['code'] =='subtotal')
     <tr><td  class="td-title-normal">{!! $element['title'] !!}:</td><td align="right" class="data-{{ $element['code'] }}">{{ \Helper::currencyFormat($element['value']) }}</td></tr>

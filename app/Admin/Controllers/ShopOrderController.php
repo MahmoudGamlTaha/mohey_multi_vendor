@@ -5,6 +5,8 @@ namespace App\Admin\Controllers;
 use App\Admin\Extensions\ExcelExpoter;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\CustomerPaymentTerm;
+use App\Models\PaymentTerm;
 use App\Models\ShopAttributeGroup;
 use App\Models\ShopCurrency;
 use App\Models\ShopOrder;
@@ -130,7 +132,21 @@ class ShopOrderController extends Controller
                 return empty($price) ? 0 : '<div style="max-width:100px; overflow:auto;word-wrap: break-word;">' . \Helper::currencyOnlyRender($price, $this->currency) . '</div>';
             });
             $grid->payment_method(trans('language.order.payment_method'))->sortable();
-
+            $grid->payment_term(trans('language.order.payment_term'))->display(function($payment_term){
+                $paymentName = "Cash";
+                if($payment_term != 0) {
+                    $Cpayment = CustomerPaymentTerm::where('id', $payment_term)->first();
+                    $paymentName = PaymentTerm::where('id', $Cpayment['payment_term_id'])->first()->name;
+                }
+                return $paymentName;
+            });
+            $grid->rate(trans('language.order.rate'))->display(function(){
+                $rate = 0;
+                if($this->payment_term != 0) {
+                    $rate = CustomerPaymentTerm::where('id', $this->payment_term)->first()->rate;
+                }
+                return $rate;
+            });
             $grid->currency(trans('language.order.currency'));
             $grid->exchange_rate(trans('language.order.exchange_rate'));
             $statusOrder = $this->statusOrder;
@@ -208,6 +224,8 @@ class ShopOrderController extends Controller
             $form->text('address2', trans('language.order.shipping_address2'));
             $form->mobile('phone', trans('language.order.shipping_phone'));
             $form->select('currency', trans('language.order.currency'))->options($this->currency)->rules('required');
+            $paymentTerm = PaymentTerm::pluck("name", "id");
+            $form->select('payment_term', trans('language.payments.payment_term'))->options($paymentTerm)->rules('required');
             $form->number('exchange_rate', trans('language.order.exchange_rate'))->default(0);
             $form->textarea('comment', trans('language.order.order_note'));
             $form->select('status', trans('language.admin.status'))->options($this->statusOrder);
