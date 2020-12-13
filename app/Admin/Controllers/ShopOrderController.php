@@ -224,8 +224,8 @@ class ShopOrderController extends Controller
             $form->text('address2', trans('language.order.shipping_address2'));
             $form->mobile('phone', trans('language.order.shipping_phone'));
             $form->select('currency', trans('language.order.currency'))->options($this->currency)->rules('required');
-            $paymentTerm = PaymentTerm::pluck("name", "id");
-            $form->select('payment_term', trans('language.payments.payment_term'))->options($paymentTerm)->rules('required');
+            //$paymentTerm = PaymentTerm::pluck("name", "id");
+            //$form->select('payment_term', trans('language.payments.payment_term'))->options($paymentTerm)->rules('required');
             $form->number('exchange_rate', trans('language.order.exchange_rate'))->default(0);
             $form->textarea('comment', trans('language.order.order_note'));
             $form->select('status', trans('language.admin.status'))->options($this->statusOrder);
@@ -460,6 +460,11 @@ JS;
                 $style = 'style="font-weight:bold;"';
             }
             $style_blance = '<tr ' . $style . ' class="data-balance"><td>' . trans('language.order.balance') . ':</td><td align="right">' . \Helper::currencyFormat($orderUpdated->balance) . '</td></tr>';
+            if($orderUpdated->payment_term != 0) {
+                $rate = CustomerPaymentTerm::where('id', $orderUpdated->payment_term)->first()->rate;
+            }else{
+                $rate = 0;
+            }
             return json_encode([
                 'stt' => 1, 'msg' => [
                     'total'          => \Helper::currencyFormat($orderUpdated->total),
@@ -469,6 +474,7 @@ JS;
                     'received'       => \Helper::currencyFormat($orderUpdated->received),
                     'balance'        => $style_blance,
                     'payment_status' => ($orderUpdated->payment_status == 2) ? '<span style="color:#0e9e33;font-weight:bold;">' . $this->statusPayment[$orderUpdated->payment_status] . '</span>' : (($orderUpdated->payment_status == 3) ? '<span style="color:#ff2f00;font-weight:bold;">' . $this->statusPayment[$orderUpdated->payment_status] . '</span>' : $this->statusPayment[$orderUpdated->payment_status]),
+                    'rate'           => $rate,
                 ],
             ]);
         } else {
