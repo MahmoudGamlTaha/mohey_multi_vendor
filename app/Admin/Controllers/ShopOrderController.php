@@ -224,8 +224,6 @@ class ShopOrderController extends Controller
             $form->text('address2', trans('language.order.shipping_address2'));
             $form->mobile('phone', trans('language.order.shipping_phone'));
             $form->select('currency', trans('language.order.currency'))->options($this->currency)->rules('required');
-            //$paymentTerm = PaymentTerm::pluck("name", "id");
-            //$form->select('payment_term', trans('language.payments.payment_term'))->options($paymentTerm)->rules('required');
             $form->number('exchange_rate', trans('language.order.exchange_rate'))->default(0);
             $form->textarea('comment', trans('language.order.order_note'));
             $form->select('status', trans('language.admin.status'))->options($this->statusOrder);

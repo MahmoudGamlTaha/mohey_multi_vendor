@@ -61,15 +61,12 @@
                 @php
                     $paymentName = 'Cash';
                     $paymentRate = 0;
-                        $CustomerPayment = \App\Models\CustomerPaymentTerm::with('paymentTerm')->get();
+                    $payment[0]  = "Cash";
+                        $CustomerPayment = \App\Models\CustomerPaymentTerm::with('paymentTerm')
+                        ->where("user_id", $order->user_id)
+                        ->get();
                         foreach ($CustomerPayment as $v){
-                            if($v->user_id == $order->user_id)
-                            {
-                                $payment[$v->id] = $v->paymentTerm['name'];
-                                $payment[0]     = "Cash";
-                            }else{
-                                $payment[] = [];
-                            }
+                            $payment[$v->id] = $v->paymentTerm['name'];
                             if($v->id == $order['payment_term']){
                                 $paymentName = $v->paymentTerm['name'];
                                 $paymentRate = $v->rate;
