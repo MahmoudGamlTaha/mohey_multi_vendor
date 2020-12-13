@@ -5,6 +5,8 @@ namespace App\Admin\Controllers;
 use App\Admin\Extensions\ExcelExpoter;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\CustomerPaymentTerm;
+use App\Models\PaymentTerm;
 use App\Models\ShopAttributeGroup;
 use App\Models\ShopCurrency;
 use App\Models\ShopOrder;
@@ -130,7 +132,21 @@ class ShopOrderController extends Controller
                 return empty($price) ? 0 : '<div style="max-width:100px; overflow:auto;word-wrap: break-word;">' . \Helper::currencyOnlyRender($price, $this->currency) . '</div>';
             });
             $grid->payment_method(trans('language.order.payment_method'))->sortable();
-
+            $grid->payment_term(trans('language.order.payment_term'))->display(function($payment_term){
+                $paymentName = "Cash";
+                if($payment_term != 0) {
+                    $Cpayment = CustomerPaymentTerm::where('id', $payment_term)->first();
+                    $paymentName = PaymentTerm::where('id', $Cpayment['payment_term_id'])->first()->name;
+                }
+                return $paymentName;
+            });
+            $grid->rate(trans('language.order.rate'))->display(function(){
+                $rate = 0;
+                if($this->payment_term != 0) {
+                    $rate = CustomerPaymentTerm::where('id', $this->payment_term)->first()->rate;
+                }
+                return $rate;
+            });
             $grid->currency(trans('language.order.currency'));
             $grid->exchange_rate(trans('language.order.exchange_rate'));
             $statusOrder = $this->statusOrder;
@@ -442,6 +458,11 @@ JS;
                 $style = 'style="font-weight:bold;"';
             }
             $style_blance = '<tr ' . $style . ' class="data-balance"><td>' . trans('language.order.balance') . ':</td><td align="right">' . \Helper::currencyFormat($orderUpdated->balance) . '</td></tr>';
+            if($orderUpdated->payment_term != 0) {
+                $rate = CustomerPaymentTerm::where('id', $orderUpdated->payment_term)->first()->rate;
+            }else{
+                $rate = 0;
+            }
             return json_encode([
                 'stt' => 1, 'msg' => [
                     'total'          => \Helper::currencyFormat($orderUpdated->total),
@@ -451,6 +472,7 @@ JS;
                     'received'       => \Helper::currencyFormat($orderUpdated->received),
                     'balance'        => $style_blance,
                     'payment_status' => ($orderUpdated->payment_status == 2) ? '<span style="color:#0e9e33;font-weight:bold;">' . $this->statusPayment[$orderUpdated->payment_status] . '</span>' : (($orderUpdated->payment_status == 3) ? '<span style="color:#ff2f00;font-weight:bold;">' . $this->statusPayment[$orderUpdated->payment_status] . '</span>' : $this->statusPayment[$orderUpdated->payment_status]),
+                    'rate'           => $rate,
                 ],
             ]);
         } else {

@@ -244,6 +244,8 @@ return [
         'currency'              => 'Currency',
         'exchange_rate'         => 'Exchange rate',
         'payment_method'        => 'Payment method',
+        'payment_term'          => 'نطام الدفع',
+        'rate'                  => 'النسبه المضافه',
         'email'                 => [
             'title'     => 'Email',
             'new_title' => 'NEW ORDER',

@@ -58,6 +58,23 @@
                 <tr><td  class="td-title">{{ trans('language.order.order_status') }}:</td><td><a href="#" class="updateStatus" data-name="status" data-type="select" data-source ="{{ json_encode($statusOrder2) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->status }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.order_status') }}">{{ $statusOrder[$order->status] }}</a></td></tr>
                 <tr><td>{{ trans('language.order.order_shipping_status') }}:</td><td><a href="#" class="updateStatus" data-name="shipping_status" data-type="select" data-source ="{{ json_encode($statusShipping2) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->shipping_status }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.order_shipping_status') }}">{{ $statusShipping[$order->shipping_status] }}</a></td></tr>
                 <tr><td>{{ trans('language.order.payment_method') }}:</td><td><a href="#" class="updateStatus" data-name="payment_method" data-type="select" data-source ="{{ json_encode($paymentMethod) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->payment_method }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.payment_method') }}">{{ $order->payment_method }}</a></td></tr>
+                @php
+                    $paymentName = 'Cash';
+                    $paymentRate = 0;
+                    $payment[0]  = "Cash";
+                        $CustomerPayment = \App\Models\CustomerPaymentTerm::with('paymentTerm')
+                        ->where("user_id", $order->user_id)
+                        ->get();
+                        foreach ($CustomerPayment as $v){
+                            $payment[$v->id] = $v->paymentTerm['name'];
+                            if($v->id == $order['payment_term']){
+                                $paymentName = $v->paymentTerm['name'];
+                                $paymentRate = $v->rate;
+                            }
+                        }
+                @endphp
+                <tr><td><strong>{{trans('language.order.payment_term')}}</strong></td><td><a href="#" class="updatePrice" data-name="payment_term" data-type="select" data-source ="{{ json_encode($payment) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->payment_term }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.payment_term') }}">{{$paymentName}}</a></td></tr>
+                <tr><td><strong>{{trans('language.order.rate')}}</strong></td><td><a href="#" class="rate" data-name="rate" data-type="select" data-source =""  data-pk="{{ $order->id }}" data-value="" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.rate') }}">{{$paymentRate}}%</a></td></tr>
               </table>
              <table class="table box table-bordered">
                 <tr>
@@ -500,6 +517,7 @@ $(document).ready(function() {
                 $('.data-balance').remove();
                 $('#update-status').before(rs.msg.balance);
                 $('.payment_status').html(rs.msg.payment_status);
+                $('.rate').html(rs.msg.rate+'%');
             }
     }
     });
