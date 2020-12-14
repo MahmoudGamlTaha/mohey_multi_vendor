@@ -108,10 +108,10 @@ class ShopOrderController extends Controller
 
             $grid->id('ID')->sortable();
             if($this->checkSuperUser()) {
-                $grid->email('Email')->display(function ($email) {
+                $grid->email(trans('language.order.Email'))->display(function ($email) {
                     return empty($email) ? 'N/A' : '<div style="max-width:150px; overflow:auto;word-wrap: break-word;">' . $email . '</div>';
                 });
-                $grid->company_id('company')->display(function ($company_id) {
+                $grid->company_id(trans('language.order.Company'))->display(function ($company_id) {
                     $company_name = Company::where('id', $company_id)->first();
                     return empty($company_name->name) ? 'N/A' : '<div style="max-width:150px; overflow:auto;word-wrap: break-word;">' . $company_name->name . '</div>';
                 });
