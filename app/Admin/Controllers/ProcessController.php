@@ -3,6 +3,9 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
+use App\Models\ShopBrand;
+use App\Models\ShopCategory;
 use App\Models\ShopProduct;
 use App\Models\ShopProductDescription;
 use App\Models\ShopSpecialPrice;
@@ -41,10 +44,25 @@ class ProcessController extends Controller
                     $reader->skipRows(1); //
                     $arrError   = array();
                     $arrSuccess = array();
+                    $row_num = 0;
                     foreach ($reader->toArray() as $key => $row) {
+                        ++$row_num;
                         if (ShopProduct::where('sku', $row['sku'])->first()) {
-                            $arrError[] = $row['sku'] . ': already exist!';
-                        } else {
+                            $arrError[] = $row['sku'] . ': already exist! row number'. $row_num;
+                        }
+                        elseif (!Company::where('id', $row['company_id'])->first())
+                        {
+                            $arrError[] = $row['company_id'] . ': company doesn\'t exists ! row number'.$row_num ;
+                        }
+                        elseif (!ShopCategory::where('id', $row['category_id'])->first())
+                        {
+                            $arrError[] = $row['category_id'] . ': category doesn\'t exists ! row number'.$row_num ;
+                        }
+                        elseif (!ShopBrand::where('id', $row['brand_id'])->first())
+                        {
+                            $arrError[] = $row['brand_id'] . ': brand doesn\'t exists ! row number'.$row_num ;
+                        }
+                        else {
                             try {
                                 $arrMapping                = array();
                                 $arrMapping['sku']         = $row['sku'];
@@ -53,11 +71,14 @@ class ProcessController extends Controller
                                 $arrMapping['stock']       = (int) $row['stock'];
                                 $arrMapping['category_id'] = (int) $row['category_id'];
                                 $arrMapping['brand_id']    = (int) $row['brand_id'];
-                                $arrMapping['vendor_id']   = (int) $row['vendor_id'];
-                                $arrMapping['company_id']  = $this->getUserCompany()[0]->id;
+                                //$arrMapping['vendor_id']   = (int) $row['vendor_id'];
+                                $arrMapping['company_id']  = (int) $row['company_id'];
+                                $arrMapping['uofm_groups'] = (int) $row['uofm_groups'];
+                                //$arrMapping['company_id']  = $this->getUserCompany()[0]->id;
                                 $id                        = ShopProduct::insertGetId($arrMapping);
                                 $descriptons               = [
                                     'product_id'  => $id,
+                                    'company_id'  => (int) $row['company_id'],
                                     'name'        => $row['name'],
                                     'description' => $row['description'],
                                     'keyword'     => $row['keyword'],
@@ -68,6 +89,7 @@ class ProcessController extends Controller
                                 if ($row['special_price']) {
                                     ShopSpecialPrice::insert([
                                         'product_id' => $id,
+                                        'company_id'  => (int) $row['company_id'],
                                         'price'      => $row['special_price'],
                                         'status'     => 1,
                                     ]);

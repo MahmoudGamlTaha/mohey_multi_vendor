@@ -242,7 +242,7 @@ class ShopCategoryController extends Controller
         $model->save();
         DB::commit();
         return redirect('shop_category/'. $id.'/edit');      
-        }
+        //}
         $model->save();
         DB::commit();
         return $this->sendResponse($arr['status'], 'sucess');      
