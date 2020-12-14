@@ -47,10 +47,7 @@ class ProcessController extends Controller
                     $row_num = 0;
                     foreach ($reader->toArray() as $key => $row) {
                         ++$row_num;
-                        if (ShopProduct::where('sku', $row['sku'])->first()) {
-                            $arrError[] = $row['sku'] . ': already exist! row number'. $row_num;
-                        }
-                        elseif (!Company::where('id', $row['company_id'])->first())
+                        if (!Company::where('id', $row['company_id'])->first())
                         {
                             $arrError[] = $row['company_id'] . ': company doesn\'t exists ! row number'.$row_num ;
                         }
@@ -64,6 +61,13 @@ class ProcessController extends Controller
                         }
                         else {
                             try {
+                                if($this->checkSuperUser())
+                                {
+                                    $company  = $this->getUserCompany()[0]->id;
+                                }else{
+                                    $company = (int) $row['company_id'];
+                                }
+
                                 $arrMapping                = array();
                                 $arrMapping['sku']         = $row['sku'];
                                 $arrMapping['price']       = (int) $row['price'];
@@ -72,27 +76,52 @@ class ProcessController extends Controller
                                 $arrMapping['category_id'] = (int) $row['category_id'];
                                 $arrMapping['brand_id']    = (int) $row['brand_id'];
                                 //$arrMapping['vendor_id']   = (int) $row['vendor_id'];
-                                $arrMapping['company_id']  = (int) $row['company_id'];
+                                $arrMapping['company_id']  = $company;
                                 $arrMapping['uofm_groups'] = (int) $row['uofm_groups'];
-                                //$arrMapping['company_id']  = $this->getUserCompany()[0]->id;
-                                $id                        = ShopProduct::insertGetId($arrMapping);
-                                $descriptons               = [
-                                    'product_id'  => $id,
-                                    'company_id'  => (int) $row['company_id'],
-                                    'name'        => $row['name'],
-                                    'description' => $row['description'],
-                                    'keyword'     => $row['keyword'],
-                                    'content'     => $row['content'],
-                                    'lang_id'     => (int) $row['language'],
-                                ];
-                                ShopProductDescription::insert($descriptons);
-                                if ($row['special_price']) {
-                                    ShopSpecialPrice::insert([
+                                $shopProduct = ShopProduct::where('sku', $row['sku'])->first();
+                                if ($shopProduct) {
+                                    $product = ShopProduct::find($shopProduct->id);
+                                    $product->update($arrMapping);
+
+                                    $descriptons               = [
+                                        'company_id'  => $company,
+                                        'name'        => $row['name'],
+                                        'description' => $row['description'],
+                                        'keyword'     => $row['keyword'],
+                                        'content'     => $row['content'],
+                                        'lang_id'     => (int) $row['language'],
+                                    ];
+                                    ShopProductDescription::where('product_id', $shopProduct->id)->update($descriptons);
+
+                                    if ($row['special_price']) {
+                                        ShopSpecialPrice::where('product_id', $shopProduct->id)->update([
+                                            'company_id' => $company,
+                                            'price' => $row['special_price'],
+                                            'status' => 1,
+                                        ]);
+                                    }
+                                }else {
+                                    $id = ShopProduct::insertGetId($arrMapping);
+
+                                    $descriptons = [
                                         'product_id' => $id,
-                                        'company_id'  => (int) $row['company_id'],
-                                        'price'      => $row['special_price'],
-                                        'status'     => 1,
-                                    ]);
+                                        'company_id' => $company,
+                                        'name' => $row['name'],
+                                        'description' => $row['description'],
+                                        'keyword' => $row['keyword'],
+                                        'content' => $row['content'],
+                                        'lang_id' => (int)$row['language'],
+                                    ];
+
+                                    ShopProductDescription::insert($descriptons);
+                                    if ($row['special_price']) {
+                                        ShopSpecialPrice::insert([
+                                            'product_id' => $id,
+                                            'company_id' => $company,
+                                            'price' => $row['special_price'],
+                                            'status' => 1,
+                                        ]);
+                                    }
                                 }
                                 $arrSuccess[] = $row['sku'];
                             } catch (\Exception $e) {
