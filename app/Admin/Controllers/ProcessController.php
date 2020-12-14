@@ -58,69 +58,68 @@ class ProcessController extends Controller
                             $arrError[] = $row['brand_id'] . ': brand doesn\'t exists ! row number' . $row_num;
                         }
                         if (empty($arrError)) {
-                            try {
-                                if (!$this->checkSuperUser()) {
-                                    $company = $this->getUserCompany()[0]->id;
-                                } else {
-                                    $company = (int)$row['company_id'];
-                                }
-
-                                $arrMapping = array();
-                                $arrMapping['sku'] = $row['sku'];
-                                $arrMapping['price'] = (int)$row['price'];
-                                $arrMapping['cost'] = (int)$row['cost'];
-                                $arrMapping['stock'] = (int)$row['stock'];
-                                $arrMapping['category_id'] = (int)$row['category_id'];
-                                $arrMapping['brand_id'] = (int)$row['brand_id'];
-                                //$arrMapping['vendor_id']   = (int) $row['vendor_id'];
-                                $arrMapping['company_id'] = $company;
-                                $arrMapping['uofm_groups'] = (int)$row['uofm_groups'];
-                                $shopProduct = ShopProduct::where('sku', $row['sku'])->first();
-                                if ($shopProduct) {
-                                    $product = ShopProduct::find($shopProduct->id);
-                                    $product->update($arrMapping);
-                                    $id = $product->id;
-                                } else {
-                                    $id = ShopProduct::insertGetId($arrMapping);
-                                }
-                                $descriptons = [
-                                    'product_id' => $id,
-                                    'company_id' => $company,
-                                    'name' => $row['name'],
-                                    'description' => $row['description'],
-                                    'keyword' => $row['keyword'],
-                                    'content' => $row['content'],
-                                    'lang_id' => (int)$row['language'],
-                                ];
-                                $productDesc = ShopProductDescription::where('product_id', $id);
-                                if ($productDesc->first()) {
-                                    $productDesc->update($descriptons);
-                                } else {
-                                    ShopProductDescription::insert($descriptons);
-                                }
-                                if ($row['special_price']) {
-                                    $ShopSpecialPrice = ShopSpecialPrice::where('product_id', $id);
-                                    if ($ShopSpecialPrice->first()) {
-                                        $ShopSpecialPrice->update([
-                                            'company_id' => $company,
-                                            'price' => $row['special_price'],
-                                            'status' => 1,
-                                        ]);
-                                    } else {
-                                        ShopSpecialPrice::insert([
-                                            'product_id' => $id,
-                                            'company_id' => $company,
-                                            'price' => $row['special_price'],
-                                            'status' => 1,
-                                        ]);
-                                    }
-                                }
-                                $arrSuccess[] = $row['sku'];
-                            } catch (\Exception $e) {
-                                // $arrError[] = $row['sku'] . ': have error ' . $e->getMessage();
-                                $arrError[] = $row['sku'] . ': have error';
+                            continue;
+                        }
+                        try {
+                            if (!$this->checkSuperUser()) {
+                                $company = $this->getUserCompany()[0]->id;
+                            } else {
+                                $company = (int)$row['company_id'];
                             }
-                        }else{
+
+                            $arrMapping = array();
+                            $arrMapping['sku'] = $row['sku'];
+                            $arrMapping['price'] = (int)$row['price'];
+                            $arrMapping['cost'] = (int)$row['cost'];
+                            $arrMapping['stock'] = (int)$row['stock'];
+                            $arrMapping['category_id'] = (int)$row['category_id'];
+                            $arrMapping['brand_id'] = (int)$row['brand_id'];
+                            //$arrMapping['vendor_id']   = (int) $row['vendor_id'];
+                            $arrMapping['company_id'] = $company;
+                            $arrMapping['uofm_groups'] = (int)$row['uofm_groups'];
+                            $shopProduct = ShopProduct::where('sku', $row['sku'])->first();
+                            if ($shopProduct) {
+                                $product = ShopProduct::find($shopProduct->id);
+                                $product->update($arrMapping);
+                                $id = $product->id;
+                            } else {
+                                $id = ShopProduct::insertGetId($arrMapping);
+                            }
+                            $descriptons = [
+                                'product_id' => $id,
+                                'company_id' => $company,
+                                'name' => $row['name'],
+                                'description' => $row['description'],
+                                'keyword' => $row['keyword'],
+                                'content' => $row['content'],
+                                'lang_id' => (int)$row['language'],
+                            ];
+                            $productDesc = ShopProductDescription::where('product_id', $id);
+                            if ($productDesc->first()) {
+                                $productDesc->update($descriptons);
+                            } else {
+                                ShopProductDescription::insert($descriptons);
+                            }
+                            if ($row['special_price']) {
+                                $ShopSpecialPrice = ShopSpecialPrice::where('product_id', $id);
+                                if ($ShopSpecialPrice->first()) {
+                                    $ShopSpecialPrice->update([
+                                        'company_id' => $company,
+                                        'price' => $row['special_price'],
+                                        'status' => 1,
+                                    ]);
+                                } else {
+                                    ShopSpecialPrice::insert([
+                                        'product_id' => $id,
+                                        'company_id' => $company,
+                                        'price' => $row['special_price'],
+                                        'status' => 1,
+                                    ]);
+                                }
+                            }
+                            $arrSuccess[] = 'product sku '.$row['sku'].' - row'.$row_num;
+                        } catch (\Exception $e) {
+                            // $arrError[] = $row['sku'] . ': have error ' . $e->getMessage();
                             $arrError[] = $row['sku'] . ': have error';
                         }
                     }
