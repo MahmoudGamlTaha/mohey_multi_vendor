@@ -194,7 +194,7 @@
                   </i>
                 </a></li>
 
-                <li><a href="#" title="">
+                <li><a href="/compare" title="">
                   <i class="fa fa-refresh">
                   </i>
                 </a></li>
