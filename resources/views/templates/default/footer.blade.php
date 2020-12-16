@@ -63,7 +63,7 @@
           <div class="col-sm-3">
             <div class="single-widget">
               <h4 style="color: white"> بيع على دكانى</h4>
-              <a href="" style="font-size: 18px;">كن بائعا معنا</>
+              <a href="<?php echo route('registermerchant')?>" style="font-size: 18px;">كن بائعا معنا</a>
             </div>
           </div>
           <div class="col-sm-3">

@@ -11,7 +11,7 @@ return [
     | login page.
     |
      */
-    'name'                      => 'SouqVIS',
+    'name'                      => 'Dokkanii',
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
      */
-    'logo'                      => 'SouqVIS',
+    'logo'                      => 'Dokkanii',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
      */
-    'logo-mini'                 => '<b>VIS</b>',
+    'logo-mini'                 => '<b>Dokkanii</b>',
 
     /*
     |--------------------------------------------------------------------------
