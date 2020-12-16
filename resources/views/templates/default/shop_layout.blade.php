@@ -187,6 +187,12 @@
                 error= parseInt(data.error);
                 if(error ==0)
                 {
+                    $.notify({
+                        icon: 'glyphicon glyphicon-star',
+                        message: data.msg
+                    },{
+                        type: 'success'
+                    });
                 //animate
                 if(instance == null || instance =='' || instance =='default'){
                   var cart = $('#shopping-cart');
@@ -232,13 +238,6 @@
                       $('.shopping-'+data.instance).html(data.count_cart);
                     }
                   }, 1000);
-
-                    $.notify({
-                      icon: 'glyphicon glyphicon-star',
-                      message: data.msg
-                    },{
-                      type: 'success'
-                    });
                 // $('#cart-alert').html('<div class="cart-alert alert alert-success">'+data.msg+'</div>').fadeIn(100).delay(2000).fadeOut('slow');
                 }else{
                   $.notify({

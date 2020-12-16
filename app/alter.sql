@@ -178,4 +178,9 @@ ALTER TABLE `customer_payment_term` CHANGE `created_at` `created_at` TIMESTAMP N
 --//
 ALTER TABLE `shop_order` ADD `payment_term` INT(11) AFTER `payment_method` DEFAULT '0';
 
+--//
+UPDATE shop_product
+SET uofm_groups = 3
+WHERE id < 20;
+
 

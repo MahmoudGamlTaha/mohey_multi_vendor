@@ -174,32 +174,38 @@ class ShopCurrency extends Model
         $rate = ($rate) ? $rate : self::$exchange_rate;
         foreach ($details as $detail) {
             $unitprices = ProductPriceList::select("uof_id","price")->where('product_id', $detail->id)->get();
-            $targetUnit = null;
-            $baseUnitPrice = null;
-           foreach($unitprices as $unitprice){
-             if( $detail->uofm['uofm'] == $unitprice->uof_id){
-                  $targetUnit = clone $unitprice;
-                  break;
-              }
+            if($unitprices->count() > 0) {
+                $targetUnit = null;
+                $baseUnitPrice = null;
+                foreach ($unitprices as $unitprice) {
+                    if ($detail->uofm['uofm'] == $unitprice->uof_id) {
+                        $targetUnit = clone $unitprice;
+                        break;
+                    }
 
-            }
-            if($targetUnit == null){
-            $units = Uofms::select("name", "amount_in_base", "id")->where('group_id', $detail->uofm['uofm_groups'])->get();
-            $factor = 1;
-            $uofm = null;
-            foreach($units as $unit){
-                if($unit->id ==  $detail->uofm['uofm']){
-                    $factor = $unit->amount_in_base;
                 }
-                 if ($unit->amount_in_base == 1){
-                      $baseUnitPrice = $unitprice; 
-               } 
-            } 
-            $price = $baseUnitPrice->price * $factor;
-        
-        }else{
-            $price = $targetUnit->price;
-        }
+                if ($targetUnit == null) {
+                    $units = Uofms::select("name", "amount_in_base", "id")->where('group_id', $detail->uofm['uofm_groups'])->get();
+                    $factor = 1;
+                    $uofm = null;
+                    foreach ($units as $unit) {
+                        if ($unit->id == $detail->uofm['uofm']) {
+                            $factor = $unit->amount_in_base;
+                        }
+                        if ($unit->amount_in_base == 1) {
+                            $baseUnitPrice = $unitprice;
+                        }
+                    }
+                    $price = $baseUnitPrice->price * $factor;
+
+                } else {
+                    $price = $targetUnit->price;
+                }
+            }else{
+                $amount = Uofms::where(['id'=>$detail->uofm['uofm']])->first()->amount_in_base;
+                $productPrice = ShopProduct::where('id', $detail->id)->first()->price;
+                $price = $amount * $productPrice;
+            }
 
             $sum += $detail->qty * self::getValue($price, $rate);
         }

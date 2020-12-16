@@ -68,8 +68,8 @@
                   <button class="btn btn-default btn-content" style="float: left;">بيع هذا المنتج</button>
                 </div>
                 <div class="col-sm-8">
-                  <i class="fa fa-heart-o" style="color: #a8a8a8"></i> &nbsp;<a href="" style="color: #a8a8a8 ; margin-left: 30px">إضافة الى قائمة المفضلة</a>
-                  <a onClick="addToCart('{{ $product->id }}','compare',$(this))" style="color: #a8a8a8">  
+                  <i class="fa fa-heart-o" style="color: #a8a8a8"></i> &nbsp;<a onClick="addToCart('{{ $product->id  }}','wishlist',$(this))" href="" style="color: #a8a8a8 ; margin-left: 30px">إضافة الى قائمة المفضلة</a>
+                  <a href="" onClick="addToCart('{{ $product->id }}','compare',$(this))" style="color: #a8a8a8">
                     <i class="fa fa-refresh" style="color: #a8a8a8" ></i>&nbsp; مقارنة</a>
                   <ul class="list-unstyled product_details">
                    <!-- <li> <b>شركة</b>  {{count($product->company()->get()) == 0? 'Dokkani' : $product->company()->first()->name }}</li>-->
