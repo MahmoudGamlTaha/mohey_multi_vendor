@@ -47,20 +47,22 @@ class ProcessController extends Controller
                     $row_num = 0;
                     $id = 0;
                     foreach ($reader->toArray() as $key => $row) {
+                        $errorsarr = array();
                         ++$row_num;
                         if (!Company::where('id', $row['company_id'])->first()) {
-                            $arrError[] = $row['company_id'] . ': company doesn\'t exists ! row number' . $row_num;
+                            $arrError[] = 'import error - row number ' . $row_num.' : company id ('.$row['company_id'] .') doesn\'t match any record';
                             $errorsarr[] = $row_num;
                         }
                         if (!ShopCategory::where('id', $row['category_id'])->first()) {
-                            $arrError[] = $row['category_id'] . ': category doesn\'t exists ! row number' . $row_num;
+                            $arrError[] = 'import error - row number ' . $row_num . ': category id ('. $row['category_id'].') doesn\'t exists !';
                             $errorsarr[] = $row_num;
                         }
                         if (!ShopBrand::where('id', $row['brand_id'])->first()) {
-                            $arrError[] = $row['brand_id'] . ': brand doesn\'t exists ! row number' . $row_num;
+                            $arrError[] = 'import error - row number ' . $row_num.' : brand id '.$row['brand_id'] .' doesn\'t exists !';
                             $errorsarr[] = $row_num;
                         }
-                        if (empty($arrError)) {
+                        if (!empty($errorsarr)) {
+                            $request->session()->flash('import_error', $arrError);
                             continue;
                         }
                         try {
@@ -121,7 +123,7 @@ class ProcessController extends Controller
                                 }
                             }
                             if(!in_array($row_num, $errorsarr)) {
-                                $arrSuccess[] = 'product sku ' . $row['sku'] . ' - row number ' . $row_num;
+                                $arrSuccess[] = 'import success product sku ' . $row['sku'] . ' - row number ' . $row_num;
                             }
                         } catch (\Exception $e) {
                             // $arrError[] = $row['sku'] . ': have error ' . $e->getMessage();
