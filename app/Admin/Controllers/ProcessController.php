@@ -9,6 +9,7 @@ use App\Models\ShopCategory;
 use App\Models\ShopProduct;
 use App\Models\ShopProductDescription;
 use App\Models\ShopSpecialPrice;
+use App\Models\UofmGroups;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
@@ -61,8 +62,11 @@ class ProcessController extends Controller
                             $arrError[] = 'import error - row number ' . $row_num.' : brand id '.$row['brand_id'] .' doesn\'t exists !';
                             $errorsarr[] = $row_num;
                         }
+                        if (!UofmGroups::where('id', $row['uofm_groups'])->first()) {
+                            $arrError[] = 'import error - row number ' . $row_num.' : uofm id '.$row['uofm_groups'] .' doesn\'t exists !';
+                            $errorsarr[] = $row_num;
+                        }
                         if (!empty($errorsarr)) {
-                            $request->session()->flash('import_error', $arrError);
                             continue;
                         }
                         try {
@@ -74,9 +78,9 @@ class ProcessController extends Controller
 
                             $arrMapping = array();
                             $arrMapping['sku'] = $row['sku'];
-                            $arrMapping['price'] = (int)$row['price'];
-                            $arrMapping['cost'] = (int)$row['cost'];
-                            $arrMapping['stock'] = (int)$row['stock'];
+                            $arrMapping['price'] = (double)$row['price'];
+                            $arrMapping['cost'] = (double)$row['cost'];
+                            $arrMapping['stock'] = (double)$row['stock'];
                             $arrMapping['category_id'] = (int)$row['category_id'];
                             $arrMapping['brand_id'] = (int)$row['brand_id'];
                             //$arrMapping['vendor_id']   = (int) $row['vendor_id'];
