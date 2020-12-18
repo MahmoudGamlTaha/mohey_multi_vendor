@@ -24,7 +24,8 @@
 
 <div class=""> 
   @if ( $n > 2)
-  <div class="col-sm-6" style="margin-top: 20px;">
+    <div class="col-sm-7"> <br> </div>
+    <div class="col-sm-6" style="margin-top: 20px;">
   @endif
   @if ( $n == 2)
   <div class="col-sm-6"> 
@@ -102,8 +103,17 @@
     <div class="col-sm-12" style="padding:0px;">
       <a href="{{ $product->getUrl() }}"><img style="width:140px ; height:200px; margin: 0 -20px;"  
         src="{{asset($product->getImage())}}" alt="" class="block-center"></a>
-  
     </div>
+      <div class="col-sm-12" style="padding:0px;">
+          @if ($product->images->count())
+              @foreach ($product->images as $key=>$image)
+                  <div class="col-sm-6"style="padding:0px;">
+                      <img src="{{ asset($image->getImage()) }}" alt="" style="width:100%;height:100px;margin-top: 2px; border:1px solid #eee"  class="block-center"/>
+                  </div>
+              @endforeach
+          @endif
+
+      </div>
   </div>
   
     
