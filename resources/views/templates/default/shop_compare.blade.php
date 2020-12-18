@@ -4,9 +4,6 @@
 <section >
 <div class="container" style="margin-bottom: 10px;">
     <div class="row" >
-      <div class="col-sm-12" style="text-align:center;">
-        <h4 style="background: #f69620;padding: 12px 5px;color: white;">{{ $title }}</h4>
-      </div>
 
       @if (count($compare) ==0)
           <div class="col-md-12 text-danger">
@@ -68,23 +65,6 @@
   
         <div class="clearfix"></div>
         <hr style="margin: 0 0 15px 0">
-  
-        <div class="col-sm-12">
-        
-          <div class="col-sm-12">
-            
-            <i class="fa fa-heart-o" style="color: #a8a8a8"></i> &nbsp;<a href="" style="color: #a8a8a8 ; margin-left: 30px">إضافة الى قائمة المفضلة</a>
-            <a onclick="addToCart('35','compare',$(this))" style="color: #a8a8a8">  
-              <i class="fa fa-refresh" style="color: #a8a8a8"></i>&nbsp; مقارنة</a>
-            
-            
-            <ul class="list-unstyled product_details">
-              <li>3D-SENSOR-NTC 100K</li>
-              <li>3D-SENSOR-NTC 100K<b>
-            </ul>
-          </div>
-        </div>
-  
        
         <div class="col-sm-12">
           <div class="col-sm-12">
@@ -96,7 +76,6 @@
           <div class="col-sm-12">
             <input type="number" class="form-control" style="width:40%;display:inline;" name="q" value="1">
             <button class="btn btn-default btn-content" type="submit"> <i class="fa fa-shopping-cart" style="color:white;"></i> سلة الشراء</button>
-            <button style="display:inline" class="btn btn-default btn-content" > اختيار نظام الدفع </button>
           <br>
          </div>
          </div>

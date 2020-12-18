@@ -136,7 +136,7 @@
                 <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
                   <span class="caret" style="margin-left: 3px" ></span>
                   <span>Arabic  <span>
-                    <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;"> 
+                    <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;">
                 </button>
                 <ul class="dropdown-menu">
                   @foreach ($languages as $key => $language)
@@ -162,7 +162,7 @@
               @endif
             </div>
 
-          
+
         </div> --}}
       </div>
       </div>
@@ -172,7 +172,7 @@
       <div class="container">
         <div class="row">
 
-        
+
 
           <div class="col-sm-3">
             <div class="contactinfo">
@@ -194,12 +194,13 @@
                   </i>
                 </a></li>
 
-                <li><a href="/compare" title="" style="padding-top: 10px;">
-                  <i class="fa fa-refresh"  >
+                <li><a href="{{ route('compare') }}" title="">
+                  <i class="fa fa-refresh">
+
                   </i>
                 </a></li>
-                
-              
+
+
 
               {{-- <li><a href="{{ route('wishlist') }}">
                 <span  class="cart-qty shopping-wishlist top-head-forecolor" id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span>
@@ -217,7 +218,7 @@
 
           <div class="col-sm-6">
                   <div class="dropdown ">
-                  
+
                     <select class="js-example-placeholder-single js-states form-control">
                       <option></option>
                       @foreach($categoryTop as $key => $category)
@@ -226,7 +227,7 @@
                     </select>
                           <button class="btn btn-secondary zindex" type="button" >
                               <i class="fa fa-search"></i>
-                          </button> 
+                          </button>
                     </div>
 
           </div>
@@ -242,7 +243,7 @@
                 <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown" style="background: #ffffff;color: #10243f;">
                   <span class="caret" style="margin-left: 3px" ></span>
                   <span>Arabic  <span>
-                    <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;"> 
+                    <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;">
                 </button>
                 <ul class="dropdown-menu">
                   @foreach ($languages as $key => $language)
@@ -273,8 +274,8 @@
 
 
 
-          
-          
+
+
 
 
         </div>
@@ -401,4 +402,3 @@
   </header><!--/header-->
 
 
- 

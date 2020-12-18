@@ -246,9 +246,9 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
                       <br/>
                       <a href="{{ $product->getUrl() }}">Sku: <span class="fa fa-info"></span> {{$product->sku}}</a>
                       &nbsp;&nbsp;&nbsp;&nbsp;
-                      <a href="" ><span class="fas fa-prescription-bottle"></span>حذف </a>
-
-                      </td>
+                      {{--<a href="" ><span class="fas fa-prescription-bottle"></span>حذف </a>--}}
+                      <a onClick="return confirm('Confirm')" title="Remove Item" alt="Remove Item" class="cart_quantity_delete" href="{{url('removeItemWishlist/$product->rowId')}}"><span class="fas fa-prescription-bottle"></span>حذف </a>
+                    </td>
               <td>
                 <span class="cart-total-span">EGP {{$product->price}}</span>
               </td>

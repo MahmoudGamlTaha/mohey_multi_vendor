@@ -170,3 +170,18 @@ ALTER TABLE `admin_users` ADD `Cmanager_mobile` INT NULL AFTER `mobile`;
 ALTER TABLE `shop_product` ADD `uofm_groups` INT(11) NULL AFTER `price`;
 
 
+ALTER TABLE `customer_payment_term` ADD PRIMARY KEY(`id`);
+ALTER TABLE `customer_payment_term` CHANGE `id` `id` BIGINT(20) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `customer_payment_term` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL;
+ALTER TABLE `customer_payment_term` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+
+--//
+ALTER TABLE `shop_order` ADD `payment_term` INT(11) AFTER `payment_method` DEFAULT '0';
+
+--//
+UPDATE shop_product
+SET uofm_groups = 3
+WHERE id < 20;
+
+
+
