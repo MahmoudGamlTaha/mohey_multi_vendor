@@ -190,12 +190,13 @@
 
                 <li><a href="{{ route('wishlist') }}" title=" {{ trans('language.wishlist') }}">
                   <i class="fa fa-heart">
-                    <span  class=" badge " id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span>
+                    <span  class="badge" id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span>
                   </i>
                 </a></li>
 
                 <li><a href="{{ route('compare') }}" title="">
                   <i class="fa fa-refresh">
+
                   </i>
                 </a></li>
 

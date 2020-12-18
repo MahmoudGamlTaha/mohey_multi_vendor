@@ -163,13 +163,13 @@ DELETE FROM `admin_menu` WHERE `title` = 'Vendor' ;
 
 INSERT INTO `admin_roles` (`id`, `company_id`, `is_register_type`, `name`, `slug`, `created_at`, `updated_at`) VALUES (NULL, NULL, '0', ' contracting_manager', 'company', NULL, NULL);
 ALTER TABLE `company_contact` CHANGE `general_manager` `contracting_manager` VARCHAR(250) CHARACTER SET utf32 COLLATE utf32_general_ci NULL DEFAULT NULL;
-ALTER TABLE `companies` CHANGE `general_manger` `contracting_manager` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `companies` CHANGE `general_manger` `contracting_manger` VARCHAR(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 ALTER TABLE `admin_users` ADD `Cmanager_mobile` INT NULL AFTER `mobile`;
 
 --//
 ALTER TABLE `shop_product` ADD `uofm_groups` INT(11) NULL AFTER `price`;
 
---//
+
 ALTER TABLE `customer_payment_term` ADD PRIMARY KEY(`id`);
 ALTER TABLE `customer_payment_term` CHANGE `id` `id` BIGINT(20) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `customer_payment_term` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL;
@@ -182,5 +182,6 @@ ALTER TABLE `shop_order` ADD `payment_term` INT(11) AFTER `payment_method` DEFAU
 UPDATE shop_product
 SET uofm_groups = 3
 WHERE id < 20;
+
 
 
