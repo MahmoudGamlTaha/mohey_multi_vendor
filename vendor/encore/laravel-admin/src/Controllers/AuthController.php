@@ -11,10 +11,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Auth\LoginController;
 
 
 class AuthController extends Controller
 {
+	private $loginController;
+
+	public function __construct(LoginController $loginController)
+	{
+		$this->loginController = new LoginController();
+	}
     /**
      * Show the login page.
      *
@@ -38,7 +45,6 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
-    
         $credentials = $request->only([$this->username(), 'password']);
         $remember = $request->get('remember', false);
         /** @var \Illuminate\Validation\Validator $validator */
@@ -50,7 +56,10 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
         }
-          $credentials['seller_type'] = 1;
+      	$credentials['seller_type'] = 1;
+      	
+		$this->loginController->login($request);
+
         if ($this->guard()->attempt($credentials, $remember)) {
             return $this->sendLoginResponse($request);
         }
@@ -168,16 +177,10 @@ class AuthController extends Controller
         return property_exists($this, 'redirectTo') ? $this->redirectTo : config('admin.route.prefix');
     }
 
-    /**
-     * Send the response after the user was authenticated.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function sendLoginResponse(Request $request)
-    {
-        admin_toastr(trans('admin.login_successful'));
+    /** * Send the response after the user was authenticated. * * @param
+\Illuminate\Http\Request $request * * @return \Illuminate\Http\Response */
+protected function sendLoginResponse(Request $request) {
+admin_toastr(trans('admin.login_successful'));
 
         $request->session()->regenerate();
 
