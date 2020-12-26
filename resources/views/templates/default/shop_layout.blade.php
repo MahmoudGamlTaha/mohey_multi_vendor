@@ -120,14 +120,14 @@
           <!--//fillter-->
         </div>
 
-        
+        <div style="min-height: 60vh">
         <!--body sprint 3-->
         @section('main')
           @include($theme.'.center')
           @include($theme.'.right')
         @show
         <!--//body-->
-
+        </div>
       </div>
     </div>
   </section>

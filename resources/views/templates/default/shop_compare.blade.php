@@ -6,8 +6,8 @@
     <div class="row" >
 
       @if (count($compare) ==0)
-          <div class="col-md-12 text-danger">
-             <h3 style="text-align:center;" >Not found !</h3>
+          <div class="col-md-12 text-danger" style="min-height: 50vh;">
+             <h3 style="text-align:center;" >!No products found to compare</h3>
           </div>
       @endif
 
@@ -155,7 +155,7 @@
     $(document).ready(function(){
         var productCount = {{count($compare)}};
         var rates = new Array();
-        rates = {{json_encode($rates)}};
+        rates = {{json_encode($rates ?? 0)}};
         for(var i = 1 ; i <= productCount; i++)
         {
             var product = $('.star-'+i);

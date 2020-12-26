@@ -107,6 +107,12 @@ class PaymentTermController extends Controller
             $form->tools(function (Form\Tools $tools) {
                 $tools->disableView();
             });
+            $form->saving(function (Form $form) {
+                if($form->rate > 1)
+                {
+                    $form->rate = $form->rate/100 ;
+                }
+            });
         });
     }
 
@@ -118,7 +124,7 @@ class PaymentTermController extends Controller
       try{
        $payment = PaymentTerm::findOrFail($id);
        if(isset($arr['rate'])){
-         $payment->rate = $arr['rate'];
+         $payment->rate = $arr['rate']/100 ;
        }
        if(isset($arr['name'])){
           $payment->name = $arr['name'];
