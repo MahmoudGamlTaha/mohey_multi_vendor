@@ -184,7 +184,7 @@ class ShopOrderTotal extends Model
         try {
             $order           = ShopOrder::find($order_id);
             $order->subtotal += $subtotal_value;
-            $total           = $order->subtotal + $order->discount + $order->shipping;
+            $total           = ($order->subtotal - $order->discount) + $order->shipping;
             $balance         = $total + $order->received;
             $payment_status  = 0;
             if ($balance == $total) {
@@ -259,7 +259,7 @@ class ShopOrderTotal extends Model
             }
             if ($value['code'] === 'discount') {
                 $discount += $value['value'];
-                $total += $value['value'];
+                $total -= $value['value'];
             }
             if ($value['code'] === 'shipping') {
                 $shipping += $value['value'];
@@ -270,19 +270,25 @@ class ShopOrderTotal extends Model
             }
         }
 
+        //Update Order
+        $order           = ShopOrder::find($order_id);
+        $rate = 0;
+        if($order->payment_term != 0)
+        {
+            $rate = CustomerPaymentTerm::where('id', $order->payment_term)->first()->rate;
+        }
+        $total = ($order->subtotal - $discount) + $total * $rate;
+        $order->discount = $discount;
+        $order->shipping = $shipping;
+        $order->received = $received;
+        $order->balance  = $total - $received;
+        $order->total    = $total;
+        $order->save();
+
         //Update total
         $updateTotal        = self::where('order_id', $order_id)->where('code', 'total')->first();
         $updateTotal->value = $total;
         $updateTotal->save();
-
-        //Update Order
-        $order           = ShopOrder::find($order_id);
-        $order->discount = $discount;
-        $order->shipping = $shipping;
-        $order->received = $received;
-        $order->balance  = $total + $received;
-        $order->total    = $total;
-        $order->save();
 
         return $order_id;
     }

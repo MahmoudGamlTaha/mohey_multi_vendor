@@ -418,6 +418,7 @@ JS;
             $order_id           = $order_total_origin->order_id;
             $oldValue           = $order_total_origin->value;
             $order              = ShopOrder::find($order_id);
+
             $fieldTotal         = [
                 'id'    => $id,
                 'code'  => $field,
@@ -425,7 +426,7 @@ JS;
                 'text'  => \Helper::currencyOnlyRender($value, $order->currency),
             ];
             ShopOrderTotal::updateField($fieldTotal);
-        } else {
+        }else{
             $arrFields = [
                 $field => $value,
             ];
@@ -434,11 +435,25 @@ JS;
             $oldValue = $order->{$field};
             ShopOrder::updateInfo($order_id, $arrFields);
         }
-
+        $rate = 0;
+        if($field == 'payment_term')
+        {
+            if($value != 0) {
+                $rate = CustomerPaymentTerm::where('id', $value)->first()->rate;
+            }
+            $order = ShopOrder::find($id);
+            $total = ($order->subtotal - $order->discount) + $order->total * $rate;
+            $order->total = $total;
+            $order->balance = $total - $order->received;
+            $order->save();
+            $updateTotal        = ShopOrderTotal::where('order_id', $order->id)->where('code', 'total')->first();
+            $updateTotal->value = $total;
+            $updateTotal->save();
+        }
         //Add history
         $dataHistory = [
             'order_id' => $order_id,
-            //'content'  => 'Change <b>' . $field . ' . $oldValue . '' . $value . '\'</span>',
+            'content'  => 'Change ' . $field .' old value='. $oldValue . ' - new value=' . $value,
             'admin_id' => Admin::user()->id,
             'add_date' => date('Y-m-d H:i:s'),
         ];
@@ -446,7 +461,6 @@ JS;
 
         //updateField
         // $updateSubTotal = ShopOrderTotal::updateSubTotal($id, $fields = array($field => $value));
-
         if ($order_id) {
             $orderUpdated = ShopOrder::find($order_id);
             if ($orderUpdated->balance == 0 && $orderUpdated->total != 0) {
@@ -457,12 +471,15 @@ JS;
             } else {
                 $style = 'style="font-weight:bold;"';
             }
-            $style_blance = '<tr ' . $style . ' class="data-balance"><td>' . trans('language.order.balance') . ':</td><td align="right">' . \Helper::currencyFormat($orderUpdated->balance) . '</td></tr>';
-            if($orderUpdated->payment_term != 0) {
+            if($orderUpdated->payment_term != 0)
+            {
                 $rate = CustomerPaymentTerm::where('id', $orderUpdated->payment_term)->first()->rate;
-            }else{
+            }
+            else
+            {
                 $rate = 0;
             }
+            $style_blance = '<tr ' . $style . ' class="data-balance"><td>' . trans('language.order.balance') . ':</td><td align="right">' . \Helper::currencyFormat($orderUpdated->balance) . '</td></tr>';
             return json_encode([
                 'stt' => 1, 'msg' => [
                     'total'          => \Helper::currencyFormat($orderUpdated->total),
@@ -472,7 +489,7 @@ JS;
                     'received'       => \Helper::currencyFormat($orderUpdated->received),
                     'balance'        => $style_blance,
                     'payment_status' => ($orderUpdated->payment_status == 2) ? '<span style="color:#0e9e33;font-weight:bold;">' . $this->statusPayment[$orderUpdated->payment_status] . '</span>' : (($orderUpdated->payment_status == 3) ? '<span style="color:#ff2f00;font-weight:bold;">' . $this->statusPayment[$orderUpdated->payment_status] . '</span>' : $this->statusPayment[$orderUpdated->payment_status]),
-                    'rate'           => $rate,
+                    'rate'           => $rate ,
                 ],
             ]);
         } else {

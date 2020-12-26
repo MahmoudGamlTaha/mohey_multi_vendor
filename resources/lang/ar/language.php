@@ -174,7 +174,7 @@ return [
         'image'                             => 'صورة',
         'sub_image'                         => 'صور اخري',
         'sort'                              => 'Sort',
-        'status'                            => 'متوفر',
+        'status'                            => 'حالة الطلب',
         'content'                           => 'الوصف الكلي',
         'keyword'                           => 'كلمة البحث',
         'description'                       => 'الوصف المختصر',
@@ -256,6 +256,7 @@ return [
         'payment_method'        => 'طريقة الدفع',
         'currency'              => 'العمله',
         'exchange_rate'         => 'سعر الصرف',
+        'tax'                   => 'الضريبه',
         'email'                 => [
             'title'     => 'Email',
             'new_title' => 'NEW ORDER',
