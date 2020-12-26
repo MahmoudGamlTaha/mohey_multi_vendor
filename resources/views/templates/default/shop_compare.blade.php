@@ -77,10 +77,22 @@
   
         <div class="clearfix"></div>
         <hr style="margin: 0 0 15px 0">
-       
+       @php
+        if($n == 1){
+           $price = $product->showPrice();
+        }
+       @endphp
         <div class="col-sm-12">
-          <div class="col-sm-12">
-            <span> {!! $product->showPrice() !!}</span>
+          <div class="col-sm-10" style="left:60px">
+            <span>
+                <strong> سعر المنتج :</strong>
+                <span style="margin:-20%;">{!! $product->showPrice() !!}</span>
+                @if($n > 1)
+                    @if($product->showPrice() == $price)
+                        <i class="fa fa-check" style="color:#0e9e33"></i>
+                    @endif
+                @endif
+            </span>
           </div>
           <br><br>
 
