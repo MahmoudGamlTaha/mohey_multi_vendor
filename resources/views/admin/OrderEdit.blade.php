@@ -74,16 +74,16 @@
                         }
                 @endphp
                 <tr><td><strong>{{trans('language.order.payment_term')}}</strong></td><td><a href="#" class="updatePrice" data-name="payment_term" data-type="select" data-source ="{{ json_encode($payment) }}"  data-pk="{{ $order->id }}" data-value="{{ $order->payment_term }}" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.payment_term') }}">{{$paymentName}}</a></td></tr>
-                <tr><td><strong>{{trans('language.order.rate')}}</strong></td><td><a href="#" class="rate" data-name="rate" data-type="select" data-source =""  data-pk="{{ $order->id }}" data-value="" data-url="{{ route("order_update") }}" data-title="{{ trans('language.order.rate') }}">{{$paymentRate}}%</a></td></tr>
-              </table>
-             <table class="table box table-bordered">
+                <tr><td><strong>{{trans('language.order.rate')}}</strong></td><td class="rate">{{$paymentRate}}%</td></tr>
+            </table>
+             {{--<table class="table box table-bordered">
                 <tr>
                   <td class="td-title">{{ trans('language.order.currency') }}:</td><td>{{ $order->currency }}</td>
                 </tr>
                 <tr>
                   <td class="td-title">{{ trans('language.order.exchange_rate') }}:</td><td>{{ ($order->exchange_rate)??1 }}</td>
                 </tr>
-            </table>
+            </table>--}}
         </div>
 
       </div>
@@ -195,7 +195,7 @@
        </div>
       <div class="col-sm-6">
           <table   class="table table-bordered">
-@foreach ($dataTotal as $element)
+          @foreach ($dataTotal as $element)
   @if ($element['code'] =='subtotal')
     <tr><td  class="td-title-normal">{!! $element['title'] !!}:</td><td align="right" class="data-{{ $element['code'] }}">{{ \Helper::currencyFormat($element['value']) }}</td></tr>
   @endif
