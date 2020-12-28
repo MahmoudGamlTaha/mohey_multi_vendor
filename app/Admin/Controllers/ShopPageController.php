@@ -105,7 +105,7 @@ class ShopPageController extends Controller
             if ($languages->count() > 1) {
                 $form->html('<b>' . $language->name . '</b> <img style="height:25px" src="/' . config('filesystems.disks.path_file') . '/' . $language->icon . '">');
             }
-            $form->text($language->code . '__title', 'Tên')->rules('required', ['required' => trans('validation.required')])->default(!empty($langDescriptions->title) ? $langDescriptions->title : null);
+            $form->text($language->code . '__title', trans('language.admin.title'))->rules('required', ['required' => trans('validation.required')])->default(!empty($langDescriptions->title) ? $langDescriptions->title : null);
             $form->text($language->code . '__keyword', trans('language.admin.keyword'))->default(!empty($langDescriptions->keyword) ? $langDescriptions->keyword : null);
             $form->text($language->code . '__description', trans('language.admin.description'))->rules('max:300', ['max' => trans('validation.max')])->default(!empty($langDescriptions->description) ? $langDescriptions->description : null);
             $form->ckeditor($language->code . '__content', trans('language.admin.content'))->default(!empty($langDescriptions->content) ? $langDescriptions->content : null)->rules('required');
@@ -123,7 +123,7 @@ class ShopPageController extends Controller
         } else {
             $form->text('uniquekey', 'Unique Key')->rules(function ($form) {
                 return 'required|unique:shop_page,uniquekey,' . $form->model()->id . ',id';
-            }, ['required' => trans('validation.required'), 'unique' => trans('validation.unique')])->placeholder('Ví dụ: thong-tin-khuyen-mai, tin-tuc,...')->help(trans('validation.validate_nickname'));
+            }, ['required' => trans('validation.required'), 'unique' => trans('validation.unique')])->placeholder(trans('language.admin.examples'))->help(trans('validation.validate_nickname'));
         }
         $form->switch('status', trans('language.admin.status'));
         $form->disableViewCheck();

@@ -324,10 +324,15 @@
 @push('scripts')
     <script>
         var ratedIndex = -1, uID = {{Auth::id() ?? 0}};
-
+        var rate = {{$productLike['rate'] ?? 0}};
+        console.log(rate);
         $(document).ready(function () {
+            localStorage.setItem('ratedIndex', -1);
             resetStarColors();
-
+            if(ratedIndex = -1)
+            {
+                setStars(rate-1);
+            }
             if (localStorage.getItem('ratedIndex') != null) {
                 setStars(parseInt(localStorage.getItem('ratedIndex')));
                 uID = localStorage.getItem('uID');
@@ -352,8 +357,12 @@
             $('.fstar').mouseleave(function () {
                 resetStarColors();
 
-                if (ratedIndex != -1)
+                if (ratedIndex != -1) {
                     setStars(ratedIndex);
+                }else
+                {
+                    setStars(rate-1);
+                }
             });
         });
 

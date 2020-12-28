@@ -22,6 +22,7 @@ return [
      "payment_terms"    =>"أنظمة الدفع",
      "benefit"          => "الفائدة",
      "client_payment_terms" => "انظمه الدفع للعميل",
+    "polices"           => 'السياسات و الاحكام'
     ],
     'wishlist'           => 'المفضلة',
     'add_to_wishlist'    => 'الحفظ لوقت لاحق',
@@ -166,7 +167,7 @@ return [
         'product'                           => 'Product',
         'parent_category'                   => 'Parent category',
         'page_name'                         => 'Page name',
-        'title'                             => 'Title',
+        'title'                             => 'العنوان',
         'name'                              => 'العميل',
         'email'                             => 'Email',
         'phone'                             => 'Phone',
@@ -207,6 +208,8 @@ return [
         'unit_name'                         => 'الاسم',
         //'amount'                            => ''
         'payment_benefit'                   => 'الفائده',
+        'examples'                          => '
+على سبيل المثال: نصائح إخبارية ، رسائل إخبارية ، ...',
     ],
     'order'              => [
         'title'                 => 'Order',

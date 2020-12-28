@@ -183,5 +183,8 @@ UPDATE shop_product
 SET uofm_groups = 3
 WHERE id < 20;
 
+//--
+UPDATE `admin_menu` SET `parent_id` = '43', `active` = '1' WHERE `admin_menu`.`id` = 22;
+
 
 

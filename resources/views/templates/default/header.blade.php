@@ -196,7 +196,7 @@
 
                 <li><a href="{{ route('compare') }}" title="">
                   <i class="fa fa-refresh">
-
+                      <span  class="badge" id="shopping-wishlist">{{ Cart::instance('compare')->count() }}</span>
                   </i>
                 </a></li>
 

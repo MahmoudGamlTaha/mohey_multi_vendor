@@ -39,11 +39,11 @@
                 <p>{{ trans('language.subscribe.subscribe_des') }}</p>
                 <div>
                   <span id="icon-mail" class="fa fa-envelope-o" ></span>
-                  <input type="email" name="subscribe_email" placeholder="{{ trans('language.subscribe.subscribe_email') }}"> 
+                  <input type="email" name="subscribe_email" placeholder="{{ trans('language.subscribe.subscribe_email') }}">
                   <button value="male" class="btn btn-default">ذكر</button> &nbsp;
                   <button value="female" class="btn btn-default">انثى</button>
                 </div>
-               
+
                 <br/>
                 <br/>
               </form>
@@ -70,10 +70,10 @@
             <div class="single-widget">
               <h4 style="color: white"> من نحن</h4>
               <ul class="nav nav-pills nav-stacked">
-                    <li><a href="#">من</a></li>
+                    <li><a href="/about.html">من</a></li>
                     <li><a href="#">انضم الى دكانى</a></li>
-                    <li><a href="#">الشروط والاحكام</a></li>
-                    <li><a href="#">سياسة الخصوصية</a></li>
+                    <li><a href="/polices.html">الشروط والاحكام</a></li>
+                    <li><a href="/privacy.html">سياسة الخصوصية</a></li>
               </ul>
             </div>
           </div>
@@ -82,7 +82,7 @@
               <h4 style="color: white"> خدمة العملاء</h4>
               <ul class="nav nav-pills nav-stacked">
                     <li><a href="#">مركز المساعدة</a></li>
-                    <li><a href="#">اتصل بنا</a></li>
+                    <li><a href="/contact.html">اتصل بنا</a></li>
                     <li><a href="#">كيفية عمل طلب شراء</a></li>
                     <li><a href="#">سياسة الارجاع والاسترداد النقدى</a></li>
               </ul>
@@ -122,8 +122,8 @@
     <div class="footer-bottom" style="background-color: #10243f">
       <div class="container">
         <div class="row">
-          <p class="pull-left"> Copyright © 2019 
-            <a href="{{ config('scart.homepage') }}" style="color: #f69620;">{{ config('scart.name') }} {{ config('scart.version') }}</a> 
+          <p class="pull-left"> Copyright © 2019
+            <a href="{{ config('scart.homepage') }}" style="color: #f69620;">{{ config('scart.name') }} {{ config('scart.version') }}</a>
             Inc. All rights reserved</p>
           <p class="pull-right">Hosted by  <span><a target="_blank" href="https://highcoder.com" >highcoder</a></span></p>
         </div>

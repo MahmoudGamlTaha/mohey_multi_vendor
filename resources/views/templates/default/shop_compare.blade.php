@@ -6,8 +6,8 @@
     <div class="row" >
 
       @if (count($compare) ==0)
-          <div class="col-md-12 text-danger">
-             <h3 style="text-align:center;" >Not found !</h3>
+          <div class="col-md-12 text-danger" style="min-height: 50vh;">
+             <h3 style="text-align:center;" >!No products found to compare</h3>
           </div>
       @endif
 
@@ -77,10 +77,22 @@
   
         <div class="clearfix"></div>
         <hr style="margin: 0 0 15px 0">
-       
+       @php
+        if($n == 1){
+           $price = $product->showPrice();
+        }
+       @endphp
         <div class="col-sm-12">
-          <div class="col-sm-12">
-            <span> {!! $product->showPrice() !!}</span>
+          <div class="col-sm-10" style="left:60px">
+            <span>
+                <strong> سعر المنتج :</strong>
+                <span style="margin:-20%;">{!! $product->showPrice() !!}</span>
+                @if($n > 1)
+                    @if($product->showPrice() == $price)
+                        <i class="fa fa-check" style="color:#0e9e33"></i>
+                    @endif
+                @endif
+            </span>
           </div>
           <br><br>
 
@@ -155,7 +167,7 @@
     $(document).ready(function(){
         var productCount = {{count($compare)}};
         var rates = new Array();
-        rates = {{json_encode($rates)}};
+        rates = {{json_encode($rates ?? 0)}};
         for(var i = 1 ; i <= productCount; i++)
         {
             var product = $('.star-'+i);
