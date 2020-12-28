@@ -138,7 +138,11 @@ class CustomerPaymentTermController extends Controller
                 $payment->user_id = $arr['user_id'];
             }
             if(isset($arr['rate'])){
-                $payment->rate = $arr['rate']/100 ;
+                if($arr['rate'] > 1) {
+                    $payment->rate = $arr['rate'] / 100;
+                }else{
+                    $payment->rate = $arr['rate'];
+                }
             }
             if(isset($arr['payment_term_id'])){
                 $payment->payment_term_id = $arr['payment_term_id'];
