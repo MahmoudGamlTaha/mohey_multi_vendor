@@ -124,7 +124,11 @@ class PaymentTermController extends Controller
       try{
        $payment = PaymentTerm::findOrFail($id);
        if(isset($arr['rate'])){
-         $payment->rate = $arr['rate']/100 ;
+           if($arr['rate'] > 1) {
+               $payment->rate = $arr['rate'] / 100;
+           }else{
+               $payment->rate = $arr['rate'];
+           }
        }
        if(isset($arr['name'])){
           $payment->name = $arr['name'];
