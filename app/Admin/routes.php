@@ -28,6 +28,8 @@ Route::group([
     $router->post('backup', 'BackupController@generateBackup')->name('generateBackup');
     $router->any('/config_updateConfigField', 'ConfigInfoController@updateConfigField')
         ->name('updateConfigField');
+    $router->any('/config_updateContactUs', 'ConfigInfoController@updateContactUs')
+        ->name('updateContactUs');
         $router->any('/updateUofm', 'UnitOfMeasureController@updateUofm')
         ->name('updateUofmFields');
     $router->get('/ckfinder', function () {

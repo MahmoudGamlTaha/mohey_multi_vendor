@@ -4,8 +4,12 @@
 <section >
 <div class="container">
     <div class="row">
-        <h2 class="title text-center">{{ $title }}</h2>
+        <div style="width:80%;margin: auto">
+        <h2 class="title text-center" style="margin:50px;">{{ $title }}</h2>
+        <div style="margin:50px">
         {!! $page->content !!}
+        </div>
+        </div>
 </div>
 </div>
 </section>

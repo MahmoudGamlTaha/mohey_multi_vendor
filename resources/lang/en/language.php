@@ -48,6 +48,10 @@ return [
     'products_hot'       => 'Hot products',
     'products_special'   => 'Special products',
     'products_last_view' => 'Products recently viewed',
+    'clientService'      => 'Client Service',
+    'aboutUs'            => 'About Us',
+    'joinUs'             => 'Join Us',
+    'dokanii'            => 'Dokanii',
     'subscribe'          => [
         'manager'           => 'Subscribe manager',
         'email'             => 'Email',
@@ -171,6 +175,7 @@ return [
         'detail'                            => 'Detail',
         'access_denied'                     => 'Access denied!',
         'access_denied_msg'                 => 'Can\'t disable this language. Please change default language before do that.',
+        'hot_line'                          => 'Hot Line',
     ],
     'order'              => [
         'title'                 => 'Order',

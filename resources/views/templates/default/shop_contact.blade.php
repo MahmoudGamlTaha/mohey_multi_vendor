@@ -84,11 +84,15 @@
                 <div class="col-sm-4">
                     <div class="contact-info">
                         <h2 class="title text-center">{{ trans('language.contact_form.info') }}</h2>
-                        <address>
-                            <p>{{ $configsGlobal['title'] }}</p>
-                            <p>{{ $configsGlobal['address'] }}</p>
-                            <p>{{ $configsGlobal['long_phone'] }}</p>
-                            <p>{{ $configsGlobal['email'] }}</p>
+                        <address style="margin:40px;">
+                           @php
+                            $contacts = \App\Models\ContactUs::all();
+                          @endphp
+                          <ul class="nav nav-pills nav-stacked contact">
+                            <li><a href="#" style="color:black;font-weight:500;">{{ trans('language.dokanii') }}</a></li>
+                          @foreach($contacts as $contact)
+                              <li><a href="#" style="color:black;font-weight:500;">{{trans('language.admin.'.$contact->name)}} : {{ $contact->value }}</a></li>
+                          @endforeach
                         </address>
                         <div class="social-networks">
                             <h2 class="title text-center">Social Networking</h2>

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\ContactUs;
 use App\Http\Controllers\Controller;
 use App\Models\Config;
 use Encore\Admin\Controllers\HasResourceActions;
@@ -28,7 +29,11 @@ class ConfigInfoController extends Controller
 
             $content->header(trans('language.admin.config_control'));
             $content->description(' ');
-            $content->body($this->grid());
+            //$content->body($this->grid());
+            $content->body(function (Row $row) {
+                $row->column(1 / 3, new Box(trans('language.admin.ContactUs'), $this->viewContactUs()));
+                $row->column(2 / 3, $this->grid());
+            });
             $content->row(function (Row $row) {
                 $row->column(1 / 2, new Box(trans('language.admin.config_email'), $this->viewSMTPConfig()));
                 $row->column(1 / 2, new Box(trans('language.admin.config_display'), $this->viewDisplayConfig()));
@@ -102,6 +107,11 @@ class ConfigInfoController extends Controller
 
     }
 
+    public function updateContactUs(Request $request)
+    {
+        ContactUs::where('id', $request->pk)->update(['value' => $request->value]);
+    }
+
     public function viewSMTPConfig()
     {
         $configs = Config::where('code', 'smtp')->orderBy('sort', 'desc')->get();
@@ -166,6 +176,28 @@ class ConfigInfoController extends Controller
         }
         return view('admin.CustomEdit')->with([
             "datas" => $fields,
+        ])->render();
+    }
+
+    public function viewContactUs()
+    {
+        $contacts = ContactUs::all();
+        if ($contacts === null) {
+            return trans('language.no_data');
+        }
+        $fields = [];
+        foreach ($contacts as $key => $field) {
+            $data['name'] = $field->name;
+            $data['value'] = $field->value;
+            $data['id'] = $field->id;
+            $data['disabled'] = 0;
+            $data['required'] = 0;
+            $data['source'] = '';
+            $data['url'] = route('updateContactUs');
+            $fields[]         = $data;
+        }
+        return view('admin.CustomEdit')->with([
+            "contacts" => $fields,
         ])->render();
     }
 
