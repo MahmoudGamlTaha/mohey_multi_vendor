@@ -178,10 +178,10 @@
             <div class="contactinfo">
               <ul class="nav nav-pills">
 
-                <h4 style="color: white;float: left; width:-3px">{{ "EGP " . $carts['count'] }}</h4>
+                {{--<h4 style="color: white;float: left; width:-3px">{{ "EGP " . $carts['count'] }}</h4>--}}
 
                 <li>
-                  <a  style="margin-left: 15px" href="{{ route('cart') }}" title=" {{ trans('language.cart_title') }}">
+                  <a  style="margin-left:65px" href="{{ route('cart') }}" title=" {{ trans('language.cart_title') }}">
                   <i class="fa fa-shopping-cart">
                     <span  class=" badge " id="shopping-cart" >{{ $carts['count'] }}</span>
                   </i></a>
@@ -240,9 +240,9 @@
             <div class="btn-group pull-right" style="margin-top: -10px; ">
               <div class="btn-group locale">
                 @if (count($languages)>1)
-                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown" style="background: #ffffff;color: #10243f;">
+                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown" style="background: #ffffff;color: #10243f;border-radius:5px;">
                   <span class="caret" style="margin-left: 3px" ></span>
-                  <span>Arabic  <span>
+                  <span>{{$languages[app()->getLocale()]['name']}}<span>
                     <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;">
                 </button>
                 <ul class="dropdown-menu">
@@ -256,7 +256,7 @@
               </div>
               @if (count($currencies)>1)
                <div class="btn-group locale">
-                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown"  style="background: #ffffff;color: #10243f;">
+                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown"  style="background: #ffffff;color: #10243f;border-radius:5px;">
                   <span class="caret"></span>
                   {{ \Helper::getCurrency()['name'] }}
                 </button>

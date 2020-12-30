@@ -142,7 +142,7 @@ class ShopPageController extends Controller
             //Lang
             foreach ($languages as $key => $language) {
                 $arrData[$language->code]['title']       = request($language->code . '__title');
-                $arrData[$language->code]['keyword']     = request($language->code . '__keyword');
+                //$arrData[$language->code]['keyword']     = request($language->code . '__keyword');
                 $arrData[$language->code]['description'] = request($language->code . '__description');
                 $arrData[$language->code]['content']     = request($language->code . '__content');
 
@@ -159,6 +159,7 @@ class ShopPageController extends Controller
                 }, ARRAY_FILTER_USE_BOTH)) {
                     $arrData[$language->code]['page_id'] = $id;
                     $arrData[$language->code]['lang_id'] = $language->id;
+                    $arrData[$language->code]['keyword'] = $form->uniquekey;
                     ShopPageDescription::where('lang_id', $arrData[$language->code]['lang_id'])->where('page_id', $arrData[$language->code]['page_id'])->delete();
                     ShopPageDescription::insert($arrData[$language->code]);
                 }

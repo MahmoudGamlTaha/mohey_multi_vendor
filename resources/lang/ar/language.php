@@ -65,6 +65,10 @@ return [
     'products_last_view' => 'Products recently viewed',
     'wishlist_products'  => 'المنتجات المفضلة',
     'ViewAll'          => 'رؤية الكل',
+    'clientService'      => 'خدمة العملاء',
+    'aboutUs'           => 'من نحن',
+    'joinUs'            => 'انضم الى دكانى',
+    'dokanii'           => 'دكانى',
     'subscribe'          => [
         'manager'           => 'Subscribe manager',
         'email'             => 'Email',
@@ -210,6 +214,13 @@ return [
         'payment_benefit'                   => 'الفائده',
         'examples'                          => '
 على سبيل المثال: نصائح إخبارية ، رسائل إخبارية ، ...',
+        'hot_line'                          => 'الخط الساخن',
+        'ContactUs'                         => 'تواصل معنا',
+        'address'                           => 'العنوان',
+        'email'                             => 'الايميل',
+        'phone'                             => 'الهاتف',
+        'add_new_contact'                   => 'اضافة جديده',
+        'value'                             => 'القيمه',
     ],
     'order'              => [
         'title'                 => 'Order',

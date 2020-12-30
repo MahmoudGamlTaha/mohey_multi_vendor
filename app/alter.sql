@@ -186,5 +186,12 @@ WHERE id < 20;
 //--
 UPDATE `admin_menu` SET `parent_id` = '43', `active` = '1' WHERE `admin_menu`.`id` = 22;
 
+//--
+create table `contact_us`(
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `name` varchar(255) ,
+    `value` varchar(255)
+);
+
 
 

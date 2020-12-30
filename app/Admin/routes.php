@@ -26,8 +26,12 @@ Route::group([
     $router->get('backup_database', 'BackupController@index');
     $router->post('backup_database', 'BackupController@processBackupFile')->name('processBackupFile');
     $router->post('backup', 'BackupController@generateBackup')->name('generateBackup');
+    $router->post('/updateContactUs', 'ConfigInfoController@updateContactUs')
+        ->name('updateContactUs');
     $router->any('/config_updateConfigField', 'ConfigInfoController@updateConfigField')
         ->name('updateConfigField');
+    $router->any('/config_updateContactUs', 'ConfigInfoController@updateContactUs')
+        ->name('updateContactUs');
         $router->any('/updateUofm', 'UnitOfMeasureController@updateUofm')
         ->name('updateUofmFields');
     $router->get('/ckfinder', function () {

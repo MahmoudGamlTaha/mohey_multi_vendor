@@ -66,28 +66,33 @@
               <a href="<?php echo route('registermerchant')?>" style="font-size: 18px;">كن بائعا معنا</a>
             </div>
           </div>
+          @php
+            $lang = App\Models\Language::where('code', app()->getLocale())->first();
+            $columns = \App\Models\ShopPageDescription::where('lang_id', $lang->id)->get();
+          @endphp
           <div class="col-sm-3">
             <div class="single-widget">
-              <h4 style="color: white"> من نحن</h4>
+              <h4 style="color: white">{{trans('language.aboutUs')}}</h4>
               <ul class="nav nav-pills nav-stacked">
-                    <li><a href="/about.html">من</a></li>
-                    <li><a href="#">انضم الى دكانى</a></li>
-                    <li><a href="/polices.html">الشروط والاحكام</a></li>
-                    <li><a href="/privacy.html">سياسة الخصوصية</a></li>
+                @for($i = 0; $i < 3; $i++)
+                    <li><a href="{{$columns[$i]['keyword'].'.html'}}">{{$columns[$i]['title']}}</a></li>
+                @endfor
+                <li><a href="/login">{{trans('language.joinUs')}}</a>
               </ul>
             </div>
           </div>
+          @if($columns->count() > 4)
           <div class="col-sm-3">
             <div class="single-widget">
-              <h4 style="color: white"> خدمة العملاء</h4>
+              <h4 style="color: white">{{trans('language.clientService')}}</h4>
               <ul class="nav nav-pills nav-stacked">
-                    <li><a href="#">مركز المساعدة</a></li>
-                    <li><a href="/contact.html">اتصل بنا</a></li>
-                    <li><a href="#">كيفية عمل طلب شراء</a></li>
-                    <li><a href="#">سياسة الارجاع والاسترداد النقدى</a></li>
-              </ul>
+            @for($i = 3; $i < $columns->count(); $i++)
+                    <li><a href="{{$columns[$i]['keyword'].'.html'}}">{{$columns[$i]['title']}}</a></li>
+            @endfor
+                </ul>
             </div>
           </div>
+          @endif
           <div class="col-sm-1">
           </div>
         </div>
@@ -98,10 +103,13 @@
           <div class="col-sm-6">
             <div class="single-widget">
               <h2 style="font-size: 20px">تواصل معنا</h2>
+              @php
+                $contacts = \App\Models\ContactUs::all();
+              @endphp
               <ul class="nav nav-pills nav-stacked contact">
-                <li><i class="fa fa-map-marker"></i><a href="#">{{ trans('language.shop_info.address') }}: {{ $configsGlobal['address'] }}</a></li>
-                <li><i class="fa fa-phone"></i><a href="#">{{ trans('language.shop_info.hotline') }}: {{ $configsGlobal['long_phone'] }}</a></li>
-                <li><i class="fa fa-envelope-o"></i><a href="#">{{ trans('language.shop_info.email') }}: {{ $configsGlobal['email'] }}</a></li>
+              @foreach($contacts as $contact)
+                  <li><a href="#">{{trans('language.admin.'.$contact->name)}} : {{ $contact->value }}</a></li>
+              @endforeach
             </ul>
             </div>
           </div>
