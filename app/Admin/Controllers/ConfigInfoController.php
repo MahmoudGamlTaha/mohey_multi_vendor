@@ -13,6 +13,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
 use Encore\Admin\Widgets\Box;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ConfigInfoController extends Controller
 {
@@ -109,7 +110,23 @@ class ConfigInfoController extends Controller
 
     public function updateContactUs(Request $request)
     {
-        ContactUs::where('id', $request->pk)->update(['value' => $request->value]);
+        if(isset($request->pk)) {
+            ContactUs::where('id', $request->pk)->update(['value' => $request->value]);
+        }else {
+            $validate = Validator::make($request->all(),
+                [
+                    'name' => 'required',
+                    'value' => 'required'
+                ]);
+            if($validate->fails()){
+                return $this->sendError("Please fill in all the fields",400,400);
+            }
+            $ContactUs = new ContactUs();
+            $ContactUs->name = $request->name;
+            $ContactUs->value = $request->value;
+            $ContactUs->save();
+        }
+        return $this->sendResponse('add successfully', 200);
     }
 
     public function viewSMTPConfig()

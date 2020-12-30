@@ -219,6 +219,8 @@ return [
         'address'                           => 'العنوان',
         'email'                             => 'الايميل',
         'phone'                             => 'الهاتف',
+        'add_new_contact'                   => 'اضافة جديده',
+        'value'                             => 'القيمه',
     ],
     'order'              => [
         'title'                 => 'Order',
