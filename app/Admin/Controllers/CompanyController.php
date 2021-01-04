@@ -2,7 +2,6 @@
  namespace App\Admin\Controllers;
  use App\Http\Controllers\Controller;
  use App\Models\Company;
- use App\Models\ProductPriceList;
  use App\Models\ShopActivity;
  use App\Models\CompanyContact;
 use App\Models\ConfigGlobalDescription;
@@ -82,7 +81,18 @@ class CompanyController extends Controller
           //  $arrType = $this->arrType;
 
             $grid->active(trans('language.admin.status'))->switch();
-            $grid->visible(trans('language.admin.showMe'))->switch();
+            if($this->checkSuperUser()) {
+                $grid->visible(trans('language.admin.showMe'))->switch();
+                $grid->tools(function ($tools) {
+                    $tools->append('<div class="pull-right">
+            <div class="btn-group pull-right" style="margin-right: 10px">
+             <a href="' . route('productImport') . '" class="btn btn-sm btn-success" title="New">
+                <i class="fa fa-save"></i><span class="hidden-xs">&nbsp;&nbsp;&nbsp;' . trans('language.product.import_multi') . '</span>
+            </a>
+          </div>
+        </div>');
+                });
+            }
             $grid->seller(trans('admin.seller'))->switch();
             $grid->created_at(trans('language.admin.created_at'));
             $grid->notes(trans('language.notes'));
@@ -91,26 +101,19 @@ class CompanyController extends Controller
             $grid->actions(function ($actions) {
                 $actions->disableView();
             });
-
-            $grid->tools(function ($tools) {
-                $tools->append('<div class="pull-right">
-            <div class="btn-group pull-right" style="margin-right: 10px">
-             <a href="' . route('productImport') . '" class="btn btn-sm btn-success" title="New">
-                <i class="fa fa-save"></i><span class="hidden-xs">&nbsp;&nbsp;&nbsp;' . trans('language.product.import_multi') . '</span>
-            </a>
-          </div>
-        </div>');
-            });
+            if(!$this->checkSuperUser()) {
+                $grid->disableCreateButton();
+            }
         //    print_r(session('locale_id'));
         //die;
           //  $grid->model()->leftJoin('shop_product_description', 'shop_product_description.product_id', '=', 'shop_product.id')
             //    ->where('lang_id', session('locale_id'));
             //$grid->expandFilter();
-            if(!$this->checkSuperUser())
-            {
+            //if(!$this->checkSuperUser())
+            //{
             //  $grid->model()
               //   ->where('id',$this->getUserCompany()[0]->id);
-            }
+            //}
             $grid->filter(function ($filter) {
                 $filter->disableIdFilter();
                 $filter->like('name', trans('admin.company'));
@@ -168,179 +171,185 @@ class CompanyController extends Controller
    }
    protected function form($id = null)
     {
-        return Admin::form(Company::class, function (Form $form) use ($id){
-            //dd($id);
-            $languages = Language::getLanguages();
-            $form->tab(trans('admin.company'), function ($form) use ($languages, $id) {
-                $name = '';
-                $notes = '';
-                $selected = '0';
-                $visible = '0';
-                $arrData = array();
-                if ($id != null) {
-                    $entity = Company::find($id);
-                    $name = $entity->name;
-                    $notes = $entity->notes;
-                    $selected = strval($entity->activity_id);
-                    $visible = strval($entity->visible);
-                    $companyContacts = $entity->getContact()->get();
-                    $config = $entity->configs();
+        if($this->checkSuperUser()) {
+            return Admin::form(Company::class, function (Form $form) use ($id) {
+                //dd($id);
+                $languages = Language::getLanguages();
+                $form->tab(trans('admin.company'), function ($form) use ($languages, $id) {
+                    $name = '';
+                    $notes = '';
+                    $selected = '0';
+                    $visible = '0';
+                    $arrData = array();
+                    if ($id != null) {
+                        $entity = Company::find($id);
+                        $name = $entity->name;
+                        $notes = $entity->notes;
+                        $selected = strval($entity->activity_id);
+                        $visible = strval($entity->visible);
+                        $companyContacts = $entity->getContact()->get();
+                        $config = $entity->configs();
 
-                }
-                //dd($visible);
-                $allActivity = ShopActivity::where('active', true)->pluck('type', 'id');
-                $form->text('name', trans('admin.company'))->default(!empty($name) ? $name : null);
-                $form->text('notes', trans('language.notes'))->default(!empty($notes) ? $notes : null);
-                $form->select('activity_id', trans('admin.activity'))->options($allActivity)->default($selected);
-                $form->text('iban', trans('admin.iban'));
-                $form->switch('visible', trans('language.admin.showMe'))->default($visible);
-                $form->ignore('seller', 'logo', 'country', 'path', 'active', 'visible', 'fax', 'contracting_manager', 'swiftCode', 'fixed',
-                    'percentage', 'payment_type', 'tansaction_fee', 'manager', 'code', 'published_date', 'parent_id', 'youtube_url', 'longitude',
-                    'latitude', 'notes', 'created_at', 'updated_at');
-                $form->saving(function (Form $form) use ($languages, &$arrData) {
-                    //Lang
-                    //if($this->isValidIBAN($form->model()->iban))
-                    if(sizeof($arrData) > 0){
+                    }
+                    //dd($visible);
+                    $allActivity = ShopActivity::where('active', true)->pluck('type', 'id');
+                    $form->text('name', trans('admin.company'))->default(!empty($name) ? $name : null);
+                    $form->text('notes', trans('language.notes'))->default(!empty($notes) ? $notes : null);
+                    $form->select('activity_id', trans('admin.activity'))->options($allActivity)->default($selected);
+                    $form->text('iban', trans('admin.iban'));
+                    if ($this->checkSuperUser()) {
+                        $form->switch('visible', trans('language.admin.showMe'))->default($visible);
+                    }
+                    $form->ignore('seller', 'logo', 'country', 'path', 'active', 'visible', 'fax', 'contracting_manager', 'swiftCode', 'fixed',
+                        'percentage', 'payment_type', 'tansaction_fee', 'manager', 'code', 'published_date', 'parent_id', 'youtube_url', 'longitude',
+                        'latitude', 'notes', 'created_at', 'updated_at');
+                    $form->saving(function (Form $form) use ($languages, &$arrData) {
+                        //Lang
+                        //if($this->isValidIBAN($form->model()->iban))
+                        if (sizeof($arrData) > 0) {
+                            foreach ($languages as $key => $language) {
+                                $arrData[$language->code]['name'] = request($language->code . '__name');
+                                $arrData[$language->code]['keyword'] = request($language->code . '__keyword');
+                                $arrData[$language->code]['description'] = request($language->code . '__description');
+                            }
+
+                        }
+                    });
+                    $form->saved(function (Form $form) use ($languages, &$arrData) {
+                        $id = $form->model()->id;
+                        //Lang
                         foreach ($languages as $key => $language) {
-                            $arrData[$language->code]['name']        = request($language->code . '__name');
-                            $arrData[$language->code]['keyword']     = request($language->code . '__keyword');
-                            $arrData[$language->code]['description'] = request($language->code . '__description');
+                            if (sizeof($arrData) > 0 && array_filter($arrData[$language->code], function ($v, $k) {
+                                    return $v != null;
+                                }, ARRAY_FILTER_USE_BOTH)) {
+                                //config save
+                            }
+                        }
+                        //end lang
+
+                    });//sprint 2
+                    $form->disableViewCheck();
+                    //    $form->disableEditingCheck();
+                    $form->tools(function (Form\Tools $tools) {
+                        $tools->disableView();
+                    });
+                })->tab(trans('admin.setting'), function ($form) use ($id) {
+                    //  $form1 = clone $form;
+                    $form->html(Admin::grid(CompanyContact::class, function (Grid $grid) use ($id) {
+
+                        $grid->html('&nbsp;');
+                        $grid->model()->where('company_id', $id);
+                        $grid->logo(trans('language.config.logo'))->image('', 50);
+                        if (\Helper::configs()['watermark']) {
+                            $grid->watermark(trans('language.config.watermark'))->image('', 50);
                         }
 
-                    }
-                });
-                $form->saved(function (Form $form) use ($languages, &$arrData) {
-                    $id = $form->model()->id;
-                    //Lang
-                    foreach ($languages as $key => $language) {
-                        if (sizeof($arrData) > 0 && array_filter($arrData[$language->code], function ($v, $k) {
-                                return $v != null;
-                            }, ARRAY_FILTER_USE_BOTH)) {
-                            //config save
-                        }
-                    }
-                    //end lang
-
-                });//sprint 2
-                $form->disableViewCheck();
-                //    $form->disableEditingCheck();
-                $form->tools(function (Form\Tools $tools) {
-                    $tools->disableView();
-                });
-            })->tab(trans('admin.setting'), function($form) use($id){
-                //  $form1 = clone $form;
-                $form->html(Admin::grid(CompanyContact::class, function (Grid $grid) use($id){
-
-                    $grid->html('&nbsp;');
-                    $grid->model()->where('company_id', $id);
-                    $grid->logo(trans('language.config.logo'))->image('', 50);
-                    if (\Helper::configs()['watermark']) {
-                        $grid->watermark(trans('language.config.watermark'))->image('', 50);
-                    }
-
-                    $languages = Language::getLanguages();
-                    $grid->descriptions(trans('language.config.description'))->expand(function () use ($languages) {
-                        $html = '<table width="100%" class="table-padding padding5"  border=1 style="border: 1px solid #d0bcbc;direction:rtl !important;"><tr>
+                        $languages = Language::getLanguages();
+                        $grid->descriptions(trans('language.config.description'))->expand(function () use ($languages) {
+                            $html = '<table width="100%" class="table-padding padding5"  border=1 style="border: 1px solid #d0bcbc;direction:rtl !important;"><tr>
                 <td>' . trans('language.config.language') . '</td>
                 <td>' . trans('language.config.title') . '</td>
                 <td>' . trans('language.config.description') . '</td>
                 <td>' . trans('language.config.keyword') . '</td>
                 </tr>';
-                        foreach ($languages as $key => $lang) {
-                            $langDescriptions = ConfigGlobalDescription::where('config_id', $this->id)->where('lang_id', $key)->first();
-                            $html .= '<tr>
+                            foreach ($languages as $key => $lang) {
+                                $langDescriptions = ConfigGlobalDescription::where('config_id', $this->id)->where('lang_id', $key)->first();
+                                $html .= '<tr>
                 <td>' . $lang['name'] . '</td>
                 <td>' . $langDescriptions['title'] . '</td>
                 <td>' . $langDescriptions['description'] . '</td>
                 <td>' . $langDescriptions['keyword'] . '</td>
                 </tr>';
+                            }
+                            $html .= '</table>';
+                            return $html;
+                        }, trans('language.admin.detail'));
+
+                        $grid->phone(trans('language.config.phone'));
+                        $grid->long_phone(trans('language.config.long_phone'))->display(function ($text) {
+                            return '<div style="max-width:120px; overflow:auto;">' . $text . '</div>';
+                        });
+                        $grid->time_active(trans('language.config.time_active'))->display(function ($text) {
+                            return '<div style="max-width:150px; overflow:auto;">' . $text . '</div>';
+                        });
+
+                        $grid->address(trans('language.config.address'))->display(function ($text) {
+                            return '<div style="max-width:150px; overflow:auto;">' . $text . '</div>';
+                        });
+                        $grid->email(trans('language.config.email'))->display(function ($text) {
+                            return '<div style="max-width:170px; overflow:auto;">' . $text . '</div>';
+                        });
+                        // $grid->locale(trans('language.config.language'))->display(function ($locale) {
+                        //     $languages = Language::pluck('name', 'code')->all();
+                        //     return $languages[$locale];
+                        // });
+                        // $grid->currency(trans('language.config.currency'))->display(function ($currency) {
+                        //     $currencies = ShopCurrency::pluck('name', 'code')->all();
+                        //     return $currencies[$currency];
+                        // });
+                        //   $grid->disableCreation();
+                        $grid->disableExport();
+                        //$grid->disableRowSelector();
+                        $grid->disableFilter();
+                        //     $grid->disablePagination();
+                        $grid->actions(function ($actions) {
+                            $actions->disableView();
+                            $actions->disableDelete();
+                        });
+                        $grid->tools(function ($tools) {
+                            $tools->disableRefreshButton();
+
+                        });
+                    })->render());
+
+                })->tab(trans('language.admin.product_manager'), function (Form $form) use ($id) {
+                    $form->html(Admin::grid(ShopProduct::class, function (Grid $grid) use ($id) {
+                        if (!isset($id)) {
+                            $id = -1;
                         }
-                        $html .= '</table>';
-                        return $html;
-                    }, trans('language.admin.detail'));
-
-                    $grid->phone(trans('language.config.phone'));
-                    $grid->long_phone(trans('language.config.long_phone'))->display(function ($text) {
-                        return '<div style="max-width:120px; overflow:auto;">' . $text . '</div>';
-                    });
-                    $grid->time_active(trans('language.config.time_active'))->display(function ($text) {
-                        return '<div style="max-width:150px; overflow:auto;">' . $text . '</div>';
-                    });
-
-                    $grid->address(trans('language.config.address'))->display(function ($text) {
-                        return '<div style="max-width:150px; overflow:auto;">' . $text . '</div>';
-                    });
-                    $grid->email(trans('language.config.email'))->display(function ($text) {
-                        return '<div style="max-width:170px; overflow:auto;">' . $text . '</div>';
-                    });
-                    // $grid->locale(trans('language.config.language'))->display(function ($locale) {
-                    //     $languages = Language::pluck('name', 'code')->all();
-                    //     return $languages[$locale];
-                    // });
-                    // $grid->currency(trans('language.config.currency'))->display(function ($currency) {
-                    //     $currencies = ShopCurrency::pluck('name', 'code')->all();
-                    //     return $currencies[$currency];
-                    // });
-                    //   $grid->disableCreation();
-                    $grid->disableExport();
-                    //$grid->disableRowSelector();
-                    $grid->disableFilter();
-                    //     $grid->disablePagination();
-                    $grid->actions(function ($actions) {
-                        $actions->disableView();
-                        $actions->disableDelete();
-                    });
-                    $grid->tools(function ($tools) {
-                        $tools->disableRefreshButton();
-
-                    });
-                })->render());
-
-            })->tab(trans('language.admin.product_manager'), function (Form $form) use($id){
-                $form->html(Admin::grid(ShopProduct::class, function (Grid $grid) use($id){
-                    if(!isset($id)){
-                        $id = -1;
-                    }
-                    $grid->model()->where('shop_product.company_id', $id);
-                    $grid->id(trans('language.admin.sort'))->sortable();
-                    $grid->image(trans('language.admin.image'))->image('', 50);
-                    $grid->sku(trans('language.product.sku'))->sortable();
-                    $grid->name(trans('language.product.product_name'))->sortable();
-                    $grid->category()->name(trans('language.categories'));
-                    $grid->group(trans('language.admin.group'))->display(function ($group){
-                        if(isset($group)){
-                            return $group['name'];
-                        }
-                    });
-                    $grid->cost(trans('language.product.price_cost'))->display(function ($price) {
-                        return number_format($price);
-                    });
-                    $grid->price(trans('language.product.price'))->display(function ($price) {
-                        return number_format($price);
-                    });
-                    $arrType = [
-                        0 => "Default",
-                        1 => "New",
-                        2 => "Hot"
-                    ];
-                    $grid->type(trans('language.product.product_type'))->display(function ($type) use ($arrType) {
-                        $style = ($type == 1) ? 'class="label label-success"' : (($type == 2) ? '  class="label label-danger"' : 'class="label label-default"');
-                        return '<span ' . $style . '>' . $arrType[$type] . '</span>';
-                    });
-                    $grid->status(trans('language.product.status'))->switch();
-                    $grid->created_at(trans('language.admin.created_at'));
-                    $grid->model()->orderBy('id', 'desc');
-                    $grid->disableExport();
-                    $grid->disableFilter();
-                    $grid->actions(function ($actions) {
-                        $actions->disableView();
-                    });
-                    $grid->tools(function ($tools) {
-                        $tools->disableRefreshButton();
-                    });
-                })->render());
+                        $grid->model()->where('shop_product.company_id', $id);
+                        $grid->id(trans('language.admin.sort'))->sortable();
+                        $grid->image(trans('language.admin.image'))->image('', 50);
+                        $grid->sku(trans('language.product.sku'))->sortable();
+                        $grid->name(trans('language.product.product_name'))->sortable();
+                        $grid->category()->name(trans('language.categories'));
+                        $grid->group(trans('language.admin.group'))->display(function ($group) {
+                            if (isset($group)) {
+                                return $group['name'];
+                            }
+                        });
+                        $grid->cost(trans('language.product.price_cost'))->display(function ($price) {
+                            return number_format($price);
+                        });
+                        $grid->price(trans('language.product.price'))->display(function ($price) {
+                            return number_format($price);
+                        });
+                        $arrType = [
+                            0 => "Default",
+                            1 => "New",
+                            2 => "Hot"
+                        ];
+                        $grid->type(trans('language.product.product_type'))->display(function ($type) use ($arrType) {
+                            $style = ($type == 1) ? 'class="label label-success"' : (($type == 2) ? '  class="label label-danger"' : 'class="label label-default"');
+                            return '<span ' . $style . '>' . $arrType[$type] . '</span>';
+                        });
+                        $grid->status(trans('language.product.status'))->switch();
+                        $grid->created_at(trans('language.admin.created_at'));
+                        $grid->model()->orderBy('id', 'desc');
+                        $grid->disableExport();
+                        $grid->disableFilter();
+                        $grid->actions(function ($actions) {
+                            $actions->disableView();
+                        });
+                        $grid->tools(function ($tools) {
+                            $tools->disableRefreshButton();
+                        });
+                    })->render());
+                });
             });
-        });
+        }else{
+            return redirect()->back();
+        }
     }
                
       
