@@ -112,6 +112,7 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
                         <th style="width: 5%;text-align:right;">الكمية</th>
                         <th style="width: 10%;text-align:right;">نظام الدفع</th>
                         <th style="width: 5%;text-align:right;">الفائده المضافه</th>
+                        <th style="width: 5%;text-align:right;">الخصم</th>
                         <th style="width: 10%;text-align:right;">الاجمالى</th>
                         <th style="width: 25%;text-align:right;">حالة الاوردر</th>
                       </tr>
@@ -146,19 +147,25 @@ $ImageLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->sort()->
                    {{$order->qty}}
               </td>
               @php
-                  $OrderProd = \App\Models\ShopOrder::where('id', $order->order_id)->first()->payment_term;
+                  $OrderProd = \App\Models\ShopOrder::where('id', $order->order_id)->first();
+                  $test = $OrderProd->payment_term;
               @endphp
-              @if($OrderProd != 0)
+              @if($test != 0)
                   @php
-                  $CustomerPaymentTerm = \App\Models\CustomerPaymentTerm::where('id', $OrderProd)->first()->payment_term_id;
-                  $paymentTerm = \App\Models\paymentTerm::where('id', $CustomerPaymentTerm)->first();
+                  $CustomerPaymentTerm = \App\Models\CustomerPaymentTerm::where('id', $test)->first();
+                  $rate = $CustomerPaymentTerm->rate;
+                  $id = $CustomerPaymentTerm->payment_term_id;
+                  $paymentTerm = \App\Models\paymentTerm::where('id', $id)->first();
                   @endphp
                   <td>{{$paymentTerm->name}}</td>
-                  <td>{{$paymentTerm->rate}}%</td>
+                  <td>{{$rate}}%</td>
               @else
                   <td>Cash</td>
                   <td>0%</td>
               @endif
+              <td>
+                  <span>{{$OrderProd->discount}}</span>
+              </td>
               <td>
                 <span style="color:#81C4E6;">EGP {{$order->total_price}}</span>
               </td>

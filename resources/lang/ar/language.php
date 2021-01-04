@@ -221,6 +221,7 @@ return [
         'phone'                             => 'الهاتف',
         'add_new_contact'                   => 'اضافة جديده',
         'value'                             => 'القيمه',
+        'showMe'                            => 'اظهار الويب'
     ],
     'order'              => [
         'title'                 => 'Order',
@@ -316,6 +317,7 @@ return [
         'overview'     => 'Quick Overview',
         'comment'      => 'Comment',
         'unit'         => 'الوحده',
+        'status'       => 'متوفر',
     ],
     'category'           => [
         'name'        => 'Name',

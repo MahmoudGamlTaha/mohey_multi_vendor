@@ -90,7 +90,7 @@
         <select id="paymentTerm" class="form-control" name="paymentTerm">
             <option value="0">Cash</option>
           @foreach($payment_term as $key => $term)
-             <option value="{{$term->id}}">{{$term->paymentTerm()->first()->name}}</option>
+             <option value="{{$term->id}}" data-index="{{$term->rate}}" class="opt-{{$term->id}}">{{$term->paymentTerm()->first()->name}}</option>
           @endforeach
          </select>
         </div>
@@ -142,7 +142,7 @@
                         <tr class="showTotal">
                      @endif
                              <th>{!! $element['title'] !!}</th>
-                            <td style="text-align: right" id="{{ $element['code'] }}" class="total">{{$element['text'] }}</td>
+                            <td style="text-align: right" id="{{ $element['code'] }}" @if ($element['code']=='total')class="total"@endif>{{$element['text'] }}</td>
                         </tr>
                     @endif
 
@@ -201,15 +201,17 @@
 @push('scripts')
     <script>
         $(document).ready(function (){
-            console.log('hello bebo from outside the function');
+            var value = {{$value}};
             $('#paymentTerm').change(function (){
-                console.log('hi bebo');
-                if($('#paymentTerm').val() === 'Cash') {
+                var id = $('#paymentTerm').val();
+                var rate = $('.opt-'+id).data('index');
+                console.log(id);
+                if(id == 0) {
                     $('.total').html({{$value}});
                     $('.rate').html('0%');
                 }else{
-                    $('.total').html('ج'+{{($term->rate * $value)+$value}});
-                    $('.rate').html({{$term->rate}}+'%');
+                    $('.total').html('ج'+((rate * value) + value));
+                    $('.rate').html( rate +'%');
                 }
             });
         });

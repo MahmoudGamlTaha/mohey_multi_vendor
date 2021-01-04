@@ -359,7 +359,7 @@ class ShopCart extends GeneralController
                 }
                 $product = ShopProduct::findOrFail($value->id);
                 //$subtotal = $value->price * $value->qty
-                $total = $subtotal + $shipping + $rate;
+                $total = $subtotal + $shipping + $rate + $discount;
                 if($productCount == 0){
                     $order = $this->createOrder(null, $product->company_id, $address, $user_id, $subtotal, $shipping, $discount, $received, $total, $payment_method, $payment_term);
 

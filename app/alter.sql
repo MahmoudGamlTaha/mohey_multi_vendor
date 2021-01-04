@@ -193,5 +193,9 @@ create table `contact_us`(
     `value` varchar(255)
 );
 
+//--
+ALTER TABLE `companies` ADD `visible` TINYINT NOT NULL DEFAULT '0' AFTER `active`;
+ALTER TABLE `shop_discount` ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `expires_at`;
+
 
 

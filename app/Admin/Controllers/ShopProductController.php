@@ -50,6 +50,13 @@ class ShopProductController extends Controller
         try{
             DB::beginTransaction();
             $shopProductModel = ShopProduct::findOrFail($id);
+            if((count($arr) <= 3) && (isset($arr['status'])))
+            {
+                $shopProductModel->status = $arr['status'] == 'on' ? 1 : 0;
+                $shopProductModel->save();
+                DB::commit();
+                return $this->index();
+            }
             $shopProductModel->sku = $arr['sku'];
             $shopProductModel->price = $arr['price'];
             $shopProductModel->cost = $arr['cost'];
