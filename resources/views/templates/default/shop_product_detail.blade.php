@@ -76,11 +76,13 @@
                    @php
                     $company = $product->company()->first();
                     if(isset($company) && ($company->visible == 1))
-                        {
-                            $company_name = $company->name;
-                        }
+                    {
+                        $company_name = $company->name;
+                    }else{
+                        $company_name = 'Dokkani';
+                    }
                    @endphp
-                   <li> <b> شركة  {{$company_name ?? 'Dokkani'}}</b></li>
+                   <li> <b> شركة  {{$company_name}}</b></li>
                     <li><b>SKU</li>
                     <li>{{ $product->sku }}</li>
                   </ul>
