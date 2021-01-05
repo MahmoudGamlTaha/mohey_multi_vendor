@@ -48,11 +48,13 @@
                 @php
                     $company = $product->company()->first();
                     if(isset($company) && ($company->visible == 1))
-                        {
-                            $company_name = $company->name;
-                        }
+                    {
+                        $company_name = $company->name;
+                    }else{
+                        $company_name = 'Dokkani';
+                    }
                 @endphp
-                  <span>{{$company->name ?? 'Dokkani'}}</span>
+                  <span>{{$company_name}}</span>
                   <br/>
                   <br/>
                  <a style="cursor: pointer;color:#00f" onClick="addToCart('{{ $product->id }}','wishlist',$(this))"><i class="fa fa-heart-o"></i> {{trans('language.add_to_wishlist')}}</a>
