@@ -45,7 +45,16 @@
                   <br/>
                   <span>البائع: </span>
                   <br/>
-                  <span>{{count($product->company()->get()) == 0? 'Dokkani' : $product->company()->first()->name }}</span>
+                @php
+                    $company = $product->company()->first();
+                    if(isset($company) && ($company->visible == 1))
+                    {
+                        $company_name = $company->name;
+                    }else{
+                        $company_name = 'Dokkani';
+                    }
+                @endphp
+                  <span>{{$company_name}}</span>
                   <br/>
                   <br/>
                  <a style="cursor: pointer;color:#00f" onClick="addToCart('{{ $product->id }}','wishlist',$(this))"><i class="fa fa-heart-o"></i> {{trans('language.add_to_wishlist')}}</a>
@@ -108,13 +117,13 @@
                               
           
                       <div id="collapse" class="panel-collapse collapse in" style="height: auto;text-align: center;">
-                      
+
                         <form style=" width: 50%; padding: 5px 30px;" class="shipping_address" id="form-order" role="form" method="POST" action="{{ route('processCart') }}">
                           {{ csrf_field() }}
                            <div>
                             <label style="float: right ; color: #b0b0b0;padding-right: 20px;">{{ trans('language.cart.coupon') }}:</label>
                             <input type="text" class="form-control" id="coupon-value"  {{ ($extensionDiscount['permission'])?'':'disabled' }} placeholder="كوبون الخصم" style="width: 80% ; display: inline;"/>
-                           
+
                             <button style="color:white;background-color:#10243F;border-radius:5px;padding:5px;font-size:12pt;" {!! ($extensionDiscount['permission'])?'id="coupon-button"':'' !!}>تطبيق</button>
                             <div class="coupon-msg  {{ Session::has('error_discount')?'text-danger':'' }}" style="text-align: left;padding-left: 10px;">{{ Session::has('error_discount')?Session::get('error_discount'):'' }}</div>
                           <div>
@@ -129,7 +138,7 @@
                   <a  style="color:#9f9f9f;background-color:#fdfdfd ; border: 1px solid #9f9f9f ;border-radius:5px;padding:5px;font-size:12pt;cursor:pointer;">تحديث السلة</a>
                   <a href="{{ route('home') }}" 
                   style="color:#10243C;background-color:#F99520;border-radius:5px;padding:5px;font-size:12pt; border:none;cursor:pointer;"><b>متابعة التسوق</b></a>
-                 <!-- <a onClick="return confirm('Confirm ?')" href="{{route('clearCart')}}"><button class="btn" type="button" style="cursor: pointer;padding:10px 30px">{{ trans('language.cart.remove_all') }}</button></a>
+                 <!-- <a onClick="return confirm('Confirm ?')" href="{{--route('clearCart')--}}"><button class="btn" type="button" style="cursor: pointer;padding:10px 30px">{{--trans('language.cart.remove_all')--}}</button></a>
 -->
 <br/><br/>
 
@@ -351,12 +360,12 @@ $('#submit-order').click(function(){
 @if ($extensionDiscount)
     $('#coupon-button').click(function() {
      var coupon = $('#coupon-value').val();
-        if(coupon==''){
+        /*if(coupon==''){
             $('#coupon-group').addClass('has-error');
-            $('.coupon-msg').html('{{ trans('language.cart.coupon_empty') }}').addClass('text-danger').show();
+            $('.coupon-msg').html('{{--{{ trans('language.cart.coupon_empty') }}--}}').addClass('text-danger').show();
         }else{
         $('#coupon-button').button('loading');
-        setTimeout(function() {
+        setTimeout(function() {*/
             $.ajax({
                 url: '{{ route('useDiscount') }}',
                 type: 'POST',
@@ -383,14 +392,14 @@ $('#submit-order').click(function(){
                     $('#showTotal').prepend(result.html);
                 }
             })
-            .fail(function() {
+            .failed(function() {
                 //console.log("error");
             })
            $('#coupon-button').button('reset');
-       }, 2000);
-        }
+       });
+        /*}
 
-    });
+    });*/
     $('#removeCoupon').click(function() {
             $.ajax({
                 url: '{{ route('removeDiscount') }}',

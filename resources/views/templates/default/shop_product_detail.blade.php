@@ -72,8 +72,17 @@
                   <a href="" onClick="addToCart('{{ $product->id }}','compare',$(this))" style="color: #a8a8a8">
                     <i class="fa fa-refresh" style="color: #a8a8a8" ></i>&nbsp; مقارنة</a>
                   <ul class="list-unstyled product_details">
-                   <!-- <li> <b>شركة</b>  {{count($product->company()->get()) == 0? 'Dokkani' : $product->company()->first()->name }}</li>-->
-                   <li> <b>شركة</b> Dokkani</li>
+                   <!-- <li> <b>شركة</b>  {{--{{count($product->company()->get()) == 0? 'Dokkani' : $product->company()->first()->name }}--}}</li>-->
+                   @php
+                    $company = $product->company()->first();
+                    if(isset($company) && ($company->visible == 1))
+                    {
+                        $company_name = $company->name;
+                    }else{
+                        $company_name = 'Dokkani';
+                    }
+                   @endphp
+                   <li> <b> شركة  {{$company_name}}</b></li>
                     <li><b>SKU</li>
                     <li>{{ $product->sku }}</li>
                   </ul>

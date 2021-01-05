@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 class Discount extends Model
 {
-    public $timestamps    = false;
+    public $timestamp    = false;
     public $table         = 'shop_discount';
     public $table_related = 'shop_discount_user';
     protected $fillable   = ['code', 'reward', 'type', 'expires_at', 'number_uses', 'used', 'status', 'login'];

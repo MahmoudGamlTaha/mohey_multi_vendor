@@ -176,6 +176,7 @@ return [
         'access_denied'                     => 'Access denied!',
         'access_denied_msg'                 => 'Can\'t disable this language. Please change default language before do that.',
         'hot_line'                          => 'Hot Line',
+        'showMe'                            => 'Show me on the web',
     ],
     'order'              => [
         'title'                 => 'Order',
