@@ -79,7 +79,7 @@
                     {
                         $company_name = $company->name;
                     }else{
-                        $company_name = 'Dokkani';
+                        $company_name = trans('language.dokanii');
                     }
                    @endphp
                    <li> <b> شركة  {{$company_name}}</b></li>

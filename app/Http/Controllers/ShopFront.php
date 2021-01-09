@@ -552,7 +552,7 @@ class ShopFront extends GeneralController
             $sortBy    = $filterArr[$filter_sort][0];
             $sortOrder = $filterArr[$filter_sort][1];
         }
-        $keyword = request('keyword') ?? '';
+        $keyword = request('q') ?? '';
         return view($this->theme . '.shop_products_list',
             array(
                 'title'       => trans('language.search') . ': ' . $keyword,
@@ -560,6 +560,20 @@ class ShopFront extends GeneralController
                 'layout_page' => 'product_list',
                 'filter_sort' => $filter_sort,
             ));
+    }
+    public function getSearch()
+    {
+        return (new ShopProduct())->where('status', 1)
+            ->leftJoin('shop_product_description', 'shop_product_description.product_id', 'shop_product.id')
+            ->where('shop_product_description.lang_id', 1)
+            ->where(function ($sql){
+                $sql->where('shop_product_description.name', 'like', '%' . stripcslashes(request('q')) . '%')
+                    ->orWhere('shop_product.sku', 'like', '%' . stripcslashes(request('q')) . '%');
+            })
+
+            ->sort(null, 'asc')
+            ->take(10)
+            ->get();
     }
 
 /**

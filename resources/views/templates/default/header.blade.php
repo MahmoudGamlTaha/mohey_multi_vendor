@@ -219,12 +219,7 @@
           <div class="col-sm-6">
                   <div class="dropdown ">
 
-                    <select class="js-example-placeholder-single js-states form-control">
-                      <option></option>
-                      @foreach($categoryTop as $key => $category)
-                      <option>{{$category->name}}</option>
-                      @endforeach
-                    </select>
+                    <select class="js-example-placeholder-single js-states form-control"></select>
                           <button class="btn btn-secondary zindex" type="button" >
                               <i class="fa fa-search"></i>
                           </button>

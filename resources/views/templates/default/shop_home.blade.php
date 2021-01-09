@@ -69,10 +69,10 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
                 <a href="{{ $item->getUrl() }}"> <img src="{{ asset( $item->getThumb()) }}" style="width:100%;height:150px;" alt="" /></a>
                      {!! $item->showPrice() !!}
                 <ul class="nav nav-pills nav-justified" >
-                    <li class="cart1"> <a class="btn btn-default add-to-cart" 
+                    <li class="cart1"> <a class="btn btn-default add-to-cart"
                             onClick="addToCart('{{ $item->id }}','default',$(this))">
                            {{trans('language.add_to_cart')}}  <i class="fa fa-shopping-cart"></i> </a></li>
-                    <li class="fav"> <a class="btn btn-default add-to-cart"  
+                    <li class="fav"> <a class="btn btn-default add-to-cart"
                             onClick="addToCart('{{ $item->id }}','wishlist',$(this))"><i class="fa fa-heart"></i></a>
                     </li>
                 </ul>
@@ -82,7 +82,7 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
     </div>
     @endforeach
 
-      
+
 </div>
 <div class="col-sm-2 home-top-row-ads">
     <div class="product-image-wrapper product-single" style="height:442px">
@@ -127,7 +127,7 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
     {{-- <div class="row"  style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
         <div class="col-md-2">
         <h2 class="title text-center center-block " style="color: white"> الاكثر مبيعا </h2>
-        </div> 
+        </div>
 
         <div class="col-md-8" style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
         <a href="{{$value[0]->getUrl() }}">
@@ -137,14 +137,14 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 
         <div class="col-md-2" style="background-color: #10243f;height: 50px;padding: 10px 5px;margin-bottom: 3px;">
         <h2 class="title text-center center-block "  style="color: white"> افضل عرض </h2>
-        </div> 
+        </div>
     </div> --}}
 
     <div class="row" >
         <div class="col-sm-2" style="padding:0">
             <div  style="background-color: #10243f;height: 35px;padding: 10px 5px;margin-bottom: 3px;">
                 <h2 class="title text-center center-block " style="color: white"> الاكثر مبيعا </h2>
-            </div> 
+            </div>
             @for($i = 0; $i < count($products_most); $i++) @if($products_most[$i]->category_id == $value[0]->id && $countBest < 4)
                 <div class="col-sm-5" style="border: 1px solid #eee; margin: 5px 8px; padding: 0">
                     <a href="{{ $products_most[$i]->getUrl() }}">
@@ -225,16 +225,16 @@ $products = \App\Models\ShopProduct::where(['status'=> 1,'category_id' => $value
 <div class="col-sm-2" style="padding: 0">
     <div  style="background-color: #10243f;height: 35px;padding: 10px 5px;margin-bottom: 3px;">
         <h2 class="title text-center center-block "  style="color: white"> افضل عرض </h2>
-        </div> 
+        </div>
 
         @if(isset($bestPrice))
     <div class="product-image-wrapper product-single" style="margin : 0">
         <div class="single-products product-box-{{ $bestPrice->id }}">
             <a href="{{ $bestPrice->getUrl() }}"><img src="{{ asset($bestPrice->getThumb()) }}"
                     style="width:100%;height:auto;" alt="" /></a>
-                   
+
                     <p style="text-align: center"> {!! $bestPrice->showPrice() !!} </p>
-            
+
             <ul class="nav nav-pills nav-justified">
                 <li class="cart1"> <a class="btn btn-default add-to-cart"
                         onClick="addToCart('{{ $bestPrice->id }}','default',$(this))">

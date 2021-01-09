@@ -194,8 +194,8 @@ class ShopProduct extends Model
             ->leftJoin('shop_product_description', 'shop_product_description.product_id', 'shop_product.id')
             ->where('shop_product_description.lang_id', $idLang)
             ->where(function ($sql) use ($keyword) {
-                $sql->where('shop_product_description.name', 'like', '%' . $keyword . '%')
-                    ->orWhere('shop_product.sku', 'like', '%' . $keyword . '%');
+                $sql->where('shop_product_description.name', 'like', '%' . stripcslashes($keyword) . '%')
+                    ->orWhere('shop_product.sku', 'like', '%' . stripcslashes($keyword) . '%');
             })
             ->sort($sortBy, $sortOrder)
             ->paginate($limit);

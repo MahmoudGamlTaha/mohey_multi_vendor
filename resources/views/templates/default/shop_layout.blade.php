@@ -450,14 +450,37 @@ function updateUserInfo(){
 
 <script>
   $(document).ready(function() {
-    $(".js-example-placeholder-single").select2({
-    placeholder: "البحث عن المنتجات ............",
-    allowClear: true
-});
-
-});
-
-
+      var x = 0 ;
+      $(".js-example-placeholder-single").select2({
+          placeholder: "البحث عن المنتجات ............",
+          allowClear: true,
+          ajax: {
+              url: '/search',
+              dataType: 'json',
+              delay: 250,
+              type: "post",
+              data: function (params) {
+                  x++
+                  if(x > 1)
+                  {
+                      $("[id = test]").remove();
+                  }
+                  return {
+                      _token: '{{csrf_token()}}',
+                      q: params.term,
+                  };
+              },
+              processResults: function (r) {
+                  for(var i = 0 ; i <= r.length ; i++)
+                  {
+                      $(".select2-results__options").append('<li id="test" style="margin:7px;list-style:none;font-weight:500"> <a style="" id="test2" href="http://127.0.0.1:8000/search.html?q=' + r[i]['name'] + '">' + r[i]['name'] + '</a></li>');
+                  }
+              },
+              cache: true,
+          }
+      });
+      qzz
+  });
 </script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\ShopProduct;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -119,6 +122,7 @@ Route::post('/productRate', 'ShopFront@productRate')->name('productRate');
 //End product
 
 Route::get('/search.html', 'ShopFront@search')->name('search');
+Route::post('/search', 'ShopFront@getSearch')->name('getSearch');
 Route::get('/contact.html', 'ShopFront@getContact')->name('contact');
 Route::post('/contact.html', 'ShopFront@postContact')->name('postContact');
 Route::post('/subscribe', 'ShopFront@emailSubscribe')->name('subscribe');
