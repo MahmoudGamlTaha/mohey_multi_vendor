@@ -476,6 +476,7 @@ function updateUserInfo(){
               },
               cache: true
           },
+          placeholder: "البحث عن المنتجات ............",
           minimumInputLength: 1,
       });
       $(".js-example-placeholder-single").on("select2:select", function (e) {
