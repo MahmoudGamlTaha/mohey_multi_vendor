@@ -563,7 +563,7 @@ class ShopFront extends GeneralController
     }
     public function getSearch()
     {
-        return (new ShopProduct())->where('status', 1)
+        $products = (new ShopProduct())->where('status', 1)
             ->leftJoin('shop_product_description', 'shop_product_description.product_id', 'shop_product.id')
             ->where('shop_product_description.lang_id', 1)
             ->where(function ($sql){
@@ -572,8 +572,18 @@ class ShopFront extends GeneralController
             })
 
             ->sort(null, 'asc')
-            ->take(10)
+            ->take(7)
             ->get();
+        $responds = array();
+        foreach ($products as $product)
+        {
+            $responds[] = array(
+                'id' => $product->id,
+                'text' => $product->name
+            );
+        }
+
+        return json_encode($responds);
     }
 
 /**

@@ -450,40 +450,36 @@ function updateUserInfo(){
 
 <script>
   $(document).ready(function() {
-      var x = 0 ;
       $(".js-example-placeholder-single").select2({
-          placeholder: "البحث عن المنتجات ............",
-          allowClear: true,
           ajax: {
-              url: '/search',
+              url: "/search",
               dataType: 'json',
               delay: 250,
-              type: "post",
+              type: 'post',
               data: function (params) {
-                  x++
-                  if(x > 1)
-                  {
-                      $("[id = test]").remove();
-                  }
                   return {
                       _token: '{{csrf_token()}}',
-                      q: params.term,
+                      q: params.term, // search term
+                      page: params.page
                   };
               },
-              processResults: function (r) {
-                  var count = r.length;
-                  if(count == 0)
-                  {
-                      $(".select2-results__option").html('no results found');
-                      t++;
-                  }else {
-                      for (var i = 0; i <= r.length; i++) {
-                          $(".select2-results__options").append('<li id="test" style="list-style:none;height:35px;padding-top:7px" onMouseOut="this.style.backgroundColor=\'#fff\'" onMouseOver="this.style.backgroundColor=\'#5897FB\'"> <a style="color:#555555;padding:15px" onMouseOut="this.style.color=\'#555555\'" onMouseOver="this.style.color=\'#fff\'" href="http://127.0.0.1:8000/search.html?q=' + r[i]['name'] + '">' + r[i]['name'] + '</a></li>');
+              processResults: function (data, params) {
+
+                  params.page = params.page || 1;
+
+                  return {
+                      results: data,
+                      pagination: {
+                          more: (params.page * 30) < data.total_count
                       }
-                  }
+                  };
               },
-              cache: true,
-          }
+              cache: true
+          },
+          minimumInputLength: 1,
+      });
+      $(".js-example-placeholder-single").on("select2:select", function (e) {
+          window.open('/search.html?q='+e.params.data.text, '_self');
       });
   });
 </script>
