@@ -471,15 +471,20 @@ function updateUserInfo(){
                   };
               },
               processResults: function (r) {
-                  for(var i = 0 ; i <= r.length ; i++)
+                  var count = r.length;
+                  if(count == 0)
                   {
-                      $(".select2-results__options").append('<li id="test" style="margin:7px;list-style:none;font-weight:500"> <a style="" id="test2" href="http://127.0.0.1:8000/search.html?q=' + r[i]['name'] + '">' + r[i]['name'] + '</a></li>');
+                      $(".select2-results__option").html('no results found');
+                      t++;
+                  }else {
+                      for (var i = 0; i <= r.length; i++) {
+                          $(".select2-results__options").append('<li id="test" style="list-style:none;height:35px;padding-top:7px" onMouseOut="this.style.backgroundColor=\'#fff\'" onMouseOver="this.style.backgroundColor=\'#5897FB\'"> <a style="color:#555555;padding:15px" onMouseOut="this.style.color=\'#555555\'" onMouseOver="this.style.color=\'#fff\'" href="http://127.0.0.1:8000/search.html?q=' + r[i]['name'] + '">' + r[i]['name'] + '</a></li>');
+                      }
                   }
               },
               cache: true,
           }
       });
-      qzz
   });
 </script>
 </body>
