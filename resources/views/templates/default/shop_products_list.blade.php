@@ -27,34 +27,51 @@
 
       @if (count($products) == 0)
         {{ trans('language.empty_product') }}
-      @else
-          @foreach ($products as  $key => $product)
-          <div class="col-sm-4 col-xs-6">
-              <div class="product-image-wrapper product-single">
-                <div class="single-products">
-                  <div class="productinfo text-center product-box-{{ $product->id }}">
-                    <a href="{{ $product->getUrl() }}"><img src="{{ asset($product->getThumb()) }}" alt="{{ $product->name }}" /></a>
+      @elseif(count($products) == 1)
+          @php
+            $item = $products[0];
+          @endphp
+          <div class="col-sm-10" style="margin-left:38%;margin-top:30px;">
+              <div class="col-sm-3 home-top-row-ads">
+                  <div class="thumbnail product-image-wrapper product-single">
+                      <div class=" single-products product-box-{{ $item->id }}">
+                          <a href="{{ $item->getUrl() }}"> <img src="{{ asset( $item->getThumb()) }}" style="width:100%;height:150px;" alt="" /></a>
+                          {!! $item->showPrice() !!}
+                          <ul class="nav nav-pills nav-justified" >
+                              <li class="cart1"> <a class="btn btn-default add-to-cart"
+                                                    onClick="addToCart('{{ $item->id }}','default',$(this))">
+                                      {{trans('language.add_to_cart')}}  <i class="fa fa-shopping-cart"></i> </a></li>
+                              <li class="fav"> <a class="btn btn-default add-to-cart"
+                                                  onClick="addToCart('{{ $item->id }}','wishlist',$(this))"><i class="fa fa-heart"></i></a>
+                              </li>
+                          </ul>
 
-                    {!! $product->showPrice() !!}
-
-                    <a href="{{ $product->getUrl() }}"><p>{{ $product->name }}</p></a>
-                    <a  class="btn btn-default add-to-cart" onClick="addToCart({{ $product->id }},'default',$(this))"><i class="fa fa-shopping-cart"></i>{{trans('language.add_to_cart')}}</a>
+                      </div>
                   </div>
-                  @if ($product->price != $product->getPrice())
-                  <img src="{{ asset($theme_asset.'/images/home/sale.png') }}" class="new" alt="" />
-                  @elseif($product->type == 1)
-                  <img src="{{ asset($theme_asset.'/images/home/new.png') }}" class="new" alt="" />
-                  @endif
-                </div>
-                <div class="choose">
-                  <ul class="nav nav-pills nav-justified">
-                    <li><a  onClick="addToCart({{ $product->id }},'wishlist',$(this))"><i class="fa fa-plus-square"></i>{{trans('language.add_to_wishlist')}}</a></li>
-                    <li><a  onClick="addToCart({{ $product->id }},'compare',$(this))"><i class="fa fa-plus-square"></i>{{trans('language.add_to_compare')}}</a></li>
-                  </ul>
-                </div>
               </div>
           </div>
+      @else
+          <div class="col-sm-9" style="margin-left:10%">
+          @foreach ($products as $item)
+              <div class="col-sm-3 home-top-row-ads">
+                  <div class="thumbnail product-image-wrapper product-single">
+                      <div class=" single-products product-box-{{ $item->id }}">
+                          <a href="{{ $item->getUrl() }}"> <img src="{{ asset( $item->getThumb()) }}" style="width:100%;height:150px;" alt="" /></a>
+                          {!! $item->showPrice() !!}
+                          <ul class="nav nav-pills nav-justified" >
+                              <li class="cart1"> <a class="btn btn-default add-to-cart"
+                                                    onClick="addToCart('{{ $item->id }}','default',$(this))">
+                                      {{trans('language.add_to_cart')}}  <i class="fa fa-shopping-cart"></i> </a></li>
+                              <li class="fav"> <a class="btn btn-default add-to-cart"
+                                                  onClick="addToCart('{{ $item->id }}','wishlist',$(this))"><i class="fa fa-heart"></i></a>
+                              </li>
+                          </ul>
+
+                      </div>
+                  </div>
+              </div>
           @endforeach
+          </div>
       @endif
 
     <div style="clear: both; ">

@@ -51,7 +51,7 @@
                     {
                         $company_name = $company->name;
                     }else{
-                        $company_name = 'Dokkani';
+                        $company_name = trans('language.dokanii');
                     }
                 @endphp
                   <span>{{$company_name}}</span>
