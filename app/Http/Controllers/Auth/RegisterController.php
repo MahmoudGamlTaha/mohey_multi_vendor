@@ -48,14 +48,15 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('guest');
+        $this->middleware('guest');
     }
 
     public function showRegisterMerchantForm()
     {
-        //if (Auth::user()) {
-        //    return redirect()->route('home');
-        //}
+        $user = Auth::user();
+        if ($user && $user->seller_type == 1) {
+            return redirect()->route('home');
+        }
         return view((new GeneralController)->theme . '.shop_register_merchant',
             array(
                 'title' => trans('language.registermerchant'),
@@ -64,9 +65,9 @@ class RegisterController extends Controller
     }
     public function showRegisterCustomerForm()
     {
-        //if (Auth::user()) {
-        //    return redirect()->route('home');
-        //}
+        if (Auth::user()) {
+            return redirect()->route('home');
+        }
         return view((new GeneralController)->theme . '.shop_register_customer',
             array(
                 'title' => trans('language.registerCustomer'),
