@@ -13,6 +13,7 @@ use App\Models\ShopProduct;
 use App\Models\ShopProductDescription;
 use App\Models\ShopVendor;
 use App\Models\UofmGroups;
+use Dompdf\Exception;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -25,6 +26,7 @@ use App\Models\ShopProductImage;
 use Encore\Admin\Form\Field\Image;
 use DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Input;
 
 class ShopProductController extends Controller
 {
@@ -295,6 +297,13 @@ class ShopProductController extends Controller
             $languages = Language::getLanguages();
             $form->tab(trans('language.product.product_info'), function ($form) use ($languages) {
 //Language
+                if(Input::get('id') !== null) {
+                    Admin::script($this->create_product());
+                    $id = Input::get('id');
+                    $product = ShopProduct::findOrFail($id);
+                    $productDesc = ShopProductDescription::where('product_id', $id)->first();
+                    $image = $product->image;
+                }
                 $arrParameters = request()->route()->parameters();
                 $idCheck       = (int) end($arrParameters);
 
@@ -327,9 +336,9 @@ class ShopProductController extends Controller
                         $once = true;
                     }
                     $form->text($language->code . '__keyword', trans('language.admin.keyword'))->default(!empty($langDescriptions->keyword) ? $langDescriptions->keyword : null);
-                   
+
                     $form->textarea($language->code . '__description', trans('language.admin.description'))->rules('max:300', ['max' => trans('validation.max')])->default(!empty($langDescriptions->description) ? $langDescriptions->description : null);
-                    $form->ckeditor($language->code . '__content', trans('language.admin.content'))->default(!empty($langDescriptions->content) ? $langDescriptions->content : null)->rules('required');
+                    $form->ckeditor($language->code . '__content', trans('language.admin.content'))->default(!empty($langDescriptions->content) ? $langDescriptions->content : null)->rules('required')->value(!empty($productDesc->content) ? $productDesc->content : null);
                     $arrFields[] = $language->code . '__name';
                     $arrFields[] = $language->code . '__keyword';
                     $arrFields[] = $language->code . '__description';
@@ -378,7 +387,7 @@ class ShopProductController extends Controller
                     $form->select('company_id', trans('admin.company'))->options($companies)
                    ->rules('required');
                 }
-                $form->image('image', trans('language.admin.image'))->uniqueName()->move('product');
+                $form->image('image', trans('language.admin.image'))->uniqueName()->move('product')->value(!empty($image) ? $image : null);
                 $form->number('stock', trans('language.product.stock'))->rules('numeric|min:0')->default('0'); //sprint 1
             
                 $form->select('brand_id', trans('language.brands'))->options($arrBrand)->default('0')
@@ -466,6 +475,13 @@ SCRIPT;
                }
             $arrData = array();
             $form->saving(function (Form $form) use ($languages, &$arrData) {
+                $company_id = $form->company_id ?? $form->model()->company_id;
+                $check_sku = ShopProduct::where(['sku' => $form->sku, 'company_id' => $company_id])->first();
+                if($check_sku != null)
+                {
+                    admin_toastr('sku already exists', 'error');
+                    return redirect()->back();
+                }
                 //Lang
                 foreach ($languages as $key => $language) {
                     $arrData[$language->code]['name']        = request($language->code . '__name');
@@ -539,6 +555,37 @@ SCRIPT;
             });
         });
 
+    }
+    public function create_product()
+    {
+        try {
+            $id = Input::get('id');
+            $product = ShopProduct::findOrFail($id);
+            $desc = ShopProductDescription::where('product_id', $id)->first();
+            if($desc != null) {
+                return <<<JS
+            $('[name="sku"]').val('$product->sku');
+            $('[name="company_id"]').val('$product->company_id');
+            $('[name="brand_id"]').val('$product->brand_id');
+            $('[name="vendor_id"]').val('$product->vendor_id');
+            $('[name="category_id"]').val('$product->category_id');
+            $('[name="price"]').val('$product->price');
+            $('[name="uofm_groups"]').val('$product->uofm_groups');
+            $('[name="cost"]').val('$product->cost');
+            $('[name="path"]').val('$product->path');
+            $('[name="sold"]').val('$product->sold');
+            $('[name="type"]').val('$product->type');
+            $('[name="sort"]').val('$product->sort');
+            $('[name="status"]').val('$product->status');
+            $('[name="ar__name"]').val('$desc->name');
+            $('[name="ar__keyword"]').val('$desc->keyword');
+            $('[name="ar__description"]').val('$desc->description');
+JS;
+            }
+        }catch (Exception $e)
+        {
+            return $this->form();
+        }
     }
 
     public function show($id)

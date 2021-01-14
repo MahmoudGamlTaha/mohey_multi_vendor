@@ -15,6 +15,8 @@
             INNER JOIN cte
             ON  d.id = cte.parent
         ) SELECT * FROM cte "), [$cat_id]);
+        $user =  Auth::guard()->user();
+        $seller_check = $user->seller_type ?? null;
     @endphp
     <ul class="page-addressbar">
         <li class="page-addressbar-head"><a href="{{ env('APP_URL') }}">الرئيسية</a></li>
@@ -65,7 +67,7 @@
               <hr style="margin: 0 0 15px 0">
               <div class="col-sm-12">
                 <div class="col-sm-4">
-                  <button class="btn btn-default btn-content" style="float: left;">بيع هذا المنتج</button>
+                  <button class="btn btn-default btn-content" style="float: left;" onclick="window.open('{{$seller_check == 1 ? route('prod', ['id' => $product->id]) : route('registermerchantl')}}', '_self')">بيع هذا المنتج</button>
                 </div>
                 <div class="col-sm-8">
                   <i class="fa fa-heart-o" style="color: #a8a8a8"></i> &nbsp;<a onClick="addToCart('{{ $product->id  }}','wishlist',$(this))" href="" style="color: #a8a8a8 ; margin-left: 30px">إضافة الى قائمة المفضلة</a>
@@ -334,7 +336,7 @@
     <script>
         var ratedIndex = -1, uID = {{Auth::id() ?? 0}};
         var rate = {{$productLike['rate'] ?? 0}};
-        console.log(rate);
+        //console.log(rate);
         $(document).ready(function () {
             localStorage.setItem('ratedIndex', -1);
             resetStarColors();

@@ -53,7 +53,8 @@ class RegisterController extends Controller
 
     public function showRegisterMerchantForm()
     {
-        if (Auth::user()) {
+        $user = Auth::user();
+        if ($user && $user->seller_type == 1) {
             return redirect()->route('home');
         }
         return view((new GeneralController)->theme . '.shop_register_merchant',

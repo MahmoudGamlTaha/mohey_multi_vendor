@@ -197,5 +197,11 @@ create table `contact_us`(
 ALTER TABLE `companies` ADD `visible` TINYINT NOT NULL DEFAULT '0' AFTER `active`;
 ALTER TABLE `shop_discount` ADD `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP AFTER `expires_at`;
 
+//--
+ALTER TABLE shop_product DROP INDEX sku
+
+//--
+ALTER TABLE companies DROP INDEX name
+
 
 
