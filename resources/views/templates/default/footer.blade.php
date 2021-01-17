@@ -68,13 +68,14 @@
           </div>
           @php
             $lang = App\Models\Language::where('code', app()->getLocale())->first();
+            
             $columns = \App\Models\ShopPageDescription::where('lang_id', $lang->id)->get();
           @endphp
           <div class="col-sm-3">
             <div class="single-widget">
               <h4 style="color: white">{{trans('language.aboutUs')}}</h4>
               <ul class="nav nav-pills nav-stacked">
-                @for($i = 0; $i < 3; $i++)
+                @for($i = 0; $i < count($columns); $i++)
                     <li><a href="{{$columns[$i]['keyword'].'.html'}}">{{$columns[$i]['title']}}</a></li>
                 @endfor
                 <li><a href="/login">{{trans('language.joinUs')}}</a>
@@ -104,7 +105,7 @@
             <div class="single-widget">
               <h2 style="font-size: 20px">تواصل معنا</h2>
               @php
-                $contacts = \App\Models\ContactUs::all();
+                $contacts = \App\Models\ContactUs::all()??array();
               @endphp
               <ul class="nav nav-pills nav-stacked contact">
               @foreach($contacts as $contact)
