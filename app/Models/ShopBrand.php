@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ShopBrand extends Model
 {
-    public $timestamps = false;
+    public $timestamp = false;
     public $table      = 'shop_brand';
 
     public function products()

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShopCategoryDescription extends Model
 {
     protected $primaryKey = null;
-    public $timestamps    = false;
+    public $timestamp    = false;
     public $table         = 'shop_category_description';
     protected $fillable   = ['lang_id', 'name', 'description', 'keyword', 'shop_category_id'];
 }

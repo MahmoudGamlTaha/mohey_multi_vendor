@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ShopCategory extends Model
 {
-    public $timestamps = false;
+    public $timestamp = false;
     public $table      = 'shop_category';
     protected $appends = [
         'name',

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShopCurrency extends Model
 {
     public $table                   = 'shop_currency';
-    public $timestamps              = false;
+    public $timestamp              = false;
     protected static $code          = '';
     protected static $name          = '';
     protected static $symbol        = '';
@@ -202,7 +202,8 @@ class ShopCurrency extends Model
                     $price = $targetUnit->price;
                 }
             }else{
-                $amount = Uofms::where(['id'=>$detail->uofm['uofm']])->first()->amount_in_base;
+                $amount = Uofms::where(['id'=>$detail->uofm['uofm']])->first();
+                $amount = isset($amount) ? $amount->amount_in_base : 0;
                 $productPrice = ShopProduct::where('id', $detail->id)->first()->price;
                 $price = $amount * $productPrice;
             }

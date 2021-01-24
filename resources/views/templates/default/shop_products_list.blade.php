@@ -1,128 +1,126 @@
 @extends($theme.'.shop_layout')
 
 @section('center')
-  <div class="features_items">
-    <h2 class="title text-center">{{ $title }}</h2>
+    <!--====== App Content ======-->
+    <div class="app-content">
 
-    @isset ($itemsList)
-      @if($itemsList->count())
-      <div class="item-folder">
-            @foreach ($itemsList as  $key => $item)
-            <div class="col-sm-3 col-xs-4">
-                <div class="item-folder-wrapper product-single">
-                  <div class="single-products">
-                    <div class="productinfo text-center product-box-{{ $item->id }}">
-                      <a href="{{ $item->getUrl() }}"><img src="{{ asset($item->getThumb()) }}" alt="{{ $item->name }}" /></a>
-                      <a href="{{ $item->getUrl() }}"><p>{{ $item->name }}</p></a>
+        <!--====== Section 1 ======-->
+        <div class="u-s-p-y-90">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="shop-p">
+                            <div class="shop-p__toolbar u-s-m-b-30">
+                                <div class="shop-p__meta-wrap u-s-m-b-60">
+
+                                    <span class="shop-p__meta-text-1">FOUND {{count($products)}} RESULTS</span>
+                                </div>
+                                <div class="shop-p__tool-style">
+                                    <div class="tool-style__group u-s-m-b-8">
+
+                                        <span class="js-shop-filter-target" data-side="#side-filter">Filters</span>
+
+                                        <span class="js-shop-grid-target is-active">Grid</span>
+
+                                        <span class="js-shop-list-target">List</span></div>
+                                    <form>
+                                        <div class="tool-style__form-wrap">
+                                            <div class="u-s-m-b-8"><select class="select-box select-box--transparent-b-2">
+                                                    <option>Show: 8</option>
+                                                    <option selected>Show: 12</option>
+                                                    <option>Show: 16</option>
+                                                    <option>Show: 28</option>
+                                                </select></div>
+                                            <div class="u-s-m-b-8"><select class="select-box select-box--transparent-b-2">
+                                                    <option selected>Sort By: Newest Items</option>
+                                                    <option>Sort By: Latest Items</option>
+                                                    <option>Sort By: Best Selling</option>
+                                                    <option>Sort By: Best Rating</option>
+                                                    <option>Sort By: Lowest Price</option>
+                                                    <option>Sort By: Highest Price</option>
+                                                </select></div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="shop-p__collection">
+                                <div class="row is-grid-active">
+                                    @foreach ($products as $item)
+                                        <div class="col-lg-3 col-md-4 col-sm-6">
+                                            <div class="product-m">
+                                                <div class="product-m__thumb">
+
+                                                    <a class="aspect aspect--bg-grey aspect--square u-d-block" href="{{ $item->getUrl() }}">
+
+                                                        <img class="aspect__img" src="{{ asset( $item->getThumb()) }}" alt=""></a>
+                                                    <div class="product-m__quick-look">
+
+                                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                                    <div class="product-m__add-cart">
+
+                                                        <a class="btn--e-brand" onClick="addToCart('{{ $item->id }}','default',$(this))" data-modal="modal" data-modal-id="#add-to-cart">Add to Cart</a></div>
+                                                </div>
+                                                <div class="product-m__content">
+
+                                                    <div class="product-m__name">
+
+                                                        <a href="product-detail.html">{{ $item->name }}</a></div>
+                                                    <div class="product-o__rating gl-rating-style">
+                                                        @php
+                                                            $rate = (new \App\Models\ShopProductLike)->getRate($item->id);
+                                                        @endphp
+                                                        @for($r = 0 ; $r < $rate['percent'];$r++)
+                                                            <i class="fas fa-star"></i>
+                                                        @endfor
+                                                        @if($r < 5)
+                                                            @for($x = 0; $x < (5-$r); $x++)
+                                                                <i class="fas fa-star" style="color:wheat"></i>
+                                                            @endfor
+                                                        @endif
+                                                        <span class="product-o__review">({{$rate['userCount'] > 0 ? 'تقييم ' . $rate['userCount'] : 'لا يوجد تقييم'}})</span></div>
+                                                    <div class="product-m__price">{{ $item->price }}</div>
+                                                    <div class="product-m__hover">
+                                                        <div class="product-m__preview-description">
+
+                                                            <span>{{ $item->description }}</span></div>
+                                                        <div class="product-m__wishlist">
+
+                                                            <a class="far fa-heart" onClick="addToCart('{{ $item->id }}','wishlist',$(this))" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="u-s-p-y-60">
+
+                                <!--====== Pagination ======-->
+                                <ul class="shop-p__pagination">
+                                    <li class="is-active">
+
+                                        <a href="#">1</a></li>
+                                    <li>
+
+                                        <a href="#">2</a></li>
+                                    <li>
+
+                                        <a href="#">3</a></li>
+                                    <li>
+
+                                        <a href="#">4</a></li>
+                                    <li>
+
+                                        <a class="fas fa-angle-right" href="shop-grid-full.html"></a></li>
+                                </ul>
+                                <!--====== End - Pagination ======-->
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
             </div>
-            @endforeach
-        <div style="clear: both; ">
         </div>
-      </div>
-      @endif
-    @endisset
-
-      @if (count($products) == 0)
-        {{ trans('language.empty_product') }}
-      @elseif(count($products) == 1)
-          @php
-            $item = $products[0];
-          @endphp
-          <div class="col-sm-10" style="margin-left:38%;margin-top:30px;">
-              <div class="col-sm-3 home-top-row-ads">
-                  <div class="thumbnail product-image-wrapper product-single">
-                      <div class=" single-products product-box-{{ $item->id }}">
-                          <a href="{{ $item->getUrl() }}"> <img src="{{ asset( $item->getThumb()) }}" style="width:100%;height:150px;" alt="" /></a>
-                          {!! $item->showPrice() !!}
-                          <ul class="nav nav-pills nav-justified" >
-                              <li class="cart1"> <a class="btn btn-default add-to-cart"
-                                                    onClick="addToCart('{{ $item->id }}','default',$(this))">
-                                      {{trans('language.add_to_cart')}}  <i class="fa fa-shopping-cart"></i> </a></li>
-                              <li class="fav"> <a class="btn btn-default add-to-cart"
-                                                  onClick="addToCart('{{ $item->id }}','wishlist',$(this))"><i class="fa fa-heart"></i></a>
-                              </li>
-                          </ul>
-
-                      </div>
-                  </div>
-              </div>
-          </div>
-      @else
-          <div class="col-sm-9" style="margin-left:10%">
-          @foreach ($products as $item)
-              <div class="col-sm-3 home-top-row-ads">
-                  <div class="thumbnail product-image-wrapper product-single">
-                      <div class=" single-products product-box-{{ $item->id }}">
-                          <a href="{{ $item->getUrl() }}"> <img src="{{ asset( $item->getThumb()) }}" style="width:100%;height:150px;" alt="" /></a>
-                          {!! $item->showPrice() !!}
-                          <ul class="nav nav-pills nav-justified" >
-                              <li class="cart1"> <a class="btn btn-default add-to-cart"
-                                                    onClick="addToCart('{{ $item->id }}','default',$(this))">
-                                      {{trans('language.add_to_cart')}}  <i class="fa fa-shopping-cart"></i> </a></li>
-                              <li class="fav"> <a class="btn btn-default add-to-cart"
-                                                  onClick="addToCart('{{ $item->id }}','wishlist',$(this))"><i class="fa fa-heart"></i></a>
-                              </li>
-                          </ul>
-
-                      </div>
-                  </div>
-              </div>
-          @endforeach
-          </div>
-      @endif
-
-    <div style="clear: both; ">
-        <ul class="pagination">
-          {{ $products->appends(request()->except(['page','_token']))->links() }}
-      </ul>
+        <!--====== End - Section 1 ======-->
     </div>
-</div>
+    <!--====== End - App Content ======-->
 @endsection
-
-
-@section('breadcrumb')
-    <div class="breadcrumbs pull-left">
-        <ol class="breadcrumb">
-          <li><a href="{{ route('home') }}">Home</a></li>
-          <li class="active">{{ $title }}</li>
-        </ol>
-      </div>
-@endsection
-
-@section('filter')
-  <form action="" method="GET" id="filter_sort">
-        <div class="pull-right">
-        <div>
-            @php
-              $queries = request()->except(['filter_sort','page']);
-            @endphp
-            @foreach ($queries as $key => $query)
-              <input type="hidden" name="{{ $key }}" value="{{ $query }}">
-            @endforeach
-          <select class="custom-select" name="filter_sort">
-            <option value="">{{ trans('language.filters.sort') }}</option>
-            <option value="price_asc" {{ ($filter_sort =='price_asc')?'selected':'' }}>{{ trans('language.filters.price_asc') }}</option>
-            <option value="price_desc" {{ ($filter_sort =='price_desc')?'selected':'' }}>{{ trans('language.filters.price_desc') }}</option>
-            <option value="sort_asc" {{ ($filter_sort =='sort_asc')?'selected':'' }}>{{ trans('language.filters.sort_asc') }}</option>
-            <option value="sort_desc" {{ ($filter_sort =='sort_desc')?'selected':'' }}>{{ trans('language.filters.sort_desc') }}</option>
-            <option value="id_asc" {{ ($filter_sort =='id_asc')?'selected':'' }}>{{ trans('language.filters.id_asc') }}</option>
-            <option value="id_desc" {{ ($filter_sort =='id_desc')?'selected':'' }}>{{ trans('language.filters.id_desc') }}</option>
-          </select>
-        </div>
-      </div>
-  </form>
-
-@endsection
-
-@push('styles')
-@endpush
-@push('scripts')
-  <script type="text/javascript">
-    $('[name="filter_sort"]').change(function(event) {
-      $('#filter_sort').submit();
-    });
-  </script>
-@endpush

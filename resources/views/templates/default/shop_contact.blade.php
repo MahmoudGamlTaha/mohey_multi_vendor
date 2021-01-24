@@ -1,145 +1,131 @@
 @extends($theme.'.shop_layout')
 
 @section('main')
+    <!--====== App Content ======-->
+    <div class="app-content">
 
-     <div id="contact-page" class="container">
-        <div class="bg">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h2 class="title text-center">{{ $title }}</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="contact-form">
-                        <h2 class="title text-center">{{ trans('language.contact_form.title') }}</h2>
-                        <form method="post" action="{{ route('postContact') }}" class="contact-form">
-                        {{ csrf_field() }}
-                        <div id="contactFormWrapper" style="margin: 30px;">
-                        <div class="row">
-                                <div class="col-md-12 collapsed-block">
-                                    {!! $page->content !!}
-                                </div>
-                                <div class="col-md-12 col-xs-12">
-                                    <div class="row">
-                                        <div class="col-sm-4 form-group {{ $errors->has('name') ? ' has-error' : '' }}">
-                                            <label>{{ trans('language.contact_form.name') }}:</label>
-                                            <input type="text"  class="form-control {{ ($errors->has('name'))?"input-error":"" }}"  name="name" placeholder="Your name..." value="{{ old('name') }}">
-                                            @if ($errors->has('name'))
-                                                <span class="help-block">
-                                                    {{ $errors->first('name') }}
-                                                </span>
-                                            @endif
-                                        </div>
-                                        <div class="col-sm-4 form-group {{ $errors->has('email') ? ' has-error' : '' }}">
-                                            <label>{{ trans('language.contact_form.email') }}:</label>
-                                            <input  type="email" class="form-control {{ ($errors->has('email'))?"input-error":"" }}"  name="email" placeholder="Your email..." value="{{ old('email') }}">
-                                            @if ($errors->has('email'))
-                                                <span class="help-block">
-                                                    {{ $errors->first('email') }}
-                                                </span>
-                                            @endif
-                                        </div>
-                                        <div class="col-sm-4 form-group {{ $errors->has('phone') ? ' has-error' : '' }}">
-                                            <label>{{ trans('language.contact_form.phone') }}:</label>
-                                            <input  type="telephone" class="form-control {{ ($errors->has('phone'))?"input-error":"" }}"  name="phone" placeholder="Your phone..." value="{{ old('phone') }}">
-                                            @if ($errors->has('phone'))
-                                                <span class="help-block">
-                                                    {{ $errors->first('phone') }}
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
+        <!--====== Section 1 ======-->
+        <div class="u-s-p-y-60">
 
-                                    <div class="row">
-                                        <div class="col-sm-12 form-group {{ $errors->has('title') ? ' has-error' : '' }}">
-                                            <label class="control-label">{{ trans('language.contact_form.subject') }}:</label>
-                                            <input  type="text" class="form-control {{ ($errors->has('title'))?"input-error":"" }}"  name="title" placeholder="Subject..." value="{{ old('title') }}">
-                                            @if ($errors->has('title'))
-                                                <span class="help-block">
-                                                    {{ $errors->first('title') }}
-                                                </span>
-                                            @endif
-                                        </div>
-                                        <div class="col-sm-12 form-group {{ $errors->has('content') ? ' has-error' : '' }}">
-                                            <label class="control-label">{{ trans('language.contact_form.content') }}:</label>
-                                            <textarea  class="form-control {{ ($errors->has('content'))?"input-error":"" }}" rows="5" cols="75"  name="content" placeholder="Your Message...">{{ old('content') }}</textarea>
-                                            @if ($errors->has('content'))
-                                                <span class="help-block">
-                                                    {{ $errors->first('content') }}
-                                                </span>
-                                            @endif
+            <!--====== Section Content ======-->
+            <div class="section__content">
+                <div class="container">
+                    <div class="breadcrumb">
+                        <div class="breadcrumb__wrap">
+                            <ul class="breadcrumb__list">
+                                <li class="has-separator">
 
-                                        </div>
-                                    </div>
-                                    <div class="btn-toolbar form-group">
-                                        <input type="submit"  value="{{ trans('language.contact_form.submit') }}" class="btn btn-primary">
-                                    </div>
-                                </div>
-                        </div>
-                        </div><!-- contactFormWrapper -->
-                        </form>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="contact-info">
-                        <h2 class="title text-center">{{ trans('language.contact_form.info') }}</h2>
-                        <address style="margin:40px;">
-                           @php
-                            $contacts = \App\Models\ContactUs::all();
-                          @endphp
-                          <ul class="nav nav-pills nav-stacked contact">
-                            <li><a href="#" style="color:black;font-weight:500;">{{ trans('language.dokanii') }}</a></li>
-                          @foreach($contacts as $contact)
-                              <li><a href="#" style="color:black;font-weight:500;">{{trans('language.admin.'.$contact->name)}} : {{ $contact->value }}</a></li>
-                          @endforeach
-                        </address>
-                        <div class="social-networks">
-                            <h2 class="title text-center">Social Networking</h2>
-                            <ul>
-                                <li>
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-google-plus"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-youtube"></i></a>
-                                </li>
+                                    <a href="index.html">Home</a></li>
+                                <li class="is-marked">
+
+                                    <a href="contact.html">Contact</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div><!--/#contact-page-->
+        <!--====== End - Section 1 ======-->
 
 
+<!--        ====== Section 2 ======
+        <div class="u-s-p-b-60">
 
-  <!-- Main Container -->
-  <div class="main-container col1-layout">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-  <div class="page_content">
-
-
-  </div>
+            ====== Section Content ======
+            <div class="section__content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="g-map">
+                                <div id="map"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ====== End - Section Content ======
         </div>
-    </div>
-    </div>
-</div>
+        ====== End - Section 2 ======-->
 
-@endsection
 
-@section('breadcrumb')
-    <div class="breadcrumbs">
-        <ol class="breadcrumb">
-          <li><a href="{{ route('home') }}">Home</a></li>
-          <li class="active">{{ $title }}</li>
-        </ol>
-      </div>
+        <!--====== Section 3 ======-->
+        <div class="u-s-p-b-60">
+
+            <!--====== Section Content ======-->
+            <div class="section__content">
+                <div class="container">
+                    <div class="row">
+                        @php
+                            $contacts = \App\Models\ContactUs::all();
+                        @endphp
+                            @foreach($contacts as $contact)
+                            <div class="col-lg-4 col-md-6 u-s-m-b-30">
+                                <div class="contact-o u-h-100">
+                                    <div class="contact-o__wrap">
+                                        <span class="contact-o__info-text-1">{{trans('language.admin.'.$contact->name)}}</span>
+
+                                        <span class="contact-o__info-text-2">(+0) 900 901 904</span>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                    </div>
+                </div>
+            </div>
+            <!--====== End - Section Content ======-->
+        </div>
+        <!--====== End - Section 3 ======-->
+
+
+        <!--====== Section 4 ======-->
+        <div class="u-s-p-b-60">
+
+            <!--====== Section Content ======-->
+            <div class="section__content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="contact-area u-h-100">
+                                <div class="contact-area__heading">
+                                    <h2>Get In Touch</h2>
+                                </div>
+                                <form class="contact-f" method="post" action="index.html">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 u-h-100">
+                                            <div class="u-s-m-b-30">
+
+                                                <label for="c-name"></label>
+
+                                                <input class="input-text input-text--border-radius input-text--primary-style" type="text" id="c-name" placeholder="Name (Required)" required></div>
+                                            <div class="u-s-m-b-30">
+
+                                                <label for="c-email"></label>
+
+                                                <input class="input-text input-text--border-radius input-text--primary-style" type="text" id="c-email" placeholder="Email (Required)" required></div>
+                                            <div class="u-s-m-b-30">
+
+                                                <label for="c-subject"></label>
+
+                                                <input class="input-text input-text--border-radius input-text--primary-style" type="text" id="c-subject" placeholder="Subject (Required)" required></div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 u-h-100">
+                                            <div class="u-s-m-b-30">
+
+                                                <label for="c-message"></label><textarea class="text-area text-area--border-radius text-area--primary-style" id="c-message" placeholder="Compose a Message (Required)" required></textarea></div>
+                                        </div>
+                                        <div class="col-lg-12">
+
+                                            <button class="btn btn--e-brand-b-2" type="submit">Send Message</button></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--====== End - Section Content ======-->
+        </div>
+        <!--====== End - Section 4 ======-->
+    </div>
+    <!--====== End - App Content ======-->
 @endsection

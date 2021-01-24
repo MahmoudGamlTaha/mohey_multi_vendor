@@ -1,142 +1,143 @@
-<!--Footer-->
+<!--====== Main Footer ======-->
+<footer>
+    <div class="outer-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-5">
+                    <div class="outer-footer__content u-s-m-b-40">
 
-<!--Module top footer -->
-  @isset ($layouts['footer'])
-      @foreach ( $layouts['footer']  as $layout)
-        @if ($layout->page == null ||  $layout->page =='*' || $layout->page =='' || (isset($layout_page) && in_array($layout_page, $layout->page) ) )
-          @if ($layout->type =='html')
-            {!! $layout->text !!}
-          @elseif($layout->type =='view')
-            @if (view()->exists('blockView.'.$layout->text))
-             @include('blockView.'.$layout->text)
-            @endif
-          @elseif($layout->type =='module')
-            {!! (new $layout->text)->render() !!}
-          @endif
-        @endif
-      @endforeach
-  @endisset
-<!--//Module top footer -->
+                        <span class="outer-footer__content-title">{{trans('language.admin.ContactUs')}}</span>
+                        @php
+                            $contacts = \App\Models\ContactUs::all()??array();
+                        @endphp
+                        @foreach($contacts as $contact)
+                            <div class="outer-footer__text-wrap">
 
-  <footer id="footer"><!--Footer-->
-    <div class="footer-widget" style="background-color:#282828">
-      <div class="container">
-        <div class="row" >
+                                <span>{{trans('language.admin.'.$contact->name)}} : {{ $contact->value }}</span></div>
+                        @endforeach
+                        <div class="outer-footer__social">
+                            <ul>
+                                <li>
 
-          <div class="col-sm-4">
-            <div class="single-widget">
-            <h2>لتنزيل تطبيق دكانى</h2>
-            <p>احصل على العديد من العروض الحصرية</p>
-            <img src="{{ asset($theme_asset.'/images/home/googleplay.png') }}" style="width:auto;height:50px;" alt="googleplay"/>
-            <img src="{{ asset($theme_asset.'/images/home/appstore.png') }}" style="width:auto;height:50px;" alt="appstore"/>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="single-widget">
-              <h2>{{ trans('language.subscribe.title') }}</h2>
-              <form action="{{ route('subscribe') }}" method="post" class="searchform">
-                @csrf
-                <p>{{ trans('language.subscribe.subscribe_des') }}</p>
-                <div>
-                  <span id="icon-mail" class="fa fa-envelope-o" ></span>
-                  <input type="email" name="subscribe_email" placeholder="{{ trans('language.subscribe.subscribe_email') }}">
-                  <button value="male" class="btn btn-default">ذكر</button> &nbsp;
-                  <button value="female" class="btn btn-default">انثى</button>
+                                    <a class="s-fb--color-hover" href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li>
+
+                                    <a class="s-tw--color-hover" href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li>
+
+                                    <a class="s-youtube--color-hover" href="#"><i class="fab fa-youtube"></i></a></li>
+                                <li>
+
+                                    <a class="s-insta--color-hover" href="#"><i class="fab fa-instagram"></i></a></li>
+                                <li>
+
+                                    <a class="s-gplus--color-hover" href="#"><i class="fab fa-google-plus-g"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+                @php
+                    $lang = App\Models\Language::where('code', app()->getLocale())->first();
 
-                <br/>
-                <br/>
-              </form>
+                    $columns = \App\Models\ShopPageDescription::where('lang_id', $lang->id)->get();
+                @endphp
+                <div class="col-lg-3 col-md-5">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="outer-footer__content u-s-m-b-40">
+                                <span class="outer-footer__content-title">{{trans('language.aboutUs')}}</span>
+                                <div class="outer-footer__list-wrap">
+                                    @if(count($columns) > 0)
+                                    <ul>
+                                    @for($i = 0; $i < 3; $i++)
+                                        <li><a href="{{$columns[$i]['keyword'].'.html'}}">{{$columns[$i]['title']}}</a></li>
+                                    @endfor
+                                    <li><a href="/login">{{trans('language.joinUs')}}</a>
+                                    </ul>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if($columns->count() > 4)
+                    <div class="col-lg-3 col-md-5">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="outer-footer__content u-s-m-b-40">
+                                    <span class="outer-footer__content-title">{{trans('language.clientService')}}</span>
+                                    <div class="outer-footer__list-wrap">
+                                        <ul>
+                                            @for($i = 3; $i < $columns->count(); $i++)
+                                                <li><a href="{{$columns[$i]['keyword'].'.html'}}">{{$columns[$i]['title']}}</a></li>
+                                            @endfor
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <div class="col-lg-3 col-md-12">
+                    <div class="outer-footer__content">
+
+                        <span class="outer-footer__content-title">Join our Newsletter</span>
+                        <form class="newsletter">
+                            <div class="u-s-m-b-15">
+                                <div class="radio-box newsletter__radio">
+
+                                    <input type="radio" id="male" name="gender">
+                                    <div class="radio-box__state radio-box__state--primary">
+
+                                        <label class="radio-box__label" for="male">Male</label></div>
+                                </div>
+                                <div class="radio-box newsletter__radio">
+
+                                    <input type="radio" id="female" name="gender">
+                                    <div class="radio-box__state radio-box__state--primary">
+
+                                        <label class="radio-box__label" for="female">Female</label></div>
+                                </div>
+                            </div>
+                            <div class="newsletter__group">
+
+                                <label for="newsletter"></label>
+
+                                <input class="input-text input-text--only-white" type="text" id="newsletter" placeholder="Enter your Email">
+
+                                <button class="btn btn--e-brand newsletter__btn" type="submit">SUBSCRIBE</button></div>
+
+                            <span class="newsletter__text">Subscribe to the mailing list to receive updates on promotions, new arrivals, discount and coupons.</span>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-sm-3">
-
-          </div>
         </div>
-      </div>
     </div>
-    <div class="footer-widget" style="background-color:#323232;">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-1">
-          </div>
-          <div class="col-sm-3">
-            <div class="single-widget">
-              <h4 style="color: white"> بيع على دكانى</h4>
-              <a href="<?php echo route('registermerchant')?>" style="font-size: 18px;">كن بائعا معنا</a>
+    <div class="lower-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="lower-footer__content">
+                        <div class="lower-footer__copyright">
+                            <span>Copyright © 2019</span>
+                            <a href="{{ config('scart.homepage') }}" style="color: #f69620;">{{ config('scart.name') }} {{ config('scart.version') }}</a>
+                            <span>All Right Reserved</span>
+                            <br>
+                            <span>Hosted by <a target="_blank" href="https://highcoder.com" >highcoder</a></span></div>
+                        <div class="lower-footer__payment">
+                            <ul>
+                                <li><i class="fab fa-cc-stripe"></i></li>
+                                <li><i class="fab fa-cc-paypal"></i></li>
+                                <li><i class="fab fa-cc-mastercard"></i></li>
+                                <li><i class="fab fa-cc-visa"></i></li>
+                                <li><i class="fab fa-cc-discover"></i></li>
+                                <li><i class="fab fa-cc-amex"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          @php
-            $lang = App\Models\Language::where('code', app()->getLocale())->first();
-            
-            $columns = \App\Models\ShopPageDescription::where('lang_id', $lang->id)->get();
-          @endphp
-          <div class="col-sm-3">
-            <div class="single-widget">
-              <h4 style="color: white">{{trans('language.aboutUs')}}</h4>
-              <ul class="nav nav-pills nav-stacked">
-                @for($i = 0; $i < count($columns); $i++)
-                    <li><a href="{{$columns[$i]['keyword'].'.html'}}">{{$columns[$i]['title']}}</a></li>
-                @endfor
-                <li><a href="/login">{{trans('language.joinUs')}}</a>
-              </ul>
-            </div>
-          </div>
-          @if($columns->count() > 4)
-          <div class="col-sm-3">
-            <div class="single-widget">
-              <h4 style="color: white">{{trans('language.clientService')}}</h4>
-              <ul class="nav nav-pills nav-stacked">
-            @for($i = 3; $i < $columns->count(); $i++)
-                    <li><a href="{{$columns[$i]['keyword'].'.html'}}">{{$columns[$i]['title']}}</a></li>
-            @endfor
-                </ul>
-            </div>
-          </div>
-          @endif
-          <div class="col-sm-1">
-          </div>
         </div>
-<hr  style="margin-top: 20px; margin-bottom: 0px; border: 0; border-top: 1px solid #908a8a;">
-      <div class="row">
-          <div class="col-sm-1">
-          </div>
-          <div class="col-sm-6">
-            <div class="single-widget">
-              <h2 style="font-size: 20px">تواصل معنا</h2>
-              @php
-                $contacts = \App\Models\ContactUs::all()??array();
-              @endphp
-              <ul class="nav nav-pills nav-stacked contact">
-              @foreach($contacts as $contact)
-                  <li><a href="#">{{trans('language.admin.'.$contact->name)}} : {{ $contact->value }}</a></li>
-              @endforeach
-            </ul>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="single-widget">
-              <h2 style="font-size: 20px">تابعونا على</h2>
-              <img src="{{ asset($theme_asset.'/images/home/instagram.png') }}" style="width:45px;" alt="instagram"/>
-              <img src="{{ asset($theme_asset.'/images/home/youtube.png') }}" style="width:30px;"alt="youtube"/>
-              <img src="{{ asset($theme_asset.'/images/home/facebook.png') }}" style="width:30px;margin-right: 10px;" alt="facebook"/>
-
-            </div>
-          </div>
-
-        </div><br>
-      </div>
     </div>
-
-    <div class="footer-bottom" style="background-color: #10243f">
-      <div class="container">
-        <div class="row">
-          <p class="pull-left"> Copyright © 2019
-            <a href="{{ config('scart.homepage') }}" style="color: #f69620;">{{ config('scart.name') }} {{ config('scart.version') }}</a>
-            Inc. All rights reserved</p>
-          <p class="pull-right">Hosted by  <span><a target="_blank" href="https://highcoder.com" >highcoder</a></span></p>
-        </div>
-      </div>
-    </div>
-  </footer>
-<!--//Footer-->
+</footer>
