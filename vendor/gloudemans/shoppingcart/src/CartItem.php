@@ -215,7 +215,8 @@ class CartItem implements Arrayable, Jsonable
                 $price = $targetUnit->price;
             }
         }else{
-            $amount = Uofms::where(['id'=>$this->uofm['uofm']])->first()->amount_in_base;
+            $amount = Uofms::where(['id'=>$this->uofm['uofm']])->first();
+            $amount = isset($amount) ? $amount->amount_in_base : 0;
             $productPrice = ShopProduct::where('id', $this->id)->first()->price;
             $price = $amount * $productPrice;
         }

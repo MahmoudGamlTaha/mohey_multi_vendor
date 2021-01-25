@@ -4,441 +4,500 @@
         {{ session()->get('error') }}
     </div>
 @endif
+<style>
+    .minus-btn{
+        left: 0;
+        position: absolute;
+        border: none !important;
+        top: 0;
+        display: inline-block;
+        cursor: pointer;
+        font-size: 10px;
+        text-align: center;
+        width: 50px;
+        line-height: 50px;
+        height: 100%;
+        border-radius: 34px;
+        outline: none;
+        background-color: #F1F1F1;
+        color: #333;
+    }
+    .plus-btn{
+        right: 0;
+        position: absolute;
+        border: none !important;
+        top: 0;
+        display: inline-block;
+        cursor: pointer;
+        font-size: 10px;
+        text-align: center;
+        width: 50px;
+        line-height: 50px;
+        height: 100%;
+        border-radius: 34px;
+        outline: none;
+        background-color: #F1F1F1;
+        color: #333;
+    }
+    .qty-input{
+        outline: none;
+        border: none !important;
+        display: block;
+        background-color: #F1F1F1;
+        height: 50px;
+        width: 100%;
+        border-radius: 34px;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: center;
+    }
+</style>
 @section('main')
-<section>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-1">
-        </div>
-        <div class="col-sm-10">
-        <div class="col-sm-12">
-          <h4 style="color: #10243f;">{{ $title }}</h4>
-        </div>
-        <div class="col-sm-12 table-responsive"  style="border: 1px solid #eee; padding: 19px 5px 0 5px; margin-bottom: 5px;">
-        @if(isset($cart) && sizeof($cart) > 0)
-        <table class="table table-striped" style="margin-bottom:0;">
-            <thead>
-              <tr>
-                <th style="width: 15%;text-align:center;"></th>
-                <th style="width: 25%;text-align:right;">{{ trans('language.cart.product') }}</th>
-                <th style="width: 15%;text-align:center;">{{ trans('language.product.price') }}</th>
-                <th style="width: 20%;text-align:center;">{{ trans('language.product.quantity') }}</th>
-                <th style="width: 20%;text-align:center;">{{ trans('language.product.unit') }}</th>
-                <th style="width: 12%;text-align:center;">{{ trans('language.product.total_price') }}</th>
-                @if($payment_term != null)
-                <th style="width: 15%;text-align:center;">{{ trans('language.payments.payment_term') }}</th>
-                @endif
-              </tr>
-            </thead>
-            <tbody>
-            @foreach($cart as $item)
-            @php
-            $product = App\Models\ShopProduct::find($item->id);
-            $uofms = \App\Models\UofmGroups::where('id', $product->uofm_groups)->first();
-           @endphp
-            <tr>
-                <td style="text-align:center;">
-                <a href="{{$product->getUrl() }}"><img width="100" src="{{asset($product->getImage())}}" alt=""></a>
-                </td>
-                <td>
-                  <span class="cart-product-span">{{$product->getName()}}</span>
-                  <br/>
-                  <span>البائع: </span>
-                  <br/>
-                @php
-                    $company = $product->company()->first();
-                    if(isset($company) && ($company->visible == 1))
-                    {
-                        $company_name = $company->name;
-                    }else{
-                        $company_name = trans('language.dokanii');
-                    }
-                @endphp
-                  <span>{{$company_name}}</span>
-                  <br/>
-                  <br/>
-                 <a style="cursor: pointer;color:#00f" onClick="addToCart('{{ $product->id }}','wishlist',$(this))"><i class="fa fa-heart-o"></i> {{trans('language.add_to_wishlist')}}</a>
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <a style="cursor: pointer;color:#f00" onClick="return confirm('Confirm?')" title="Remove Item" alt="Remove Item" class="cart_quantity_delete" href="{{route("removeItem",['id'=>$item->rowId])}}"><i class="fa fa-trash-o"></i> حذف</a>
-                  </td>
-                <td style="padding: 33px;">
-                  <span class="cart-total-span">{!! html_entity_decode($product->showPrice()) !!}</span>
-                </td>
-                <td style="width: 15%;text-align:center;padding: 33px;">
-                  <button name="decrease" style="border:none; height:28px;width:30px;border: 1px solid #dad9d9"  id="decrease" onClick="decreseAmount('{{$item->rowId}}', {{ $item->id }});">-</button>
-                  <input type="text" id="item-{{$item->id}}" onChange="updateCart('{{$item->rowId}}', {{ $item->id }});" class="item-qty" value="{{$item->qty}}" name="qty-{{$item->id}}" style="width:30px;text-align:center; margin:-3px ;height:28px;border:1px solid #dad9d9">
-                  <button style="border:none; height:28px;width:30px; border:1px solid #dad9d9" name="increase" id="increase" onClick="increaseAmount('{{$item->rowId}}', {{ $item->id }});">+</button>
-                </td>
-                <td style="width:20%;padding:33px;" class="col-md-12">
-                    <div class="form-group">
-                        <select id="units-{{$item->id}}" style="font-size:15px;padding:3px;border-style:none;color:black;" class="form-control" onclick="units('{{$item->rowId}}', {{ $item->id }});">
-                        @if($uofms !== null)
-                                @php
-                                    $uofm = \App\Models\Uofms::where('group_id', $item->uofm['uofm_groups'])->get();
-                                @endphp
-                                <option hidden disabled selected>{{$uofms->name ."/". \App\Models\Uofms::where('id', $item->uofm['uofm'])->first()->name}}</option>
-                                @foreach($uofm as $unit)
-                                <option class="test-{{$item->id}}" data-index="{{$uofms->id}}" value="{{$unit->id ?? 0}}">{{$uofms->name ."/".$unit->name ?? 0}}</option>
-                                @endforeach
-                            @else
-                                <option>لا يوجد</option>
-                            @endif
-                        </select>
-                    </div>
-                </td>
-                <td>
-                  <span style="color:#10243f;width: 12%;text-align:center; font-size: 16px;line-height: 5;"><b>{{\Helper::currencyRender($item->subtotal)}}</b></span>
-                </td>
-                @if($payment_term != null)
-                <td>
-                <span style="color:#81C4E6;">{{$payment_term->paymentTerm()->first()->name}}</span>
-                </td>
-                @endif
-              </tr>
-              @endforeach
-            </tbody>
-            <tfoot style="background: #f9f9f9;">
-              <tr>
-                @if($extensionDiscount)
-                <td colspan="100%">
-                  <div >
-                   
+    @if(isset($cart) && sizeof($cart) > 0)
+            <!--====== App Content ======-->
+            <div class="app-content">
 
+                <!--====== Section 1 ======-->
+                <div class="u-s-p-y-60">
 
-                    <div class="panel-group">
-                      <div class="panel panel-default">
-                    
-                        <div class="panel-heading">
-                          <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#collapse" style="color:#10243f ; font-size:18px">
-                               <i  onclick="myFunctiondiscount(this)" class="fa fa-angle-up" style="float: left "></i> كود الخصم  </a>
-                          </h4>
+                    <!--====== Section Content ======-->
+                    <div class="section__content">
+                        <div class="container">
+                            <div class="breadcrumb">
+                                <div class="breadcrumb__wrap">
+                                    <ul class="breadcrumb__list">
+                                        <li class="has-separator">
+
+                                            <a href="index.html">Home</a></li>
+                                        <li class="is-marked">
+
+                                            <a href="cart.html">Cart</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                              
-          
-                      <div id="collapse" class="panel-collapse collapse in" style="height: auto;text-align: center;">
-
-                        <form style=" width: 50%; padding: 5px 30px;" class="shipping_address" id="form-order" role="form" method="POST" action="{{ route('processCart') }}">
-                          {{ csrf_field() }}
-                           <div>
-                            <label style="float: right ; color: #b0b0b0;padding-right: 20px;">{{ trans('language.cart.coupon') }}:</label>
-                            <input type="text" class="form-control" id="coupon-value"  {{ ($extensionDiscount['permission'])?'':'disabled' }} placeholder="كوبون الخصم" style="width: 80% ; display: inline;"/>
-
-                            <button style="color:white;background-color:#10243F;border-radius:5px;padding:5px;font-size:12pt;" {!! ($extensionDiscount['permission'])?'id="coupon-button"':'' !!}>تطبيق</button>
-                            <div class="coupon-msg  {{ Session::has('error_discount')?'text-danger':'' }}" style="text-align: left;padding-left: 10px;">{{ Session::has('error_discount')?Session::get('error_discount'):'' }}</div>
-                          <div>
-                          </form>
-                       </div>
-          
-                  </div>
+                    </div>
                 </div>
-
-                  </div>
-                  <br/>
-                  <a  style="color:#9f9f9f;background-color:#fdfdfd ; border: 1px solid #9f9f9f ;border-radius:5px;padding:5px;font-size:12pt;cursor:pointer;">تحديث السلة</a>
-                  <a href="{{ route('home') }}" 
-                  style="color:#10243C;background-color:#F99520;border-radius:5px;padding:5px;font-size:12pt; border:none;cursor:pointer;"><b>متابعة التسوق</b></a>
-                 <!-- <a onClick="return confirm('Confirm ?')" href="{{--route('clearCart')--}}"><button class="btn" type="button" style="cursor: pointer;padding:10px 30px">{{--trans('language.cart.remove_all')--}}</button></a>
--->
-<br/><br/>
+                <!--====== End - Section 1 ======-->
 
 
-                </td>
-                @endif
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+                <!--====== Section 2 ======-->
+                <div class="u-s-p-b-60">
 
-     
+                    <!--====== Section Intro ======-->
+                    <div class="section__intro u-s-m-b-60">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="section__text-wrap">
+                                        <h1 class="section__heading u-c-secondary">SHOPPING CART</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--====== End - Section Intro ======-->
 
-        <div class="col-sm-3">
-        </div>
-        <div class="col-sm-6">
 
-          <div class="panel-group">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
-                  <a data-toggle="collapse" href="#collapse1" style="color:#10243f ; font-size:18px">
-                     <i  onclick="myFunction(this)" class="fa fa-angle-up" style="float: left "></i> الاجمالى  </a>
-                </h4>
-              </div>
-     
-              <form id="form-order" role="form" method="POST" action="{{ route('processCart') }}" style="margin-bottom: 0">
-          {{ csrf_field() }}           
-         
+                    <!--====== Section Content ======-->
+                    <div class="section__content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 u-s-m-b-30">
+                                    <div class="table-responsive">
+                                        <table class="table-p">
+                                            <tbody>
 
-            <div id="collapse1" class="panel-collapse collapse in" style="height: auto;text-align: center;">
-            
-            @foreach ($dataTotal as $key => $element)
-                    @if ($element['value'] !=0)
-            @if($element['code']=='total')
-            <div style="margin-top: 12px; margin-bottom: -5px;">
-              <span style="text-align:center; color: #b0b0b0; margin: 20px;">  الاجمالى : </span>
-              <span style="text-align:center; color: #000;">{{$element['text'] }}</span>
+                                            <!--====== Row ======-->
+                                            @foreach($cart as $item)
+                                                @php
+                                                    $product = App\Models\ShopProduct::find($item->id);
+                                                    $category = \App\Models\ShopCategoryDescription::where('shop_category_id', $product->category_id)->first();
+                                                    $uofms = \App\Models\UofmGroups::where('id', $product->uofm_groups)->first();
+                                                @endphp
+                                                <tr>
+                                                    <td>
+                                                        <div class="table-p__box">
+                                                            <div class="table-p__img-wrap">
+
+                                                                <a href="{{$product->getUrl() }}"><img class="u-img-fluid" src="{{asset($product->getImage())}}" alt=""></a></div>
+                                                            <div class="table-p__info">
+
+                                                                <span class="table-p__name">
+
+                                                                    <a href="{{$product->getUrl() }}">{{$product->getName()}}</a></span>
+
+                                                                <span class="table-p__category">
+
+                                                                    <a href="shop-side-version-2.html">{{$category->name}}</a></span>
+<!--                                                                <ul class="table-p__variant-list">
+                                                                    <li>
+
+                                                                        <span>Size: 22</span></li>
+                                                                    <li>
+
+                                                                        <span>Color: Red</span></li>
+                                                                </ul>-->
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+
+                                                        <span class="table-p__price subtotal-{{$item->rowId}}">{{\Helper::currencyRender($item->subtotal)}}</span></td>
+                                                    <td>
+                                                        <div class="table-p__input-counter-wrap">
+
+                                                            <!--====== Input Counter ======-->
+                                                            <div class="input-counter">
+                                                                <button class="minus-btn fas fa-minus" id="decreasex" onClick="decreseAmount('{{$item->rowId}}', {{ $item->id }});"></button>
+
+                                                                <input class="qty-input item-qty" onChange="updateCart('{{$item->rowId}}', {{ $item->id }});" type="text" id="item-{{$item->id}}" class="item-qty" value="{{$item->qty}}" name="qty-{{$item->id}}" readonly>
+
+                                                                <button class="plus-btn fas fa-plus" id="increasex" onClick="increaseAmount('{{$item->rowId}}', {{ $item->id }});"></button></div>
+                                                            <!--====== End - Input Counter ======-->
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-p__del-wrap">
+                                                            <select id="units-{{$item->id}}" style="width:70%;border-radius:15px;text-align-last:center;" class="select-box select-box--primary-style" onclick="units('{{$item->rowId}}', {{ $item->id }});">
+                                                                @if($uofms !== null)
+                                                                    @php
+                                                                        $uofm = \App\Models\Uofms::where('group_id', $item->uofm['uofm_groups'])->get();
+                                                                    @endphp
+                                                                    <option hidden disabled selected>{{$uofms->name ."/". \App\Models\Uofms::where('id', $item->uofm['uofm'])->first()->name}}</option>
+                                                                    @foreach($uofm as $unit)
+                                                                        <option class="test-{{$item->id}}" data-index="{{$uofms->id}}" value="{{$unit->id ?? 0}}">{{$uofms->name ."/".$unit->name ?? 0}}</option>
+                                                                    @endforeach
+                                                                @else
+                                                                    <option>لا يوجد</option>
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-p__del-wrap">
+
+                                                            <a class="far fa-trash-alt table-p__delete-link" href="{{route("removeItem",['id'=>$item->rowId])}}"></a></div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            <!--====== End - Row ======-->
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div id="checkout-msg-group">
+                                        <div class="msg">
+
+                                        <span class="msg__text">Have a coupon?
+
+                                            <a class="gl-link" href="#have-coupon" data-toggle="collapse">Click Here to enter your code</a></span>
+                                            <div class="collapse" id="have-coupon" data-parent="#checkout-msg-group">
+                                                <div class="c-f u-s-m-b-16">
+
+                                                    <span class="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
+                                                    <form class="c-f__form" id="form-order" role="form" method="POST" action="{{ route('processCart') }}">
+                                                        {{ csrf_field() }}
+                                                        <div class="u-s-m-b-16">
+                                                            <div class="u-s-m-b-15">
+
+                                                                <label for="coupon"></label>
+
+                                                                <input class="input-text input-text--primary-style" type="text" id="coupon-value"  {{ ($extensionDiscount['permission'])?'':'disabled' }} placeholder="Coupon Code"></div>
+                                                            <div class="u-s-m-b-15">
+
+                                                                <button class="btn btn--e-transparent-brand-b-2" type="submit" {!! ($extensionDiscount['permission'])?'id="coupon-button"':'' !!}>APPLY</button></div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <!--====== End - Section Content ======-->
+                </div>
+                <!--====== End - Section 2 ======-->
+
+
+                <!--====== Section 3 ======-->
+                <div class="u-s-p-b-60">
+
+                    <!--====== Section Content ======-->
+                    <div class="section__content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 u-s-m-b-30">
+                                    <form class="f-cart">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6 u-s-m-b-30">
+                                                <div class="f-cart__pad-box">
+                                                    <h1 class="gl-h1">ESTIMATE SHIPPING AND TAXES</h1>
+
+                                                    <span class="gl-text u-s-m-b-30">Enter your destination to get a shipping estimate.</span>
+                                                    <div class="u-s-m-b-30">
+
+                                                        <!--====== Select Box ======-->
+
+                                                        <label class="gl-label" for="shipping-country">COUNTRY *</label><select class="select-box select-box--primary-style" id="shipping-country">
+                                                            <option selected value="">Choose Country</option>
+                                                            <option value="uae">United Arab Emirate (UAE)</option>
+                                                            <option value="uk">United Kingdom (UK)</option>
+                                                            <option value="us">United States (US)</option>
+                                                        </select>
+                                                        <!--====== End - Select Box ======-->
+                                                    </div>
+                                                    <div class="u-s-m-b-30">
+
+                                                        <!--====== Select Box ======-->
+
+                                                        <label class="gl-label" for="shipping-state">STATE/PROVINCE *</label><select class="select-box select-box--primary-style" id="shipping-state">
+                                                            <option selected value="">Choose State/Province</option>
+                                                            <option value="al">Alabama</option>
+                                                            <option value="al">Alaska</option>
+                                                            <option value="ny">New York</option>
+                                                        </select>
+                                                        <!--====== End - Select Box ======-->
+                                                    </div>
+                                                    <div class="u-s-m-b-30">
+
+                                                        <label class="gl-label" for="shipping-zip">ZIP/POSTAL CODE *</label>
+
+                                                        <input class="input-text input-text--primary-style" type="text" id="shipping-zip" placeholder="Zip/Postal Code"></div>
+                                                    <div class="u-s-m-b-30">
+
+                                                        <a class="f-cart__ship-link btn--e-transparent-brand-b-2" href="#">CALCULATE SHIPPING</a></div>
+
+                                                    <span class="gl-text">Note: There are some countries where free shipping is available otherwise our flat rate charges or country delivery charges will be apply.</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 u-s-m-b-30">
+                                                <div class="f-cart__pad-box">
+                                                    <h1 class="gl-h1">NOTE</h1>
+
+                                                    <span class="gl-text u-s-m-b-30">Add Special Note About Your Product</span>
+                                                    <div>
+
+                                                        <label for="f-cart-note"></label><textarea class="text-area text-area--primary-style" id="f-cart-note"></textarea></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 u-s-m-b-30">
+                                                <div class="f-cart__pad-box">
+                                                    <div class="u-s-m-b-30">
+                                                        <table class="f-cart__table">
+                                                            <tbody>
+                                                            @foreach ($dataTotal as $key => $element)
+                                                                @if($element['code']=='discount')
+                                                                    <tr>
+                                                                        <td>{{trans('language.order.discount')}}</td>
+                                                                        <td class="discountx">{{$element['text'] }}</td>
+                                                                    </tr>
+                                                                @endif
+                                                                @if($element['code']=='subtotal')
+                                                                    <tr>
+                                                                        <td>{{trans('language.order.sub_total')}}</td>
+                                                                        <td class="subtotalx">{{$element['text'] }}</td>
+                                                                    </tr>
+                                                                @endif
+                                                                @if($element['code']=='total')
+                                                                    <tr>
+                                                                        <td>{{trans('language.order.total')}}</td>
+                                                                        <td class="totalx">{{$element['text'] }}</td>
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div>
+
+                                                        <a style="text-align:center" href="{{ route('checkout') }}" class="btn btn--e-brand-b-2" type="submit"> PROCEED TO CHECKOUT</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--====== End - Section Content ======-->
+                </div>
+                <!--====== End - Section 3 ======-->
             </div>
-            <hr/>
-            
-            <div style="margin-top: -8px; margin-bottom: 15px;">
-              <span style="text-align:center; color: #b0b0b0; margin: 4px;">  {!! $element['title'] !!} :  </span>
-              <span style="text-align:center; color: #000;">   {{$element['text'] }}</span>
+            <!--====== End - App Content ======-->
+        </div>
+    @else
+        <!--====== App Content ======-->
+        <div class="app-content">
+
+            <!--====== Section 1 ======-->
+            <div class="u-s-p-y-60">
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 u-s-m-b-30">
+                                <div class="empty">
+                                    <div class="empty__wrap">
+
+                                        <span class="empty__big-text">EMPTY</span>
+
+                                        <span class="empty__text-1">No items found on your cart.</span>
+
+                                        <a class="empty__redirect-link btn--e-brand" href="{{route('home')}}">CONTINUE SHOPPING</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
             </div>
-            @endif
-            @else
-                        <tr class="showTotal">
-            @endif
-            @endforeach
-            <input style="width:98%;color:white;background-color:#10243F;border-radius:5px;padding:5px;font-size:12pt;margin-bottom: 5px;" value="{{trans('language.purchase')}}" type="submit" id="submit-order"></input>
-            @endif
-
-      
-             </div>
-          </form>
-
+            <!--====== End - Section 1 ======-->
         </div>
-      </div>
+        <!--====== End - App Content ======-->
 
-        </div>
-      </div>
-      </div>
-      <br/>
-<hr style="margin-bottom: 0">
-      <div class="row" style="">
-        <div class="row">
-        
-          <div class="col-sm-12" style="text-align:center;">
-            <h4 style="background: #f69620;padding: 12px 5px;color: white;">{{ trans('language.cart.lastViewd') }}</h4>
-          </div>
-         
-        </div>
-        <div class="row" style="margin: 0px 6px;">
-          @foreach($lastViewed as $key => $value)
-          <div class="col-sm-2"  style="width: 16.1%; border: 1px solid #eee; margin:5px 3px 0 3px;">
-            <a href="{{$value->getUrl() }}"><img src="{{asset($value->getImage())}}" alt style="width:100%;"/></a>
-            <span>{{$value->getName()}}</span>
-          </div>
-          @endforeach
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <a href="" class="btn btn-default1">{{ trans('language.ViewAll') }}  <i class="fa fa-angle-double-left"></i> </a>  
-          </div>
-        </div>
-      </div>
-
-  <hr style="margin-bottom: 0">
-      <div class="row" style="">
-        <div class="row">
-        
-          <div class="col-sm-12" style="text-align:center;">
-            <h4 style="background: #f69620;padding: 12px 5px;color: white;">{{trans('language.wishlist_products')}}</h4>
-          </div>
-         
-        </div>
-
-        <div class="row" style="margin: 0px 6px;">
-          @foreach( $wishlist as $item)
-          @php
-          $count = (isset($n)?$n:0);
-          if($count >= 6)
-             break;
-          $count++;
-          $productWish = App\Models\ShopProduct::find( $item->id);
-         
-          @endphp
-            <div class="col-sm-2"  style="width: 16.1%; border: 1px solid #eee; margin:5px 3px 0 3px;">
-            <a href="{{ $productWish->getUrl() }}"><img style="width:95% " src="{{asset($productWish->getImage())}}" alt=""></a>
-            </div>
-            @endforeach
-          </div>
-          <br>
-
-        <div class="row">
-          <div class="col-sm-12">
-            <a href="{{route('wishlist')}}" class="btn btn-default1">{{ trans('language.ViewAll') }}  <i class="fa fa-angle-double-left"></i> </a>  
-          </div>
-        </div>
-      </div>
-<br>
-
-
-    </div>
-</section>
-@endsection
-@section('breadcrumb')
-    <div class="breadcrumbs">
-        <ol class="breadcrumb">
-          <li><a href="{{ route('home') }}">الرئيسية</a></li>
-         <li class="active"> > {{ $title }}</li>
-        </ol>
-      </div>
+    @endif
 @endsection
 @push('scripts')
-<script type="text/javascript">
+    <script>
+            function decreseAmount(rowId, item_id) {
+                var curr_qty = parseInt($('#item-'+item_id).val(), 10);
+                curr_qty = curr_qty - 1;
+                if(curr_qty <= 0)
+                    return;
+                $('#item-'+item_id).val(curr_qty);
+                updateCart(rowId, item_id);
+            }
 
-function decreseAmount(rowId, item_id) {
-  var curr_qty = parseInt($('#item-'+item_id).val(), 10);
-  curr_qty = curr_qty - 1;
-  if(curr_qty <= 0)
-     return;
-  $('#item-'+item_id).val(curr_qty);
-  updateCart(rowId, item_id);
-}
+            function increaseAmount(rowId, item_id) {
+                var curr_qty = parseInt($('#item-'+item_id).val(), 10);
+                curr_qty = curr_qty + 1;
+                $('#item-'+item_id).val(curr_qty);
+                updateCart(rowId, item_id);
+            }
 
-function increaseAmount(rowId, item_id) {
-  var curr_qty = parseInt($('#item-'+item_id).val(), 10);
-  curr_qty = curr_qty + 1;
-  $('#item-'+item_id).val(curr_qty);
-  updateCart(rowId, item_id);
-}
+            function updateCart(rowId,id){
+                var new_qty = $('#item-'+id).val();
 
-    function updateCart(rowId,id){
-      //console.log(rowId);
-        var new_qty = $('#item-'+id).val();
+                $.ajax({
+                    url: '{{ route('updateToCart') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    async: true,
+                    cache: false,
+                    data: {
+                        id: id,
+                        rowId: rowId,
+                        new_qty: new_qty,
+                        _token:'{{ csrf_token() }}'},
+                    success: function(data){
 
-            $.ajax({
-            url: '{{ route('updateToCart') }}',
-            type: 'POST',
-            dataType: 'json',
-            async: true,
-            cache: false,
-            data: {
-                id: id,
-                rowId: rowId,
-                new_qty: new_qty,
-                _token:'{{ csrf_token() }}'},
-            success: function(data){
-              
-                error= parseInt(data.error);
+                        error= parseInt(data.error);
 
-                if(error ===0)
-                {
-                        window.location.replace(location.href);
-                }else{
+                        if(error ===0)
+                        {
+                            window.location.replace(location.href);
+                        }else{
 
-                    $('.item-qty-'+id).css('display','block').html(data.msg);
-                }
+                            $('.item-qty-'+id).css('display','block').html(data.msg);
+                        }
 
-                },
-                error: function(err){
-                  //console.log(err);
-                }
-        });
-    }
+                    },
+                    error: function(err){
+                    }
+                });
+            }
 
-    function units(rowId, item_id)
-    {
-        var unitId = $('#units-'+item_id).val();
-        var uofm_group = $(".test-"+item_id).data('index');
-        $.ajax({
-            url: '{{ route('updateToCart') }}',
-            type: 'POST',
-            dataType : 'json',
-            data : {
-                id     : item_id,
-                rowId  : rowId,
-                unitId : unitId,
-                uofm_group : uofm_group,
-                _token:'{{ csrf_token() }}'
-            },
-            success : function (result){
-                error= parseInt(result.error);
-               if(error ===0)
-                {
-                     window.location.replace(location.href);
-                }
-            },
-    });
-    }
+            //Units
+            function units(rowId, item_id)
+            {
+                var unitId = $('#units-'+item_id).val();
+                console.log(unitId);
+                var uofm_group = $(".test-"+item_id).data('index');
+                $.ajax({
+                    url: '{{ route('updateToCart') }}',
+                    type: 'POST',
+                    dataType : 'json',
+                    data : {
+                        id     : item_id,
+                        rowId  : rowId,
+                        unitId : unitId,
+                        uofm_group : uofm_group,
+                        _token:'{{ csrf_token() }}'
+                    },
+                    success : function (result){
+                        error= parseInt(result.error);
+                        if(error ===0)
+                        {
+                            window.location.replace(location.href);
+                        }
+                    },
+                });
+            }
 
-$('#submit-order').click(function(){
-    $('#form-order').submit();
-    $(this).prop('disabled',true);
-});
+            //COUPON
+            @if ($extensionDiscount)
+            $('#coupon-button').on('click', function() {
+                var coupon = $('#coupon-value').val();
 
-@if ($extensionDiscount)
-    $('#coupon-button').click(function() {
-     var coupon = $('#coupon-value').val();
-        /*if(coupon==''){
-            $('#coupon-group').addClass('has-error');
-            $('.coupon-msg').html('{{--{{ trans('language.cart.coupon_empty') }}--}}').addClass('text-danger').show();
-        }else{
-        $('#coupon-button').button('loading');
-        setTimeout(function() {*/
-            $.ajax({
-                url: '{{ route('useDiscount') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    code: coupon,
-                    uID: {{ $uID }},
-                    _token: "{{ csrf_token() }}",
-                },
-            })
-            .done(function(result) {
-                    $('#coupon-value').val('');
-                    $('.coupon-msg').removeClass('text-danger');
-                    $('.coupon-msg').removeClass('text-success');
-                    $('#coupon-group').removeClass('has-error');
-                    $('.coupon-msg').hide();
-                if(result.error ==1){
-                    $('#coupon-group').addClass('has-error');
-                    $('.coupon-msg').html(result.msg).addClass('text-danger').show();
-                }else{
-                    $('#removeCoupon').show();
-                    $('.coupon-msg').html(result.msg).addClass('text-success').show();
-                    $('.showTotal').remove();
-                    $('#showTotal').prepend(result.html);
-                }
-            })
-            .failed(function() {
-                //console.log("error");
-            })
-           $('#coupon-button').button('reset');
-       });
-        /*}
+                $.ajax({
+                    url: '{{ route('useDiscount') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        code: coupon,
+                        uID: {{ $uID }},
+                        _token: "{{ csrf_token() }}",
+                    },
+                })
+                    .done(function(result) {
+                        $('#coupon-value').val('');
+                        $('.coupon-msg').removeClass('text-danger');
+                        $('.coupon-msg').removeClass('text-success');
+                        $('#coupon-group').removeClass('has-error');
+                        $('.coupon-msg').hide();
+                        if(result.error ==1){
+                            $.notify(result.msg, 'error');
+                        }else{
+                            $('#removeCoupon').show();
+                            $.notify(result.msg, 'success');
+                            $('.showTotal').remove();
+                            $('#showTotal').prepend(result.html);
+                        }
+                    })
+                    .failed(function() {
+                        //console.log("error");
+                    })
+                $('#coupon-button').button('reset');
+            });
 
-    });*/
-    $('#removeCoupon').click(function() {
-            $.ajax({
-                url: '{{ route('removeDiscount') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                },
-            })
-            .done(function(result) {
-                    $('#removeCoupon').hide();
-                    $('#coupon-value').val('');
-                    $('.coupon-msg').removeClass('text-danger');
-                    $('.coupon-msg').removeClass('text-success');
-                    $('.coupon-msg').hide();
-                    $('.showTotal').remove();
-                    $('#showTotal').prepend(result.html);
-            })
-            .fail(function() {
-                //console.log("error");
-            })
-            // .always(function() {
-            //     console.log("complete");
-            // });
-    });
-@endif
+            $('#removeCoupon').on('click', function() {
+                $.ajax({
+                    url: '{{ route('removeDiscount') }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                })
+                    .done(function(result) {
+                        $('#removeCoupon').hide();
+                        $('#coupon-value').val('');
+                        $('.coupon-msg').removeClass('text-danger');
+                        $('.coupon-msg').removeClass('text-success');
+                        $('.coupon-msg').hide();
+                        $('.showTotal').remove();
+                        $('#showTotal').prepend(result.html);
+                    })
+                    .failed(function() {
+                        //console.log("error");
+                    })
+            });
+        @endif
 
-</script>
+    </script>
 @endpush
-
-
-<script>
-  function myFunction(x) {
-    x.classList.toggle("fa-angle-down");
-  }
-
-  function myFunctiondiscount(x) {
-    x.classList.toggle("fa-angle-down");
-  }
-
-  
-  </script>

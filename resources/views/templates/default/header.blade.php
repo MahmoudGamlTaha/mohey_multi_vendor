@@ -1,399 +1,902 @@
-  <style>
-  @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+<style>
+    .select2-selection{
+        border:none !important;
+        background-color: #F1F1F1 !important;
+        appearance: none !important;
+        height: 35px !important;
+    }
+    .select2-selection__arrow{
+        display: none;
+    }
+    .select2-dropdown--below , .select2-search--dropdown{
+        background-color: #F1F1F1;
+        border: 3px solid #F1F1F1;
+        margin-top: 4px!important;
+        border-radius: 10px!important;
+        font-size:13px!important;
+    }
+    .select2-dropdown--below{
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
+    }
+    .select2-selection--single{
+        font-size:13px!important;
+        outline: none;
+        border-radius: 30px !important;
+    }
+    .select2-selection__placeholder{
+        padding: 5px!important;
+    }
+    .select2-search--dropdown, .select2-search__field{
+        outline: none;
+        border: none !important;
+        padding: 5px;
+        background-color: #ffffff;
+        color: #333333;
+    }
+    .select2-container--open {
+        border-radius: 10px !important;
+    }
+    #double li {
+        width: 50%;
+    }
+</style>
+<!--====== Nav 1 ======-->
+<nav class="primary-nav primary-nav-wrapper--border">
+    <div class="container">
 
-.navbar-nav>li>.dropdown-menu {
-  margin-top: 20px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-.navbar-default .navbar-nav>li>a {
-  font-weight: bold;
-}
+        <!--====== Primary Nav ======-->
+        <div class="primary-nav">
 
-.mega-dropdown {
-  position: static !important;
-}
+            <!--====== Main Logo ======-->
 
-.mega-dropdown-menu {
-  padding: 20px 0px;
-  width: 100%;
-  box-shadow: none;
-  -webkit-box-shadow: none;
-}
+            <a class="main-logo" href="{{route('home')}}">
 
-.mega-dropdown-menu:before {
-  content: "";
-  border-bottom: 15px solid #fff;
-  border-right: 17px solid transparent;
-  border-left: 17px solid transparent;
-  position: absolute;
-  top: -15px;
-  right: 10%;
-  z-index: 10;
-}
-
-.mega-dropdown-menu:after {
-  content: "";
-  border-bottom: 17px solid #ccc;
-  border-right: 19px solid transparent;
-  border-left: 19px solid transparent;
-  position: absolute;
-  top: -17px;
-  right: 10%;
-  z-index: 8;
-}
-
-.mega-dropdown-menu > li > ul {
-  padding: 0;
-  margin: 0;
-}
-
-.mega-dropdown-menu > li > ul > li {
-  list-style: none;
-}
-
-.mega-dropdown-menu > li > ul > li > a {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: normal;
-  line-height: 1.428571429;
-  color: #999;
-  white-space: normal;
-}
-
-.mega-dropdown-menu > li ul > li > a:hover,
-.mega-dropdown-menu > li ul > li > a:focus {
-  text-decoration: none;
-  color: #444;
-  background-color: #f5f5f5;
-}
-.top-head-backcolor{
-  background: none repeat scroll 0 0 black !important;
-}
-.top-head-forecolor{
-  color: white !important;
-}
-.has-search {
-  position: relative;
-  width: 100% !important;
-  padding-left: 2.375rem;
-  left: 54%;
-  top:-30px;
-  margin-bottom: -60px;
-}
-.radius22{
-  border-radius: 22px !important;
-}
-.zindex2{
-  position: relative;
-  z-index: 2;
-  right: 88%;
-  top:-36px;
-  margin-top: 2px;
-  background-color: #ffb52ce6;
-  border-bottom-left-radius: 22px !important;
-  border-top-left-radius: 22px !important;
-  width: 12%;
-  text-align: center;
-}
-.mega-dropdown-menu .dropdown-header {
-  color: #428bca;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.mega-dropdown-menu form {
-  margin: 3px 20px;
-}
-
-.mega-dropdown-menu .form-group {
-  margin-bottom: 3px;
-}
-.topbar
-{
-    background-color: #10243F;
-}
-
-  </style>
-
-  <header id="header"><!--header-->
-    <div class="first_header">
-      <div class="container" >
-      <div class="row">
-        {{-- <div class="col-sm-6">
-          <div class="social">
-            <a class="twitter" href="#" title="twitter"> <span class="fa fa-twitter"><span></a>
-            <a class="google"  href="#" title="google"> <span class="fa fa-google-plus"><span></a>
-            <a class="youtube"  href="#" title="youtube"> <span class="fa fa-youtube"><span></a>
-            <a class="facebook" href="#" title="facebook"> <span class="fa fa-facebook"><span></a>
-          </div>
-        </div> --}}
-        {{-- <div class="col-sm-6" id="lang">
-            <div class="btn-group pull-right">
-              <div class="btn-group locale">
-                @if (count($languages)>1)
-                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                  <span class="caret" style="margin-left: 3px" ></span>
-                  <span>Arabic  <span>
-                    <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;">
-                </button>
-                <ul class="dropdown-menu">
-                  @foreach ($languages as $key => $language)
-                    <li><a href="{{ url('locale/'.$key) }}">
-                      <span>{{$key}} <span>
-                        <img src="{{ asset($path_file.'/'.$language['icon']) }}" style="height: 12px; margin: 5px;"></a></li>
-                  @endforeach
-                </ul>
-                @endif
-              </div>
-              @if (count($currencies)>1)
-               <div class="btn-group locale">
-                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                  <span class="caret"></span>
-                  {{ \Helper::getCurrency()['name'] }}
-                </button>
-                <ul class="dropdown-menu">
-                  @foreach ($currencies as $key => $currency)
-                    <li><a href="{{ url('currency/'.$currency->code) }}">{{ $currency->name }}</a></li>
-                  @endforeach
-                </ul>
-              </div>
-              @endif
-            </div>
+                <img style="width:70px" src="{{ asset($theme_asset.'/images/brand.png')}}" alt=""></a>
+            <!--====== End - Main Logo ======-->
 
 
-        </div> --}}
-      </div>
-      </div>
-    </div>
+            <!--====== Search Form ======-->
+            <form class="main-form">
 
-    <div class="header_top topbar" style="height: 50px ; padding: 10px"><!--header_top-->
-      <div class="container">
-        <div class="row">
+                <label for="main-search"></label>
 
-
-
-          <div class="col-sm-3">
-            <div class="contactinfo">
-              <ul class="nav nav-pills">
-
-                {{--<h4 style="color: white;float: left; width:-3px">{{ "EGP " . $carts['count'] }}</h4>--}}
-
-                <li>
-                  <a  style="margin-left:65px" href="{{ route('cart') }}" title=" {{ trans('language.cart_title') }}">
-                  <i class="fa fa-shopping-cart">
-                    <span  class=" badge " id="shopping-cart" >{{ $carts['count'] }}</span>
-                  </i></a>
-
-                 </li>
-
-                <li><a href="{{ route('wishlist') }}" title=" {{ trans('language.wishlist') }}">
-                  <i class="fa fa-heart">
-                    <span  class="badge" id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span>
-                  </i>
-                </a></li>
-
-                <li><a href="{{ route('compare') }}" title="">
-                  <i class="fa fa-refresh">
-                      <span  class="badge" id="shopping-wishlist">{{ Cart::instance('compare')->count() }}</span>
-                  </i>
-                </a></li>
+                <select style="width:100%" class="js-example-placeholder-single input-text input-text--border-radius input-text--style-1" type="text" id="main-search" placeholder="Search"></select>
+                <button class="btn btn--icon fas fa-search main-search-button" type="submit"></button></form>
+            <!--====== End - Search Form ======-->
 
 
+            <!--====== Dropdown Main plugin ======-->
+            <div class="menu-init" id="navigation">
 
-              {{-- <li><a href="{{ route('wishlist') }}">
-                <span  class="cart-qty shopping-wishlist top-head-forecolor" id="shopping-wishlist">{{ Cart::instance('wishlist')->count() }}</span>
-                <i class="glyphicon glyphicon-heart"></i> {{ trans('language.wishlist') }}
-              </a></li> --}}
-            <!--  <li><a href="{{ route('compare') }}"><span  class="cart-qty shopping-compare" id="shopping-compare">{{ Cart::instance('compare')->count() }}</span><i class="fa fa-crosshairs"></i> {{ trans('language.compare') }}</a></li> -->
-              {{-- <li><a href="{{ route('cart') }}"><span class="cart-qty shopping-cart" id="shopping-cart">
-                {{ $carts['count'] }}</span><i class="fa fa-shopping-cart"></i> {{ trans('language.cart_title') }}</a> </li> --}}
-              </ul>
-            </div>
-          </div>
+                <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-cogs" type="button"></button>
 
+                <!--====== Menu ======-->
+                <div class="ah-lg-mode">
 
+                    <span class="ah-close">✕ Close</span>
 
+                    <!--====== List ======-->
+                    <ul class="ah-list ah-list--design1 ah-list--link-color-secondary">
+                        <li class="has-dropdown" data-tooltip="tooltip" data-placement="left" title="Account">
 
-          <div class="col-sm-6">
-                  <div class="dropdown ">
+                            <a><i class="far fa-user-circle"></i></a>
 
-                    <select class="js-example-placeholder-single js-states form-control"></select>
-                          <button class="btn btn-secondary zindex" type="button" >
-                              <i class="fa fa-search"></i>
-                          </button>
-                    </div>
+                            <!--====== Dropdown ======-->
 
-          </div>
+                            <span class="js-menu-toggle"></span>
+                            <ul style="width:120px">
+                                @guest
+                                    <li><a href="{{ route('login') }}"><i class="fa fa-lock"></i> {{ trans('language.login') }}</a></li>
+                                    <li><a href="{{ route('registermerchant')}}" class="btn btn-yellow-white"><i class="fas fa-user-plus u-s-m-r-6"></i>{{ trans('language.signup') }}</a></li>
+                                @else
+                                    <li><a href="{{ route('profilePage') }}"><i class="fa fa-user"></i> {{ trans('language.account') }}</a></li>
+                                    <li><a href="{{ route('logout') }}" rel="nofollow" onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();"><i class="fa fa-power-off"></i> {{ trans('language.logout') }}</a></li>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                @endguest
+                            </ul>
+                            <!--====== End - Dropdown ======-->
+                        </li>
+                        <li class="has-dropdown" data-tooltip="tooltip" data-placement="left" title="Settings">
 
+                            <a><i class="fas fa-user-cog"></i></a>
 
+                            <!--====== Dropdown ======-->
 
-          <div class="col-sm-3">
+                            <span class="js-menu-toggle"></span>
+                            <ul style="width:120px">
+                                <li class="has-dropdown has-dropdown--ul-right-100">
 
+                                    <a style="padding:0px 15px 0px 15px">{{ trans('language.language') }}<i class="fas fa-angle-down u-s-m-l-6"></i></a>
 
-            <div class="btn-group pull-right" style="margin-top: -10px; ">
-              <div class="btn-group locale">
-                @if (count($languages)>1)
-                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown" style="background: #ffffff;color: #10243f;border-radius:5px;">
-                  <span class="caret" style="margin-left: 3px" ></span>
-                  <span>{{$languages[app()->getLocale()]['name']}}<span>
-                    <img src="{{ asset($path_file.'/'.$languages[app()->getLocale()]['icon']) }}" style="height: 12px; margin: 5px;">
-                </button>
-                <ul class="dropdown-menu">
-                  @foreach ($languages as $key => $language)
-                    <li><a href="{{ url('locale/'.$key) }}">
-                      <span>{{$key}} <span>
-                        <img src="{{ asset($path_file.'/'.$language['icon']) }}" style="height: 12px; margin: 5px;"></a></li>
-                  @endforeach
-                </ul>
-                @endif
-              </div>
-              @if (count($currencies)>1)
-               <div class="btn-group locale">
-                <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown"  style="background: #ffffff;color: #10243f;border-radius:5px;">
-                  <span class="caret"></span>
-                  {{ \Helper::getCurrency()['name'] }}
-                </button>
-                <ul class="dropdown-menu">
-                  @foreach ($currencies as $key => $currency)
-                    <li><a href="{{ url('currency/'.$currency->code) }}">{{ $currency->name }}</a></li>
-                  @endforeach
-                </ul>
-              </div>
-              @endif
-            </div>
+                                    <!--====== Dropdown ======-->
 
-          </div>
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:120px">
+                                        @if (count($languages)>1)
+                                            @foreach ($languages as $key => $language)
+                                                <li><a @if($languages[app()->getLocale()]['name'] == $language->name)class="u-c-brand"@endif style="text-transform: uppercase" href="{{ url('locale/'.$key) }}">
+                                                <span>{{trans('language.'.$language->name)}} <span>
+                                            @endforeach
+                                    @endif
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                                <li class="has-dropdown has-dropdown--ul-right-100">
 
+                                    <a style="padding:0px 15px 0px 15px">{{ trans('language.currencies') }}<i class="fas fa-angle-down u-s-m-l-6"></i></a>
 
+                                    <!--====== Dropdown ======-->
 
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:225px">
+                                        @if (count($currencies)>1)
+                                            @foreach ($currencies as $key => $currency)
+                                                <li><a @if(\Helper::getCurrency()['name'] == $currency->name)class="u-c-brand"@endif style="text-transform:uppercase" href="{{ url('currency/'.$currency->code) }}">{{ $currency->name }}</a></li>
+                                            @endforeach
+                                        @endif
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                            </ul>
+                            <!--====== End - Dropdown ======-->
+                        </li>
+                        @php
+                            $contacts = \App\Models\ContactUs::all();
+                            $n = 0;
+                        @endphp
+                        @foreach($contacts as $con)
+                            @if($con->name == 'phone')
+                            <li data-tooltip="tooltip" data-placement="left" title="Contact">
 
+                                <a href="tel:{{$con->value}}"><i class="fas fa-phone-volume"></i></a></li>
+                            @endif
+                            @if($con->name == 'email')
+                            <li data-tooltip="tooltip" data-placement="left" title="Mail">
 
-
-
-
-        </div>
-      </div>
-    </div><!--/header_top-->
-    <div class="header-middle"><!--header-middle-->
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="logo  pull-right">
-              <a href="{{ route('home') }}"><img style="width: 200px;" src="{{ asset($logo) }}" alt="" /></a>
-            </div>
-          </div>
-          <div class="col-sm-8">
-            <div class="shop-menu pull-right">
-
-              <ul class="nav navbar-nav">
-             <!--   <li><a href="{{ route('compare') }}"><span  class="cart-qty shopping-compare" id="shopping-compare">{{ Cart::instance('compare')->count() }}</span><i class="fa fa-crosshairs"></i> {{ trans('language.compare') }}</a></li>
-                <li><a href="{{ route('cart') }}"><span class="cart-qty shopping-cart" id="shopping-cart">{{ $carts['count'] }}</span><i class="fa fa-shopping-cart"></i> {{ trans('language.cart_title') }}</a> -->
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div><!--/header-middle-->
-
-    <div class=""><!--header-bottom-->
-      <div class="container">
-  <nav class="navbar navbar-default">
-    <div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" style="background-color:#10243F;" href="{{ route('home') }}">{{ trans('language.home') }}</a>
-    </div>
-
-
-    <div class="collapse navbar-collapse js-navbar-collapse">
-      <ul class="nav navbar-nav">
-      <li class="dropdown mega-dropdown">
-          <a href="#" class="dropdown-toggle orange-bk" data-toggle="dropdown"  style="color:#10243f">&nbsp;{{ trans('language.all_categories') }}<span class="fa fa-bars pull-right" style="color:#10243f ; margin-top:3px"></span></a>
-          <ul class="dropdown-menu mega-dropdown-menu row">
-            <li class="col-sm-3">
-              <ul>
-                <li class="dropdown-header">New in Stores</li>
-
-                <!-- /.carousel -->
-                <li class="divider"></li>
-                <li><a href="#">View all Collection <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
-              </ul>
-            </li>
-			 @foreach($categoryTop as $key => $category)
-			 <li class="col-sm-3">
-			   <ul>
-           <li class="dropdown-header">{{$category->name}}</li>
-           @if (!empty($categoryList[$category->id]))
-				     @foreach($categoryList[$category->id] as $child)
-                        <li> <a href="{{$child->getUrl()}}">{{$child->name}}</a></li>
+                                <a href="mailto:{{$con->value}}"><i class="far fa-envelope"></i></a></li>
+                            @endif
                         @endforeach
-            @endif
-				 </ul>
-						</li>
-                        @endforeach
-
-            <li class="col-sm-3">
-              <ul>
-                <li class="dropdown-header">Other</li>
-                <li><a href="{{ route('products') }}">{{ trans('language.all_product') }}</a></li>
-                 <!--       <li><a href="{{ route('cart') }}">{{ trans('language.cart_title') }}</a></li>-->
-                        <li><a href="{{ route('brands') }}">{{ trans('language.brands') }}</a></li>
-
-              </ul>
-            </li>
                     </ul>
-        </li>
-
-      <li class="dropdown">
-		<a href="{{ route('categories') }}">{{ trans('language.categories2') }}</a>
-		</li>
-      <!--   <li class="dropdown"><a href="{{ route('compare') }}">{{ trans('language.compare') }}</a></li> -->
-         @guest
-                <li><a href="{{ route('login') }}"><i class="fa fa-lock"></i> {{ trans('language.login') }}</a></li>
-                @else
-                <li><a href="{{ route('profilePage') }}"><i class="fa fa-user"></i> {{ trans('language.account') }}</a></li>
-                <li><a href="{{ route('logout') }}" rel="nofollow" onclick="event.preventDefault();
-                   document.getElementById('logout-form').submit();"><i class="fa fa-power-off"></i> {{ trans('language.logout') }}</a></li>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                {{ csrf_field() }}
-                </form>
-                @endguest
-                @if (!empty($configs['News']))
-                <li class="dropdown"><a href="{{ route('news') }}">{{ trans('language.blog') }}</a></li>
-                @endif
-         @if (!empty($configs['Content']))
-                <li class="dropdown"><a href="#">{{ trans('language.cms_category') }}<i class="fa fa-angle-down"></i></a>
-                    <ul role="menu" class="sub-menu">
-                      @php
-                        $cmsCategories = (new \App\Modules\Cms\Models\CmsCategory)->where('status',1)->get();
-                      @endphp
-                      @foreach ($cmsCategories as $cmsCategory)
-                        <li><a href="{{ $cmsCategory->getUrl() }}">{{ $cmsCategory->title }}</a></li>
-                      @endforeach
-                    </ul>
-                </li>
-                @endif
-
-                @if (!empty($layoutsUrl['menu']))
-                    @foreach ($layoutsUrl['menu'] as $url)
-                      <li><a {{ ($url->target =='_blank')?'target=_blank':''  }} href="{{ url($url->url) }}">{{ trans($url->name) }}</a></li>
-                    @endforeach
-                  @endif
-
-      </ul>
-
+                    <!--====== End - List ======-->
+                </div>
+                <!--====== End - Menu ======-->
+            </div>
+            <!--====== End - Dropdown Main plugin ======-->
+        </div>
+        <!--====== End - Primary Nav ======-->
     </div>
-    <!-- /.nav-collapse -->
-  </nav>
-      </div>
-    </div><!--/header-bottom-->
-  </header><!--/header-->
+</nav>
+<!--====== End - Nav 1 ======-->
+
+<!--====== Nav 2 ======-->
+<nav class="secondary-nav-wrapper">
+    <div class="container">
+
+        <!--====== Secondary Nav ======-->
+        <div class="secondary-nav">
+
+            <!--====== Dropdown Main plugin ======-->
+            <div class="menu-init" id="navigation1">
+
+                <button class="btn btn--icon toggle-mega-text toggle-button" type="button">M</button>
+
+                <!--====== Menu ======-->
+                <div class="ah-lg-mode">
+
+                    <span class="ah-close">✕ Close</span>
+
+                    <!--====== List ======-->
+                    <ul class="ah-list">
+                        <li class="has-dropdown">
+
+                            <span class="mega-text">M</span>
+
+                            <!--====== Mega Menu ======-->
+
+                            <span class="js-menu-toggle"></span>
+                            <div class="mega-menu">
+                                <div class="mega-menu-wrap">
+                                    <div class="mega-menu-list">
+                                        <ul>
+                                            @for($x = 0 ;$x < count($categoryTop);$x++)
+                                            <li class="cat-{{$x}}">
+
+                                                <a href="#">
+
+                                                    <span>{{$categoryTop[$x]['name']}}</span></a>
+
+                                                <span class="js-menu-toggle js-toggle-mark"></span></li>
+                                            @endfor
+                                        </ul>
+                                    </div>
+                                    @php
+                                        $banners = \App\Models\Banner::where('status', 1)->where('type_id', 8)->get();
+                                        $lastViewed = json_decode(Cookie::get('productsLastView'));
+                                        $y = 0;
+                                    @endphp
+                                    @foreach($categoryTop as $key => $category)
+                                    @php
+                                        $y++
+                                    @endphp
+                                    <div class="mega-menu-content" id="cats-{{$y}}">
+                                        @if($y == 4)
+                                            <div class="row">
+                                                <div class="col-lg-4 mega-image">
+                                                    <div class="mega-banner">
+
+                                                        <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                            <img style="height:100px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[8]['image'] ?? 0}}" alt=""></a></div>
+                                                </div>
+                                                <div class="col-lg-4 mega-image">
+                                                    <div class="mega-banner">
+
+                                                        <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                            <img style="height:100px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[9]['image'] ?? 0}}" alt=""></a></div>
+                                                </div>
+                                                <div class="col-lg-4 mega-image">
+                                                    <div class="mega-banner">
+
+                                                        <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                            <img style="height:100px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[10]['image'] ?? 0}}" alt=""></a></div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        @if($y == 3)
+                                            <div class="row">
+                                                <div class="col-lg-4 mega-image">
+                                                    <div class="mega-banner">
+
+                                                        <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                            <img style="height:150px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[5]['image'] ?? 0}}" alt=""></a></div>
+                                                </div>
+                                                <div class="col-lg-4 mega-image">
+                                                    <div class="mega-banner">
+
+                                                        <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                            <img style="height:150px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[6]['image'] ?? 0}}" alt=""></a></div>
+                                                </div>
+                                                <div class="col-lg-4 mega-image">
+                                                    <div class="mega-banner">
+
+                                                        <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                            <img style="height:150px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[7]['image'] ?? 0}}" alt=""></a></div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <!--====== Mega Menu Row ======-->
+                                        @if($y == 2)
+                                            <div class="row">
+                                                <div class="col-lg-6 mega-image">
+                                                    <div class="mega-banner">
+
+                                                        <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                            <img style="height:150px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[1]['image'] ?? 0}}" alt=""></a></div>
+                                                </div>
+                                                <div class="col-lg-6 mega-image">
+                                                    <div class="mega-banner">
+
+                                                        <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                            <img style="height:150px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[2]['image'] ?? 0}}" alt=""></a></div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <div class="row">
+                                            @if (!empty($categoryList[$category->id]))
+                                                @foreach($categoryList[$category->id] as $child)
+                                                    @php
+                                                        $products = \App\Models\ShopProduct::where('category_id', $child->id)->get();
+                                                    @endphp
+
+                                                    <div class="col-lg-3">
+                                                        <ul @if(count($products) > 5) id="double" style="width: 760px;overflow: hidden;" @endif>
+                                                            <li class="mega-list-title" style="display:flex">
+                                                                <a style="font-size:16px;font-weight: 600" href="{{$child->getUrl()}}">{{$child->name}}</a>
+                                                                @if(count($products) > 5)
+                                                                <a style="font-size:16px;font-weight: 600; margin-left: 340px" href="{{$child->getUrl()}}">{{$child->name}}</a>
+                                                                @endif
+                                                            </li>
+                                                            @for($i=0;$i<count($products);$i++)
+                                                                <li style="line-height: .8em;float: left;display: inline;">
+
+                                                                    <a style="font-size:12px;font-weight:600" href="{{route('product', ['name'=> $products[$i]['name'], 'id'=> $products[$i]['id']])}}">{{$products[$i]['name']}}</a></li>
+                                                            @endfor
+                                                        </ul>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                        <!--====== End - Mega Menu Row ======-->
+                                        <br>
+                                        <!--====== Mega Menu Row ======-->
+                                        <div class="row">
+                                            @if($y > 1)
+                                            <div class="col-lg-3">
+                                                <ul>
+                                                    <li class="mega-list-title">
+
+                                                        <a style="font-size:16px;font-weight: 600" href="{{$child->getUrl()}}">Categories</a></li>
+                                                    @for($i=0;$i<4;$i++)
+                                                        <li>
+
+                                                            <a style="font-size:12px;font-weight:600">{{$categoryTop[$i]['name']}}</a></li>
+                                                        <li>
+                                                    @endfor
+                                                </ul>
+                                            </div>
+                                            @endif
+                                            <div class="col-lg-3">
+                                                <ul>
+                                                    <li class="mega-list-title">
+
+                                                        <a href="#">LAST VIEWED PRODUCTS</a></li>
+                                                    @foreach($lastViewed as $key => $value)
+                                                        @php
+                                                            $value = \App\Models\ShopProduct::find($key);
+                                                            $n++;
+                                                        @endphp
+                                                        <li>
+                                                            <a style="line-height: 1em;font-size:12px;font-weight:600" href="{{$value->getUrl() }}">{{$value->name}}</a></li>
+                                                        @if($n > 5)
+                                                            @php
+                                                                $n = 0;
+                                                            @endphp
+                                                            @break;
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            @if($y == 1)
+                                            <div class="col-lg-9 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img style="height:150px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[0]['image'] ?? 0}}" alt=""></a></div>
+                                            </div>
+                                            @endif
+                                            @if($y == 2)
+                                                <div class="row">
+                                                    <div class="col-lg-9 mega-image">
+                                                        <div class="mega-banner">
+
+                                                            <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                                <img style="height:150px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[3]['image'] ?? 0}}" alt=""></a></div>
+                                                    </div>
+                                                    <div class="col-lg-3 mega-image">
+                                                        <div class="mega-banner">
+
+                                                            <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                                <img style="height:150px" class="u-img-fluid u-d-block" src="{{ asset($path_file.'') }}/{{ $banners[4]['image'] ?? 0}}" alt=""></a></div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="row">
+
+                                        </div>
+                                        <!--====== End - Mega Menu Row ======-->
+                                    </div>
+                                @endforeach
 
 
+                                    <!--====== Women ======-->
+                                    <div class="mega-menu-content">
+
+                                        <!--====== Mega Menu Row ======-->
+
+                                        <div class="row">
+                                            <div class="col-lg-6 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-1.jpg" alt=""></a></div>
+                                            </div>
+                                            <div class="col-lg-6 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-2.jpg" alt=""></a></div>
+                                            </div>
+                                        </div>
+
+                                        <!--====== Mega Menu Row ======-->
+                                        <div class="row">
+                                            <div class="col-lg-9 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-3.jpg" alt=""></a></div>
+                                            </div>
+                                            <div class="col-lg-3 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-4.jpg" alt=""></a></div>
+                                            </div>
+                                        </div>
+                                        <!--====== End - Mega Menu Row ======-->
+                                    </div>
+                                    <!--====== End - Women ======-->
+
+
+                                    <!--====== Men ======-->
+                                    <div class="mega-menu-content">
+
+                                        <!--====== Mega Menu Row ======-->
+                                        <div class="row">
+                                            <div class="col-lg-4 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-5.jpg" alt=""></a></div>
+                                            </div>
+                                            <div class="col-lg-4 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-6.jpg" alt=""></a></div>
+                                            </div>
+                                            <div class="col-lg-4 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-7.jpg" alt=""></a></div>
+                                            </div>
+                                        </div>
+                                        <!--====== Mega Menu Row ======-->
+                                        <div class="row">
+                                            <div class="col-lg-6 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-8.jpg" alt=""></a></div>
+                                            </div>
+                                            <div class="col-lg-6 mega-image">
+                                                <div class="mega-banner">
+
+                                                    <a class="u-d-block" href="shop-side-version-2.html">
+
+                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-9.jpg" alt=""></a></div>
+                                            </div>
+                                        </div>
+                                        <!--====== End - Mega Menu Row ======-->
+                                    </div>
+                                    <!--====== End - Men ======-->
+
+
+                                    <!--====== No Sub Categories ======-->
+                                    <div class="mega-menu-content">
+                                        <h5>No Categories</h5>
+                                    </div>
+                                    <!--====== End - No Sub Categories ======-->
+
+
+                                    <!--====== No Sub Categories ======-->
+                                    <div class="mega-menu-content">
+                                        <h5>No Categories</h5>
+                                    </div>
+                                    <!--====== End - No Sub Categories ======-->
+
+
+                                    <!--====== No Sub Categories ======-->
+                                    <div class="mega-menu-content">
+                                        <h5>No Categories</h5>
+                                    </div>
+                                    <!--====== End - No Sub Categories ======-->
+
+
+                                    <!--====== No Sub Categories ======-->
+                                    <div class="mega-menu-content">
+                                        <h5>No Categories</h5>
+                                    </div>
+                                    <!--====== End - No Sub Categories ======-->
+                                </div>
+                            </div>
+                            <!--====== End - Mega Menu ======-->
+                        </li>
+                    </ul>
+                    <!--====== End - List ======-->
+                </div>
+                <!--====== End - Menu ======-->
+            </div>
+            <!--====== End - Dropdown Main plugin ======-->
+
+
+            <!--====== Dropdown Main plugin ======-->
+            <div class="menu-init" id="navigation2">
+
+                <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-cog" type="button"></button>
+
+                <!--====== Menu ======-->
+                <div class="ah-lg-mode">
+
+                    <span class="ah-close">✕ Close</span>
+
+                    <!--====== List ======-->
+                    <ul class="ah-list ah-list--design2 ah-list--link-color-secondary">
+                        <li>
+
+                            <a href="shop-side-version-2.html">NEW ARRIVALS</a></li>
+                        <li class="has-dropdown">
+
+                            <a>PAGES<i class="fas fa-angle-down u-s-m-l-6"></i></a>
+
+                            <!--====== Dropdown ======-->
+
+                            <span class="js-menu-toggle"></span>
+                            <ul style="width:170px">
+                                <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                    <a>Home<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                    <!--====== Dropdown ======-->
+
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:118px">
+                                        <li>
+
+                                            <a href="index.html">Home 1</a></li>
+                                        <li>
+
+                                            <a href="index-2.html">Home 2</a></li>
+                                        <li>
+
+                                            <a href="index-3.html">Home 3</a></li>
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                                <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                    <a>Account<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                    <!--====== Dropdown ======-->
+
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:200px">
+                                        <li>
+
+                                            <a href="signin.html">Signin / Already Registered</a></li>
+                                        <li>
+
+                                            <a href="signup.html">Signup / Register</a></li>
+                                        <li>
+
+                                            <a href="lost-password.html">Lost Password</a></li>
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                                <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                    <a href="dashboard.html">Dashboard<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                    <!--====== Dropdown ======-->
+
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:200px">
+                                        <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                            <a href="dashboard.html">Manage My Account<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                            <!--====== Dropdown ======-->
+
+                                            <span class="js-menu-toggle"></span>
+                                            <ul style="width:180px">
+                                                <li>
+
+                                                    <a href="dash-edit-profile.html">Edit Profile</a></li>
+                                                <li>
+
+                                                    <a href="dash-address-book.html">Edit Address Book</a></li>
+                                                <li>
+
+                                                    <a href="dash-manage-order.html">Manage Order</a></li>
+                                            </ul>
+                                            <!--====== End - Dropdown ======-->
+                                        </li>
+                                        <li>
+
+                                            <a href="dash-my-profile.html">My Profile</a></li>
+                                        <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                            <a href="dash-address-book.html">Address Book<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                            <!--====== Dropdown ======-->
+
+                                            <span class="js-menu-toggle"></span>
+                                            <ul style="width:180px">
+                                                <li>
+
+                                                    <a href="dash-address-make-default.html">Address Make Default</a></li>
+                                                <li>
+
+                                                    <a href="dash-address-add.html">Add New Address</a></li>
+                                                <li>
+
+                                                    <a href="dash-address-edit.html">Edit Address Book</a></li>
+                                            </ul>
+                                            <!--====== End - Dropdown ======-->
+                                        </li>
+                                        <li>
+
+                                            <a href="dash-track-order.html">Track Order</a></li>
+                                        <li>
+
+                                            <a href="dash-my-order.html">My Orders</a></li>
+                                        <li>
+
+                                            <a href="dash-payment-option.html">My Payment Options</a></li>
+                                        <li>
+
+                                            <a href="dash-cancellation.html">My Returns & Cancellations</a></li>
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                                <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                    <a>Empty<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                    <!--====== Dropdown ======-->
+
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:200px">
+                                        <li>
+
+                                            <a href="empty-search.html">Empty Search</a></li>
+                                        <li>
+
+                                            <a href="empty-cart.html">Empty Cart</a></li>
+                                        <li>
+
+                                            <a href="empty-wishlist.html">Empty Wishlist</a></li>
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                                <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                    <a>Product Details<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                    <!--====== Dropdown ======-->
+
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:200px">
+                                        <li>
+
+                                            <a href="product-detail.html">Product Details</a></li>
+                                        <li>
+
+                                            <a href="product-detail-variable.html">Product Details Variable</a></li>
+                                        <li>
+
+                                            <a href="product-detail-affiliate.html">Product Details Affiliate</a></li>
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                                <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                    <a>Shop Grid Layout<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                    <!--====== Dropdown ======-->
+
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:200px">
+                                        <li>
+
+                                            <a href="shop-grid-left.html">Shop Grid Left Sidebar</a></li>
+                                        <li>
+
+                                            <a href="shop-grid-right.html">Shop Grid Right Sidebar</a></li>
+                                        <li>
+
+                                            <a href="shop-grid-full.html">Shop Grid Full Width</a></li>
+                                        <li>
+
+                                            <a href="shop-side-version-2.html">Shop Side Version 2</a></li>
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                                <li class="has-dropdown has-dropdown--ul-left-100">
+
+                                    <a>Shop List Layout<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
+
+                                    <!--====== Dropdown ======-->
+
+                                    <span class="js-menu-toggle"></span>
+                                    <ul style="width:200px">
+                                        <li>
+
+                                            <a href="shop-list-left.html">Shop List Left Sidebar</a></li>
+                                        <li>
+
+                                            <a href="shop-list-right.html">Shop List Right Sidebar</a></li>
+                                        <li>
+
+                                            <a href="shop-list-full.html">Shop List Full Width</a></li>
+                                    </ul>
+                                    <!--====== End - Dropdown ======-->
+                                </li>
+                                <li>
+
+                                    <a href="cart.html">Cart</a></li>
+                                <li>
+
+                                    <a href="wishlist.html">Wishlist</a></li>
+                                <li>
+
+                                    <a href="checkout.html">Checkout</a></li>
+                                <li>
+
+                                    <a href="faq.html">FAQ</a></li>
+                                <li>
+
+                                    <a href="about.html">About us</a></li>
+                                <li>
+
+                                    <a href="contact.html">Contact</a></li>
+                                <li>
+
+                                    <a href="404.html">404</a></li>
+                            </ul>
+                            <!--====== End - Dropdown ======-->
+                        </li>
+                        <li class="has-dropdown">
+
+                            <a>BLOG<i class="fas fa-angle-down u-s-m-l-6"></i></a>
+
+                            <!--====== Dropdown ======-->
+
+                            <span class="js-menu-toggle"></span>
+                            <ul style="width:200px">
+                                <li>
+
+                                    <a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
+                                <li>
+
+                                    <a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
+                                <li>
+
+                                    <a href="blog-sidebar-none.html">Blog Sidebar None</a></li>
+                                <li>
+
+                                    <a href="blog-masonry.html">Blog Masonry</a></li>
+                                <li>
+
+                                    <a href="blog-detail.html">Blog Details</a></li>
+                            </ul>
+                            <!--====== End - Dropdown ======-->
+                        </li>
+                        <li>
+
+                            <a href="shop-side-version-2.html">VALUE OF THE DAY</a></li>
+                        <li>
+
+                            <a href="shop-side-version-2.html">GIFT CARDS</a></li>
+                    </ul>
+                    <!--====== End - List ======-->
+                </div>
+                <!--====== End - Menu ======-->
+            </div>
+            <!--====== End - Dropdown Main plugin ======-->
+
+
+            <!--====== Dropdown Main plugin ======-->
+            <div class="menu-init" id="navigation3">
+
+                <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-shopping-bag toggle-button-shop" type="button"></button>
+
+                <span class="total-item-round">2</span>
+
+                <!--====== Menu ======-->
+                <div class="ah-lg-mode">
+
+                    <span class="ah-close">✕ Close</span>
+
+                    <!--====== List ======-->
+                    <ul class="ah-list ah-list--design1 ah-list--link-color-secondary">
+                        <li>
+
+                            <a href="{{ route('home') }}"><i class="home fas fa-home"></i></a></li>
+                        <li>
+
+                            <a href="{{ route('wishlist') }}" title="{{ trans('language.wishlist') }}"><i class="wishlist far fa-heart"></i></a></li>
+                        <li class="has-dropdown">
+
+                            <a href="{{ route('cart') }}" class="mini-cart-shop-link"><i class="cart fas fa-shopping-bag"></i></a>
+                                @php
+                                    $cart = Cart::content();
+                                    $total_price = 0;
+                                @endphp
+                                <span class="total-item-round">{{isset($cart) ? $carts['count'] : 0}}</span>
+
+                            <!--====== Dropdown ======-->
+
+                            <span class="js-menu-toggle"></span>
+                            <div class="mini-cart">
+
+                                <!--====== Mini Product Container ======-->
+                                <div class="mini-product-container gl-scroll u-s-m-b-15">
+                                    @isset($cart)
+                                        @foreach($cart as $item)
+                                            @php
+                                                $product = App\Models\ShopProduct::find($item->id);
+                                                $total_price += $item->price * $item->qty;
+                                            @endphp
+                                            <div class="card-mini-product">
+                                                <div class="mini-product">
+                                                    <div class="mini-product__image-wrapper">
+
+                                                        <a class="mini-product__link" href="{{route('cart')}}">
+
+                                                            <img class="u-img-fluid" src="{{asset($product->getImage())}}" alt=""></a></div>
+                                                    <div class="mini-product__info-wrapper">
+
+                                                                    <span class="mini-product__category">
+
+                                                                        <a href="shop-side-version-2.html">{{$item->sku}}</a></span>
+
+                                                        <span class="mini-product__name">
+
+                                                                        <a href="{{$product->getUrl()}}">{{$item->name}}</a></span>
+
+                                                        <span class="mini-product__quantity">{{$item->qty}} x</span>
+
+                                                        <span class="mini-product__price">${{$item->price}}</span></div>
+                                                </div>
+
+                                                <a href="{{route("removeItem",['id'=>$item->rowId])}}" class="mini-product__delete-link far fa-trash-alt"></a>
+                                            </div>
+                                        @endforeach
+                                    @endisset
+                                    <!--====== End - Card for mini cart ======-->
+                                </div>
+                                <!--====== End - Mini Product Container ======-->
+
+
+                                <!--====== Mini Product Statistics ======-->
+                                <div class="mini-product-stat">
+                                    <div class="mini-total">
+
+                                        <span class="subtotal-text">SUBTOTAL</span>
+
+                                        <span class="subtotal-value">${{$total_price}}</span></div>
+                                    <div class="mini-action">
+
+                                        <a class="mini-link btn--e-brand-b-2" href="{{ route('checkout') }}" title=" {{ trans('language.cart_title') }}">PROCEED TO CHECKOUT</a>
+
+                                        <a class="mini-link btn--e-transparent-secondary-b-2" href="{{ route('cart') }}" title=" {{ trans('language.cart_title') }}">VIEW CART</a></div>
+                                </div>
+                                <!--====== End - Mini Product Statistics ======-->
+                            </div>
+                            <!--====== End - Dropdown ======-->
+                        </li>
+                    </ul>
+                    <!--====== End - List ======-->
+                </div>
+                <!--====== End - Menu ======-->
+            </div>
+            <!--====== End - Dropdown Main plugin ======-->
+        </div>
+        <!--====== End - Secondary Nav ======-->
+    </div>
+</nav>
+<!--====== End - Nav 2 ======-->

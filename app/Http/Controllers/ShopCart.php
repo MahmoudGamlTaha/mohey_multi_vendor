@@ -278,7 +278,8 @@ class ShopCart extends GeneralController
         }
 
         $product    = ShopProduct::find($product_id);
-        $unit       = Uofms::where(['amount_in_base'=> 1, 'group_id' => $product->uofm_groups])->first()->id;
+        $unit       = Uofms::where(['amount_in_base'=> 1, 'group_id' => $product->uofm_groups])->first();
+        $unit = isset($unit) ? $unit->id : 0;
         if ($product->allowSale()) {
             $options        = array();
             $options['opt'] = $opt_sku;
