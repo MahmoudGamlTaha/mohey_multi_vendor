@@ -340,6 +340,7 @@
                                                     <li class="mega-list-title">
 
                                                         <a href="#">LAST VIEWED PRODUCTS</a></li>
+                                                    @if($lastViewed !== null)
                                                     @foreach($lastViewed as $key => $value)
                                                         @php
                                                             $value = \App\Models\ShopProduct::find($key);
@@ -354,6 +355,7 @@
                                                             @break;
                                                         @endif
                                                     @endforeach
+                                                    @endif
                                                 </ul>
                                             </div>
                                             @if($y == 1)
@@ -390,127 +392,6 @@
                                         <!--====== End - Mega Menu Row ======-->
                                     </div>
                                 @endforeach
-
-
-                                    <!--====== Women ======-->
-                                    <div class="mega-menu-content">
-
-                                        <!--====== Mega Menu Row ======-->
-
-                                        <div class="row">
-                                            <div class="col-lg-6 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-1.jpg" alt=""></a></div>
-                                            </div>
-                                            <div class="col-lg-6 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-2.jpg" alt=""></a></div>
-                                            </div>
-                                        </div>
-
-                                        <!--====== Mega Menu Row ======-->
-                                        <div class="row">
-                                            <div class="col-lg-9 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-3.jpg" alt=""></a></div>
-                                            </div>
-                                            <div class="col-lg-3 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-4.jpg" alt=""></a></div>
-                                            </div>
-                                        </div>
-                                        <!--====== End - Mega Menu Row ======-->
-                                    </div>
-                                    <!--====== End - Women ======-->
-
-
-                                    <!--====== Men ======-->
-                                    <div class="mega-menu-content">
-
-                                        <!--====== Mega Menu Row ======-->
-                                        <div class="row">
-                                            <div class="col-lg-4 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-5.jpg" alt=""></a></div>
-                                            </div>
-                                            <div class="col-lg-4 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-6.jpg" alt=""></a></div>
-                                            </div>
-                                            <div class="col-lg-4 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-7.jpg" alt=""></a></div>
-                                            </div>
-                                        </div>
-                                        <!--====== Mega Menu Row ======-->
-                                        <div class="row">
-                                            <div class="col-lg-6 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-8.jpg" alt=""></a></div>
-                                            </div>
-                                            <div class="col-lg-6 mega-image">
-                                                <div class="mega-banner">
-
-                                                    <a class="u-d-block" href="shop-side-version-2.html">
-
-                                                        <img class="u-img-fluid u-d-block" src="images/banners/banner-mega-9.jpg" alt=""></a></div>
-                                            </div>
-                                        </div>
-                                        <!--====== End - Mega Menu Row ======-->
-                                    </div>
-                                    <!--====== End - Men ======-->
-
-
-                                    <!--====== No Sub Categories ======-->
-                                    <div class="mega-menu-content">
-                                        <h5>No Categories</h5>
-                                    </div>
-                                    <!--====== End - No Sub Categories ======-->
-
-
-                                    <!--====== No Sub Categories ======-->
-                                    <div class="mega-menu-content">
-                                        <h5>No Categories</h5>
-                                    </div>
-                                    <!--====== End - No Sub Categories ======-->
-
-
-                                    <!--====== No Sub Categories ======-->
-                                    <div class="mega-menu-content">
-                                        <h5>No Categories</h5>
-                                    </div>
-                                    <!--====== End - No Sub Categories ======-->
-
-
-                                    <!--====== No Sub Categories ======-->
-                                    <div class="mega-menu-content">
-                                        <h5>No Categories</h5>
-                                    </div>
-                                    <!--====== End - No Sub Categories ======-->
                                 </div>
                             </div>
                             <!--====== End - Mega Menu ======-->
@@ -537,7 +418,7 @@
                     <ul class="ah-list ah-list--design2 ah-list--link-color-secondary">
                         <li>
 
-                            <a href="shop-side-version-2.html">NEW ARRIVALS</a></li>
+                            <a href="{{route('newArrivals')}}">NEW ARRIVALS</a></li>
                         <li class="has-dropdown">
 
                             <a>PAGES<i class="fas fa-angle-down u-s-m-l-6"></i></a>
@@ -548,249 +429,35 @@
                             <ul style="width:170px">
                                 <li class="has-dropdown has-dropdown--ul-left-100">
 
-                                    <a>Home<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                    <!--====== Dropdown ======-->
-
-                                    <span class="js-menu-toggle"></span>
-                                    <ul style="width:118px">
-                                        <li>
-
-                                            <a href="index.html">Home 1</a></li>
-                                        <li>
-
-                                            <a href="index-2.html">Home 2</a></li>
-                                        <li>
-
-                                            <a href="index-3.html">Home 3</a></li>
-                                    </ul>
-                                    <!--====== End - Dropdown ======-->
-                                </li>
-                                <li class="has-dropdown has-dropdown--ul-left-100">
-
-                                    <a>Account<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                    <!--====== Dropdown ======-->
-
-                                    <span class="js-menu-toggle"></span>
-                                    <ul style="width:200px">
-                                        <li>
-
-                                            <a href="signin.html">Signin / Already Registered</a></li>
-                                        <li>
-
-                                            <a href="signup.html">Signup / Register</a></li>
-                                        <li>
-
-                                            <a href="lost-password.html">Lost Password</a></li>
-                                    </ul>
-                                    <!--====== End - Dropdown ======-->
-                                </li>
-                                <li class="has-dropdown has-dropdown--ul-left-100">
-
-                                    <a href="dashboard.html">Dashboard<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                    <!--====== Dropdown ======-->
-
-                                    <span class="js-menu-toggle"></span>
-                                    <ul style="width:200px">
-                                        <li class="has-dropdown has-dropdown--ul-left-100">
-
-                                            <a href="dashboard.html">Manage My Account<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                            <!--====== Dropdown ======-->
-
-                                            <span class="js-menu-toggle"></span>
-                                            <ul style="width:180px">
-                                                <li>
-
-                                                    <a href="dash-edit-profile.html">Edit Profile</a></li>
-                                                <li>
-
-                                                    <a href="dash-address-book.html">Edit Address Book</a></li>
-                                                <li>
-
-                                                    <a href="dash-manage-order.html">Manage Order</a></li>
-                                            </ul>
-                                            <!--====== End - Dropdown ======-->
-                                        </li>
-                                        <li>
-
-                                            <a href="dash-my-profile.html">My Profile</a></li>
-                                        <li class="has-dropdown has-dropdown--ul-left-100">
-
-                                            <a href="dash-address-book.html">Address Book<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                            <!--====== Dropdown ======-->
-
-                                            <span class="js-menu-toggle"></span>
-                                            <ul style="width:180px">
-                                                <li>
-
-                                                    <a href="dash-address-make-default.html">Address Make Default</a></li>
-                                                <li>
-
-                                                    <a href="dash-address-add.html">Add New Address</a></li>
-                                                <li>
-
-                                                    <a href="dash-address-edit.html">Edit Address Book</a></li>
-                                            </ul>
-                                            <!--====== End - Dropdown ======-->
-                                        </li>
-                                        <li>
-
-                                            <a href="dash-track-order.html">Track Order</a></li>
-                                        <li>
-
-                                            <a href="dash-my-order.html">My Orders</a></li>
-                                        <li>
-
-                                            <a href="dash-payment-option.html">My Payment Options</a></li>
-                                        <li>
-
-                                            <a href="dash-cancellation.html">My Returns & Cancellations</a></li>
-                                    </ul>
-                                    <!--====== End - Dropdown ======-->
-                                </li>
-                                <li class="has-dropdown has-dropdown--ul-left-100">
-
-                                    <a>Empty<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                    <!--====== Dropdown ======-->
-
-                                    <span class="js-menu-toggle"></span>
-                                    <ul style="width:200px">
-                                        <li>
-
-                                            <a href="empty-search.html">Empty Search</a></li>
-                                        <li>
-
-                                            <a href="empty-cart.html">Empty Cart</a></li>
-                                        <li>
-
-                                            <a href="empty-wishlist.html">Empty Wishlist</a></li>
-                                    </ul>
-                                    <!--====== End - Dropdown ======-->
-                                </li>
-                                <li class="has-dropdown has-dropdown--ul-left-100">
-
-                                    <a>Product Details<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                    <!--====== Dropdown ======-->
-
-                                    <span class="js-menu-toggle"></span>
-                                    <ul style="width:200px">
-                                        <li>
-
-                                            <a href="product-detail.html">Product Details</a></li>
-                                        <li>
-
-                                            <a href="product-detail-variable.html">Product Details Variable</a></li>
-                                        <li>
-
-                                            <a href="product-detail-affiliate.html">Product Details Affiliate</a></li>
-                                    </ul>
-                                    <!--====== End - Dropdown ======-->
-                                </li>
-                                <li class="has-dropdown has-dropdown--ul-left-100">
-
-                                    <a>Shop Grid Layout<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                    <!--====== Dropdown ======-->
-
-                                    <span class="js-menu-toggle"></span>
-                                    <ul style="width:200px">
-                                        <li>
-
-                                            <a href="shop-grid-left.html">Shop Grid Left Sidebar</a></li>
-                                        <li>
-
-                                            <a href="shop-grid-right.html">Shop Grid Right Sidebar</a></li>
-                                        <li>
-
-                                            <a href="shop-grid-full.html">Shop Grid Full Width</a></li>
-                                        <li>
-
-                                            <a href="shop-side-version-2.html">Shop Side Version 2</a></li>
-                                    </ul>
-                                    <!--====== End - Dropdown ======-->
-                                </li>
-                                <li class="has-dropdown has-dropdown--ul-left-100">
-
-                                    <a>Shop List Layout<i class="fas fa-angle-down i-state-right u-s-m-l-6"></i></a>
-
-                                    <!--====== Dropdown ======-->
-
-                                    <span class="js-menu-toggle"></span>
-                                    <ul style="width:200px">
-                                        <li>
-
-                                            <a href="shop-list-left.html">Shop List Left Sidebar</a></li>
-                                        <li>
-
-                                            <a href="shop-list-right.html">Shop List Right Sidebar</a></li>
-                                        <li>
-
-                                            <a href="shop-list-full.html">Shop List Full Width</a></li>
-                                    </ul>
-                                    <!--====== End - Dropdown ======-->
+                                    <a href="index.html">Home</a>
                                 </li>
                                 <li>
 
-                                    <a href="cart.html">Cart</a></li>
+                                    <a href="{{route('ProductsGrid')}}">Shop Grid Layout</a>
+                                </li>
                                 <li>
 
-                                    <a href="wishlist.html">Wishlist</a></li>
+                                    <a href="{{route('cart')}}">Cart</a></li>
                                 <li>
 
-                                    <a href="checkout.html">Checkout</a></li>
+                                    <a href="{{route('wishlist')}}">Wishlist</a></li>
                                 <li>
 
-                                    <a href="faq.html">FAQ</a></li>
-                                <li>
-
-                                    <a href="about.html">About us</a></li>
+                                    <a href="{{route('checkout')}}">Checkout</a></li>
                                 <li>
 
                                     <a href="contact.html">Contact</a></li>
-                                <li>
-
-                                    <a href="404.html">404</a></li>
-                            </ul>
-                            <!--====== End - Dropdown ======-->
-                        </li>
-                        <li class="has-dropdown">
-
-                            <a>BLOG<i class="fas fa-angle-down u-s-m-l-6"></i></a>
-
-                            <!--====== Dropdown ======-->
-
-                            <span class="js-menu-toggle"></span>
-                            <ul style="width:200px">
-                                <li>
-
-                                    <a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                <li>
-
-                                    <a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                                <li>
-
-                                    <a href="blog-sidebar-none.html">Blog Sidebar None</a></li>
-                                <li>
-
-                                    <a href="blog-masonry.html">Blog Masonry</a></li>
-                                <li>
-
-                                    <a href="blog-detail.html">Blog Details</a></li>
                             </ul>
                             <!--====== End - Dropdown ======-->
                         </li>
                         <li>
 
-                            <a href="shop-side-version-2.html">VALUE OF THE DAY</a></li>
+                            <a href="{{route('ProductsGrid')}}">PRODUCTS</a>
+                        </li>
                         <li>
 
-                            <a href="shop-side-version-2.html">GIFT CARDS</a></li>
+                            <a href="about.html">ABOUT US</a></li>
+
                     </ul>
                     <!--====== End - List ======-->
                 </div>

@@ -537,7 +537,7 @@
         $lastViewed = json_decode(Cookie::get('productsLastView'));
     @endphp
     <div class="u-s-p-b-90">
-        @isset($lastViewed)
+        @if($lastViewed !== null)
         <!--====== Section Intro ======-->
             <div class="section__intro u-s-m-b-46">
                 <div class="container">
@@ -685,7 +685,7 @@
             </div>
         </div>
     </div>
-@endisset
+@endif
         <!--====== End - Section Content ======-->
     </div>
     <!--====== End - Section 1 ======-->

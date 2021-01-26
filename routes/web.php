@@ -120,7 +120,8 @@ Route::get('/product/{name}_{id}', 'ShopFront@productDetail')
     ->where(['id' => '[0-9]+'])->name('product');
 Route::post('/productRate', 'ShopFront@productRate')->name('productRate');
 //End product
-
+Route::get('/newArrivals', 'ShopFront@newArrivals')->name('newArrivals');
+Route::get('/products', 'ShopFront@shopProducts')->name('ProductsGrid');
 Route::get('/search.html', 'ShopFront@search')->name('search');
 Route::post('/search', 'ShopFront@getSearch')->name('getSearch');
 Route::get('/contact.html', 'ShopFront@getContact')->name('contact');
