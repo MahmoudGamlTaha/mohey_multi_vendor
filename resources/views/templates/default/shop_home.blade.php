@@ -18,17 +18,8 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="slider-content slider-content--animation">
-                                    <span class="content-span-1 u-c-secondary">Latest Update Stock</span>
-
-                                    <span class="content-span-2 u-c-secondary">30% Off On Electronics</span>
-
-                                    <span class="content-span-3 u-c-secondary">Find electronics on best prices, Also Discover most selling products of electronics</span>
-
-                                    <span class="content-span-4 u-c-secondary">Starting At
-
-                                            <span class="u-c-brand">$1050.00</span></span>
-
-                                    <a class="shop-now-link btn--e-brand" href="#">SHOP NOW</a></div>
+                                    {!!$banner->title!!}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -193,11 +184,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="load-more">
-
-                                <button class="btn btn--e-brand" type="button">Load More</button></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -249,10 +235,10 @@
                                                         <a data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
                                                     <li>
 
-                                                        <a data-modal="modal" onClick="addToCart('{{ $prod->id }}','default',$(this))" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a></li>
+                                                        <a data-modal="modal" onClick="addToCart('{{ $product->id }}','default',$(this))" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a></li>
                                                     <li>
 
-                                                        <a onClick="addToCart('{{ $prod->id }}','wishlist',$(this))" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a></li>
+                                                        <a onClick="addToCart('{{ $product->id }}','wishlist',$(this))" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a></li>
                                                     <li>
 
                                                         <a data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
@@ -345,66 +331,45 @@
 
         <!--====== Section 7 ======-->
         <div class="u-s-p-b-60">
+        @php
+            $ImagesLeft = \App\Models\Banner::where('status',1)->where('type_id',7)->limit(3)->get();
+        @endphp
 
             <!--====== Section Content ======-->
             <div class="section__content">
                 <div class="container">
                     <div class="row">
+                        @if(isset($ImagesLeft))
+                        @foreach($ImagesLeft as $ImageLeft)
                         <div class="col-lg-4 col-md-4 col-sm-6 u-s-m-b-30">
-
-                            <a class="promotion" href="shop-side-version-2.html">
+                            <a class="promotion" href="{{$ImageLeft->url}}">
                                 <div class="aspect aspect--bg-grey aspect--square">
 
-                                    <img class="aspect__img promotion__img" src="images/promo/promo-img-1.jpg" alt=""></div>
+                                    <img class="aspect__img promotion__img" src="{{ asset($path_file.'') }}/{{$ImageLeft->image}}" alt=""></div>
                                 <div class="promotion__content">
                                     <div class="promotion__text-wrap">
                                         <div class="promotion__text-1">
 
-                                            <span class="u-c-secondary">ACCESSORIES FOR YOUR EVERYDAY</span></div>
-                                        <div class="promotion__text-2">
-
-                                            <span class="u-c-secondary">GET IN</span>
-
-                                            <span class="u-c-brand">TOUCH</span></div>
+                                            <span class="u-c-secondary">{{$ImageLeft->title}}</span></div>
                                     </div>
                                 </div>
                             </a></div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 u-s-m-b-30">
+                            @endforeach
+                        @else
+                            <div class="col-lg-4 col-md-4 col-sm-6 u-s-m-b-30">
+                                <a class="promotion" href="#">
+                                    <div class="aspect aspect--bg-grey aspect--square">
 
-                            <a class="promotion" href="shop-side-version-2.html">
-                                <div class="aspect aspect--bg-grey aspect--square">
+                                        <img class="aspect__img promotion__img" src="{{ asset($path_file.'') }}/default/default_1.jpg" alt=""></div>
+                                    <div class="promotion__content">
+                                        <div class="promotion__text-wrap">
+                                            <div class="promotion__text-1">
 
-                                    <img class="aspect__img promotion__img" src="images/promo/promo-img-2.jpg" alt=""></div>
-                                <div class="promotion__content">
-                                    <div class="promotion__text-wrap">
-                                        <div class="promotion__text-1">
-
-                                            <span class="u-c-secondary">SMARTPHONE</span>
-
-                                            <span class="u-c-brand">2019</span></div>
-                                        <div class="promotion__text-2">
-
-                                            <span class="u-c-secondary">NEW ARRIVALS</span></div>
+                                                <span class="u-c-secondary">{{$ImageLeft->title}}</span></div>
+                                        </div>
                                     </div>
-                                </div>
-                            </a></div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 u-s-m-b-30">
-
-                            <a class="promotion" href="shop-side-version-2.html">
-                                <div class="aspect aspect--bg-grey aspect--square">
-
-                                    <img class="aspect__img promotion__img" src="images/promo/promo-img-3.jpg" alt=""></div>
-                                <div class="promotion__content">
-                                    <div class="promotion__text-wrap">
-                                        <div class="promotion__text-1">
-
-                                            <span class="u-c-secondary">DSLR FOR NEW GENERATION</span></div>
-                                        <div class="promotion__text-2">
-
-                                            <span class="u-c-brand">GET UP TO 10% OFF</span></div>
-                                    </div>
-                                </div>
-                            </a></div>
+                                </a></div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -844,10 +809,10 @@
         ====== End - Section 10 ======-->
 
 
-        <!--====== Section 11 ======-->
+<!--        ====== Section 11 ======
         <div class="u-s-p-b-90 u-s-m-b-30">
 
-            <!--====== Section Intro ======-->
+            ====== Section Intro ======
             <div class="section__intro u-s-m-b-46">
                 <div class="container">
                     <div class="row">
@@ -861,14 +826,14 @@
                     </div>
                 </div>
             </div>
-            <!--====== End - Section Intro ======-->
+            ====== End - Section Intro ======
 
 
-            <!--====== Section Content ======-->
+            ====== Section Content ======
             <div class="section__content">
                 <div class="container">
 
-                    <!--====== Testimonial Slider ======-->
+                    ====== Testimonial Slider ======
                     <div class="slider-fouc">
                         <div class="owl-carousel" id="testimonial-slider">
                             <div class="testimonial">
@@ -929,12 +894,12 @@
                             </div>
                         </div>
                     </div>
-                    <!--====== End - Testimonial Slider ======-->
+                    ====== End - Testimonial Slider ======
                 </div>
             </div>
-            <!--====== End - Section Content ======-->
+            ====== End - Section Content ======
         </div>
-        <!--====== End - Section 11 ======-->
+        ====== End - Section 11 ======-->
 
 
         <!--====== Section 12 ======-->

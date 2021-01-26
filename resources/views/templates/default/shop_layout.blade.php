@@ -43,6 +43,21 @@
 
     <!--====== Select2 ======-->
     <link rel="stylesheet" href="{{ asset($theme_asset.'/select2/css/select2.min.css')}}">
+    <style>
+        .page-link{
+            list-style: none;
+            color: #333333;
+        }
+        .page-item{
+            list-style: none;
+            display: inline;
+            border-radius: 10px;
+            margin: 15px;
+        }
+        .active{
+            background-color: #F1F1F1;
+        }
+    </style>
 </head><!--/head-->
 <body class="config">
 <div class="preloader is-active">
@@ -295,89 +310,6 @@
             });
 
         }
-    }
-</script>
-<!--profile-->
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".page-link").on('click', function(event){
-            event.preventDefault();
-            var page = $(this).attr('href').split('page=')[1];
-            var link = $(this).attr('href');
-            var tragetEntity =   $(".tab-pane.active").attr("id");
-            fetchDataByPage(link, tragetEntity);
-            uploadImage();
-        })
-    });
-    // secure it csrf_token
-    function fetchDataByPage(link, tragetEntity) {
-        link = link.replace("profile.html","fetchUserOrder");
-        $("#userOrderLi").removeClass("active");
-        $("#userWishListLi").removeClass("active");
-        if(tragetEntity == "userOrder"){
-            $.ajax({
-                url:link+"&tab="+tragetEntity,
-                success:function(data){
-                    $("body").html(data);
-                    $("#userOrderLi").click();
-                },
-                error:function(err){
-                    console.log(err)
-                }
-            });
-
-        } else if(tragetEntity == "userWishList"){
-            $.ajax({
-                url:link+"&tab="+tragetEntity,
-                success:function(data){
-                    $("body").html(data);
-                    $("#userWishListLi").click();
-                },
-                error:function(err){
-                }
-            });
-        }
-
-    }
-    function changeStyle(event){
-        var listItems = $("#ulProfile li");
-        listItems.each(function(idx, li) {
-            $(li).removeClass("orange-bk");
-            $(li).addClass("black-bk");
-        });
-        $(event).removeClass("black-bk");
-        $(event).addClass("orange-bk");
-
-    }
-    function uploadImage(){
-        $("#uploadForm").on("submit", function(e){
-            e.preventDefault();
-            var fd = new FormData(this);
-            var formData = {
-                'profileImage': $('input[name=profileImage]').val()
-            };
-
-            $.ajax({
-                url:"/profile/upload",
-                data: fd,
-
-                contentType: false,
-                cache: false,
-                processData:false,
-                type: 'POST',
-                beforeSend: function(xhr, type) {
-                    if (!type.crossDomain) {
-                        xhr.setRequestHeader('X-CSRF-Token','{{csrf_token()}}');
-                    }},
-                success:function(res){
-                    console.log(res);
-                },
-                error:function(err){
-                    console.log(err);
-                }
-            })
-
-        });
     }
 </script>
 <!--====== Noscript ======-->

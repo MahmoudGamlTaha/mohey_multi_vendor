@@ -178,6 +178,26 @@ class ShopFront extends GeneralController
         );
     }
 
+    public function newArrivals()
+    {
+        $newArrivals = \App\Models\ShopProduct::orderBy('id', 'DESC')->limit(10)->paginate(12);
+        return view($this->theme . '.shop_newArrivals',
+            array(
+                'newArrivals' => $newArrivals
+            )
+        );
+    }
+
+    public function shopProducts()
+    {
+        $products = \App\Models\ShopProduct::paginate(12);
+        return view($this->theme . '.shop_products',
+            array(
+                'products' => $products
+            )
+        );
+    }
+
 /**
  * [productDetail description]
  * @param  [type] $name [description]

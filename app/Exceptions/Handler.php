@@ -50,10 +50,7 @@ class Handler extends ExceptionHandler
     {
         if ($this->isHttpException($exception))
         {
-            if ($e->getStatusCode() == 404)
-                return redirect()->route('pageNotFound');
-
-            if ($e->getStatusCode() == 500)
+            if ($exception->getStatusCode() == 404)
                 return redirect()->route('pageNotFound');
         }
 
