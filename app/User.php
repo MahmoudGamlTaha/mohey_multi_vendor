@@ -16,10 +16,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $table    = 'admin_users';
-   /* protected $fillable = [
-        'username', 'email', 'password', 'phone',
-    ];*/
-    protected $guarded = [];
+    protected $fillable = [
+        'username', 'email', 'password', 'phone', 'street', 'city', 'country', 'Cmanager_mobile', 'mobile', 'lname', 'name'
+    ];
+    //protected $guarded = [];
     protected $appends = [
         'order_total',
         'order_amount',

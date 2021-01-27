@@ -485,15 +485,20 @@
                             <a href="{{ route('home') }}"><i class="home fas fa-home"></i></a></li>
                         <li>
 
-                            <a href="{{ route('wishlist') }}" title="{{ trans('language.wishlist') }}"><i class="wishlist far fa-heart"></i></a></li>
+                            <a href="{{ route('wishlist') }}" class="mini-cart-shop-link" title="{{ trans('language.wishlist') }}"><i class="wishlist far fa-heart"></i>
+                                @php
+                                    $wishlist = Cart::instance('wishlist')->count();
+                                @endphp
+                                <span style="width:22px;height:22px" class="total-item-round">{{isset($wishlist) ? $wishlist : 0}}</span>
+                            </a></li>
                         <li class="has-dropdown">
 
-                            <a href="{{ route('cart') }}" class="mini-cart-shop-link"><i class="cart fas fa-shopping-bag"></i></a>
+                            <a href="{{ route('cart') }}" class="mini-cart-shop-link"><i class="fas fa-shopping-bag"></i>
                                 @php
                                     $cart = Cart::content();
                                     $total_price = 0;
                                 @endphp
-                                <span class="total-item-round">{{isset($cart) ? $carts['count'] : 0}}</span>
+                                <span class="total-item-round">{{isset($cart) ? $carts['count'] : 0}}</span></a>
 
                             <!--====== Dropdown ======-->
 

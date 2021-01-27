@@ -4,6 +4,7 @@
     $top3Images = \App\Models\Banner::where('status', 1)->where('type_id', 2)->sort()->get();
     $sideImage = \App\Models\Banner::where('status',1)->where('type_id',4)->sort()->first();
     $x = -1;
+    $prodArray = [];
 @endphp
 @section('center')
     <!--====== App Content ======-->
@@ -128,10 +129,15 @@
                                                     $products = \App\Models\ShopProduct::where(['id'=> $product->product_id, 'category_id'=> $child->id])->limit(4)->get();
                                                 @endphp
                                             @foreach($products as $prod)
+                                                @php
+                                                    if(in_array($prod->id, $prodArray)){
+                                                        break;
+                                                    }
+                                                    $prodArray[] = $prod->id;
+                                                @endphp
                                                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item {{$category->name}}">
                                                     <div class="product-o product-o--hover-on product-o--radius">
                                                         <div class="product-o__wrap">
-
                                                             <a class="aspect aspect--bg-grey aspect--square u-d-block" href="{{$prod->getUrl()}}">
 
                                                                 <img class="aspect__img" src="{{asset($prod->getImage())}}" alt=""></a>
@@ -139,7 +145,7 @@
                                                                 <ul class="product-o__action-list">
                                                                     <li>
 
-                                                                        <a data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                                        <a data-modal="modal" data-modal-id="#quick-look" class="quickLook" data-index="{{$prod->id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
                                                                     <li>
 
                                                                         <a data-modal="modal" onClick="addToCart('{{ $prod->id }}','default',$(this))" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a></li>
@@ -232,7 +238,7 @@
                                                 <ul class="product-o__action-list">
                                                     <li>
 
-                                                        <a data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                        <a data-modal="modal" data-modal-id="#quick-look" class="quickLook" data-index="{{$product->id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
                                                     <li>
 
                                                         <a data-modal="modal" onClick="addToCart('{{ $product->id }}','default',$(this))" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a></li>
@@ -902,14 +908,14 @@
         ====== End - Section 11 ======-->
 
 
-        <!--====== Section 12 ======-->
+<!--        ====== Section 12 ======
         <div class="u-s-p-b-60">
 
-            <!--====== Section Content ======-->
+            ====== Section Content ======
             <div class="section__content">
                 <div class="container">
 
-                    <!--====== Brand Slider ======-->
+                    ====== Brand Slider ======
                     <div class="slider-fouc">
                         <div class="owl-carousel" id="brand-slider" data-item="5">
                             <div class="brand-slide">
@@ -944,12 +950,12 @@
                                     <img src="images/brand/b6.png" alt=""></a></div>
                         </div>
                     </div>
-                    <!--====== End - Brand Slider ======-->
+                    ====== End - Brand Slider ======
                 </div>
             </div>
-            <!--====== End - Section Content ======-->
+            ====== End - Section Content ======
         </div>
-        <!--====== End - Section 12 ======-->
+        ====== End - Section 12 ======-->
     </div>
     <!--====== End - App Content ======-->
 @endsection

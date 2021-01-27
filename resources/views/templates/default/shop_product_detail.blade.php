@@ -573,7 +573,7 @@
                                                 <ul class="product-o__action-list">
                                                     <li>
 
-                                                        <a data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                        <a data-modal="modal" data-modal-id="#quick-look" class="quickLook" data-index="{{$value->id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
                                                     <li>
 
                                                         <a data-modal="modal" onClick="addToCart('{{ $value->id }}','default',$(this))" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a></li>
@@ -652,7 +652,7 @@
                                             <ul class="product-o__action-list">
                                                 <li>
 
-                                                    <a data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
+                                                    <a data-modal="modal" data-modal-id="#quick-look" class="quickLook" data-index="{{$product->id}}" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
                                                 <li>
 
                                                     <a data-modal="modal" onClick="addToCart('{{ $product->id }}','default',$(this))" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a></li>

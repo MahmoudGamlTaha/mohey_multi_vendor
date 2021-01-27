@@ -43,21 +43,6 @@
 
     <!--====== Select2 ======-->
     <link rel="stylesheet" href="{{ asset($theme_asset.'/select2/css/select2.min.css')}}">
-    <style>
-        .page-link{
-            list-style: none;
-            color: #333333;
-        }
-        .page-item{
-            list-style: none;
-            display: inline;
-            border-radius: 10px;
-            margin: 15px;
-        }
-        .active{
-            background-color: #F1F1F1;
-        }
-    </style>
 </head><!--/head-->
 <body class="config">
 <div class="preloader is-active">
@@ -105,6 +90,71 @@
     </footer>
 
     <!--====== Modal Section ======-->
+
+    <!--====== Quick Look Modal ======-->
+    <div class="modal fade" id="quick-look">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal--shadow">
+
+                <button class="btn dismiss-button fas fa-times" type="button" data-dismiss="modal"></button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <!--====== Product Detail ======-->
+                            <div class="pd u-s-m-b-30">
+                                <div class="pd-wrap">
+                                    <div id="js-product-detail-modal">
+                                        <div>
+                                            <a href=""><img class="u-img-fluid quickLook_img" src="" alt=""></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--====== End - Product Detail ======-->
+                        </div>
+                        <div class="col-lg-7">
+
+                            <!--====== Product Right Side Details ======-->
+                            <div class="pd-detail">
+                                <div>
+
+                                    <a class="quickLook_href" href=""><span class="pd-detail__name quickLook_name"></span></a></div>
+                                <div>
+                                    <div class="pd-detail__inline">
+
+                                        <span class="pd-detail__price quickLook_price"></span>
+                                    </div>
+                                </div>
+                                <div class="u-s-m-b-15">
+                                    <div class="pd-detail__inline">
+
+                                        <span class="pd-detail__stock quickLook_stock"></span></div>
+                                </div>
+                                <div class="u-s-m-b-15">
+
+                                    <span class="pd-detail__preview-desc quickLook_desc"></span></div>
+                                <div class="u-s-m-b-15">
+                                    <div class="pd-detail__inline">
+
+                                            <span class="pd-detail__click-wrap"><i class="far fa-heart u-s-m-r-6"></i>
+
+                                                <a class="quickLook_wishList">Add to Wishlist</a></span></div>
+                                </div>
+                                <div class="u-s-m-b-15">
+                                        <div class="pd-detail-inline-2">
+                                            <div class="u-s-m-b-15">
+
+                                                <a href="{{route('cart')}}" style="padding: 16px 32px;border-radius: 5px" class="btn btn--e-brand-b-2 quickLook_cart" type="submit">Add to Cart</a></div>
+                                        </div>
+                                </div>
+                            </div>
+                            <!--====== End - Product Right Side Details ======-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--====== End - Quick Look Modal ======-->
 </div>
 <!--====== End - Main App ======-->
 
@@ -234,6 +284,33 @@
         //
         $('.cat-0').addClass(' js-active');
         $('#cats-1').addClass(' js-active');
+
+        //
+        $('.quickLook').on('click', function (){
+            let id = $(this).data('index');
+            $.ajax({
+                url: '{{route('quickLook')}}',
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    id: id
+                },
+                success: function (data){
+                    $('.quickLook_img').attr('src', "{{url('/')}}"+'/documents/website/'+data[0]['image']);
+                    $('.quickLook_name').html(data[0]['name']);
+                    $('.quickLook_price').html(data[0]['price']);
+                    $('.quickLook_stock').html(data[0]['stock']+'  متوفر ');
+                    $('.quickLook_desc').html(data[0]['description']);
+                    $('.quickLook_wishList').on('click', function (){
+                        addToCart(data[0]['id'],'wishlist',$(this));
+                    });
+                    $('.quickLook_cart').on('click', function (){
+                        addToCart(data[0]['id'],'default',$(this));
+                    });
+                    $('.quickLook_href').attr('href', "{{url('/')}}"+'/product/'+data[0]['name']+'_'+data[0]['id'])
+                }
+            });
+        });
     });
 
 </script>

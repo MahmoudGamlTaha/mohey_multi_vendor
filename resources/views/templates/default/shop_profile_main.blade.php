@@ -104,36 +104,44 @@
                                         <h1 class="dash__h1 u-s-m-b-14">My Profile</h1>
 
                                         <span class="dash__text u-s-m-b-30">Look all your info, you could customize your profile.</span>
-                                        <div class="row">
-                                            <div class="col-lg-4 u-s-m-b-30">
-                                                <h2 class="dash__h2 u-s-m-b-8">Full Name</h2>
+                                            <input type="text" class="user" name="user" value="{{$user->id}}" hidden>
+                                            <div class="row">
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <h2 class="dash__h2 u-s-m-b-8">Full Name</h2>
 
-                                                <span class="dash__text">{{$user->name ?? 'none'}}</span>
+                                                    <input class="input-text input-text--primary-style inputEdit fullName" name="fullName" style="background-color: #ffffff;outline:none;border:none;border-radius:5px" value="{{$user->name ?? 'none'}}" readonly>
+                                                </div>
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+
+                                                    <input class="input-text input-text--primary-style inputEdit email" type="email" name="email" style="background-color: #ffffff;outline:none;border:none;border-radius:5px" value="{{$user->username ?? 'none'}}">
+                                                </div>
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <h2 class="dash__h2 u-s-m-b-8">Company</h2>
+
+                                                    <input class="input-text input-text--primary-style inputEdit company" name="company" style="background-color: #ffffff;outline:none;border:none;border-radius:5px" value="{{$user->company()->first()->name ?? 'none'}}">
+                                                </div>
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
+
+                                                    <input class="input-text input-text--primary-style inputEdit phone" name="phone" style="background-color: #ffffff;outline:none;border:none;border-radius:5px" value="{{$user->mobile}}">
+
+                                                </div>
                                             </div>
-                                            <div class="col-lg-4 u-s-m-b-30">
-                                                <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="u-s-m-b-16">
 
-                                                <span class="dash__text">{{$user->username ?? 'none'}}</span>
+                                                        <button style="border-radius: 6px;font-weight: 600;padding: 16px 46px;" class="btn btn--e-brand-b-2 saveBtn" type="submit" hidden>SAVE</button></div>
+                                                </div>
                                             </div>
-                                            <div class="col-lg-4 u-s-m-b-30">
-                                                <h2 class="dash__h2 u-s-m-b-8">Company</h2>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="u-s-m-b-16">
 
-                                                <span class="dash__text">{{$user->company()->first()->name ?? 'none'}}</span>
-                                            </div>
-                                            <div class="col-lg-4 u-s-m-b-30">
-                                                <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
-
-                                                <span class="dash__text">{{$user->mobile}}</span>
-
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="u-s-m-b-16">
-
-                                                    <a class="dash__custom-link btn--e-transparent-brand-b-2" href="#">Edit Profile</a></div>
-                                            </div>
-                                        </div>
+                                            <a class="dash__custom-link btn--e-transparent-brand-b-2 editBtn">Edit Profile</a></div>
                                     </div>
                                 </div>
                                 <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
@@ -250,3 +258,55 @@
     </div>
     <!--====== End - App Content ======-->
 @endsection
+@push('scripts')
+        <script>
+            $(document).ready(function(){
+                $('.editBtn').on('click', function (){
+                    $('.inputEdit').attr('readonly', false)
+                        .css({'background-color': '#F1F1F1', 'border': '2px solid #FF4500'});
+                    $('.saveBtn').show();
+                });
+
+                //
+                $('.saveBtn').on('click', function(){
+                    let id = $('.user').val();
+                    let fullName = $('.fullName').val();
+                    let email = $('.email').val();
+                    let company = $('.company').val();
+                    let phone = $('.phone').val();
+                    $.ajax({
+                        url: '{{route('updateProfileInfo')}}',
+                        dataType: 'json',
+                        type: 'post',
+                        data: {
+                            _token: '{{csrf_token()}}',
+                            id: id,
+                            fullName: fullName,
+                            email: email,
+                            company: company,
+                            phone: phone
+                        },
+                        success: function (data){
+                            if(data.error === 1) {
+                                for(let i =0; i < data.key.length; i++ ) {
+                                    if($('.' + data.key[i]).hasClass('hasError') != true) {
+                                        $('.' + data.key[i]).after("<div style='color:red' class='invalid-feedback'>" + data.msg[data.key[i]] + "</div>")
+                                        $('.' + data.key[i]).addClass('hasError');
+                                    }
+                                }
+                            }else{
+                                $.notify(data.msg, "success");
+                                $('.inputEdit').attr('readonly', true)
+                                    .css({'background-color': '#ffffff', 'border': 'none'});
+                                $('.saveBtn').hide();
+                                $('.invalid-feedback').remove();
+                            }
+                        },
+                        failed: function (data){
+                            $.notify(data.msg, "warn");
+                        }
+                    });
+                });
+            });
+        </script>
+@endpush

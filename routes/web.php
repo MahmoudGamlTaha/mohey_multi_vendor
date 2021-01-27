@@ -37,6 +37,7 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'member'], function ($router) {
     $router->get('/member/customer.html',[
         'uses'       => 'RegisterController@showRegisterCustomerForm'
     ])->name('routeCustomer');
+    $router->post('/updateProfileInfo', 'ProfileController@update')->name('updateProfileInfo');
 });
 $router->get('member/profile.html', [
       'middleware' => 'web',
@@ -84,7 +85,10 @@ Route::post('/addToCart', 'ShopCart@addToCart')->name('addToCart');
 Route::post('/updateToCart', 'ShopCart@updateToCart')->name('updateToCart');
 Route::post('/storeOrder', 'ShopCart@storeOrder')->name('storeOrder');
 //========End cart
-
+Route::get('/quickLook', function (Request $request){
+    $quickView = ShopProduct::where('id', $request['id'])->get();
+    return $quickView;
+})->name('quickLook');
 //========Front
 //profile
 Route::get('/profilemain', 'ShopFront@showProfileMainPage')->name('profilemain');
