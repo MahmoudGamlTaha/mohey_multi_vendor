@@ -299,7 +299,7 @@
                     $('.quickLook_img').attr('src', "{{url('/')}}"+'/documents/website/'+data[0]['image']);
                     $('.quickLook_name').html(data[0]['name']);
                     $('.quickLook_price').html(data[0]['price']);
-                    $('.quickLook_stock').html(data[0]['stock']+'  متوفر ');
+                    $('.quickLook_stock').html((data[0]['stock']) > 0 ? (data[0]['stock']) +'  متوفر ': 'غير متوفر');
                     $('.quickLook_desc').html(data[0]['description']);
                     $('.quickLook_wishList').on('click', function (){
                         addToCart(data[0]['id'],'wishlist',$(this));

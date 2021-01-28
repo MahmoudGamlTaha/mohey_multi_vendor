@@ -418,10 +418,10 @@
                     <ul class="ah-list ah-list--design2 ah-list--link-color-secondary">
                         <li>
 
-                            <a href="{{route('newArrivals')}}">NEW ARRIVALS</a></li>
+                            <a href="{{route('newArrivals')}}">{{trans('language.newArrivals')}}</a></li>
                         <li class="has-dropdown">
 
-                            <a>PAGES<i class="fas fa-angle-down u-s-m-l-6"></i></a>
+                            <a>{{trans('language.pages')}}<i class="fas fa-angle-down u-s-m-l-6"></i></a>
 
                             <!--====== Dropdown ======-->
 
@@ -429,34 +429,34 @@
                             <ul style="width:170px">
                                 <li class="has-dropdown has-dropdown--ul-left-100">
 
-                                    <a href="index.html">Home</a>
+                                    <a href="index.html">{{trans('language.home')}}</a>
                                 </li>
                                 <li>
 
-                                    <a href="{{route('ProductsGrid')}}">Shop Grid Layout</a>
+                                    <a href="{{route('ProductsGrid')}}">{{trans('language.productsMenu')}}</a>
                                 </li>
                                 <li>
 
-                                    <a href="{{route('cart')}}">Cart</a></li>
+                                    <a href="{{route('cart')}}">{{trans('language.cartH')}}</a></li>
                                 <li>
 
-                                    <a href="{{route('wishlist')}}">Wishlist</a></li>
+                                    <a href="{{route('wishlist')}}">{{trans('language.wishList')}}</a></li>
                                 <li>
 
-                                    <a href="{{route('checkout')}}">Checkout</a></li>
+                                    <a href="{{route('checkout')}}">{{trans('language.checkout')}}</a></li>
                                 <li>
 
-                                    <a href="contact.html">Contact</a></li>
+                                    <a href="contact.html">{{trans('language.contact')}}</a></li>
                             </ul>
                             <!--====== End - Dropdown ======-->
                         </li>
                         <li>
 
-                            <a href="{{route('ProductsGrid')}}">PRODUCTS</a>
+                            <a href="{{route('ProductsGrid')}}">{{trans('language.productsMenu')}}</a>
                         </li>
                         <li>
 
-                            <a href="about.html">ABOUT US</a></li>
+                            <a href="about.html">{{trans('language.about')}}</a></li>
 
                     </ul>
                     <!--====== End - List ======-->

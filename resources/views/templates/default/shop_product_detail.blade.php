@@ -111,7 +111,7 @@
                                     <span class="pd-detail__stock">{{trans('language.available')}}</span>
                                     <span class="pd-detail__stock">{{$product->stock}} in stock</span>
                                 @elseif($product->stock <= 0)
-                                    <span class="pd-detail__stock">{{trans('language.available')}}</span>
+                                    <span style="background-color: #FFE5DB;color:#FF4500" class="pd-detail__stock">{{trans('language.unavailable')}}</span>
                                 @endif
                                 <!--<span class="pd-detail__stock">200 in stock</span>
                                 <span class="pd-detail__left">Only 2 left</span></div>-->
