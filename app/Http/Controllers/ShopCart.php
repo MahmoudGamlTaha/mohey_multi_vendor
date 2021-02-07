@@ -118,7 +118,6 @@ class ShopCart extends GeneralController
          } 
          session(['paymentTerm' => $paymentTerm]);
         }
-
         $cart = Cart::instance($instance)->content();
         return view($this->theme . '.shop_cart',
             array(
@@ -629,6 +628,10 @@ class ShopCart extends GeneralController
                         <a href="' . route('cart') . '"><button class="main-btn">' . trans('language.cart_title') . '</button></a>
                         <a href="' . route('checkout') . '"><button class="primary-btn">' . trans('language.checkout_title') . ' <i class="fa fa-arrow-circle-right"></i></button></a>
                       </div>';
+            }
+            if (Auth::check()) {
+                $identifier = auth()->user()->id;
+                Cart::store($identifier);
             }
             return response()->json(
                 [

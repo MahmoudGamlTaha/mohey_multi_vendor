@@ -487,6 +487,13 @@
 
                             <a href="{{ route('wishlist') }}" class="mini-cart-shop-link" title="{{ trans('language.wishlist') }}"><i class="wishlist far fa-heart"></i>
                                 @php
+                                    if(Cart::content()->count() == 0 && Auth::check())
+                                    {
+                                        $user_id = auth()->user()->id;
+                                        Cart::instance('default')->restore($user_id);
+                                    }
+                                    $cart = Cart::instance('default')->content();
+                                    $total_price = 0;
                                     $wishlist = Cart::instance('wishlist')->count();
                                 @endphp
                                 <span style="width:22px;height:22px" class="total-item-round">{{isset($wishlist) ? $wishlist : 0}}</span>
@@ -494,11 +501,8 @@
                         <li class="has-dropdown">
 
                             <a href="{{ route('cart') }}" class="mini-cart-shop-link"><i class="fas fa-shopping-bag"></i>
-                                @php
-                                    $cart = Cart::content();
-                                    $total_price = 0;
-                                @endphp
-                                <span class="total-item-round">{{isset($cart) ? $carts['count'] : 0}}</span></a>
+
+                                <span class="total-item-round">{{isset($cart) ? Cart::instance('default')->count() : 0}}</span></a>
 
                             <!--====== Dropdown ======-->
 

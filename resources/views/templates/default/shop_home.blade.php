@@ -113,7 +113,7 @@
                                 @for($x = 0 ;$x < count($categoryTop);$x++)
                                     <div class="filter__category-wrapper">
 
-                                        <button class="btn filter__btn filter__btn--style-1" type="button" data-filter=".{{$categoryTop[$x]['name']}}">{{$categoryTop[$x]['name']}}</button></div>
+                                        <button class="btn filter__btn filter__btn--style-1" type="button" data-filter=".{{str_replace(' ', '',$categoryTop[$x]['name'])}}">{{$categoryTop[$x]['name']}}</button></div>
                                 @endfor
                             </div>
                             <div class="filter__grid-wrapper u-s-m-t-30">
@@ -135,7 +135,7 @@
                                                     }
                                                     $prodArray[] = $prod->id;
                                                 @endphp
-                                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item {{$category->name}}">
+                                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item {{str_replace(' ', '',$category->name)}}">
                                                     <div class="product-o product-o--hover-on product-o--radius">
                                                         <div class="product-o__wrap">
                                                             <a class="aspect aspect--bg-grey aspect--square u-d-block" href="{{$prod->getUrl()}}">
