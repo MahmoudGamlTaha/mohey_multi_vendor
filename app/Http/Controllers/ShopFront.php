@@ -233,15 +233,15 @@ class ShopFront extends GeneralController
             $sortOrder = request('sortOrder') ?? 'asc';
             $getRate   = (new ShopProductLike)->getRate($id);
             $category = $product->category()->first();
-            $parent_categories[] = $category;
+            $parent_categories[] = $category->id;
             if($category) {
                 $cat_id = $category->id;
                 $parentId = $category->parent;
                 for ($i = 0; $i <= 1; $i++) {
-                    $parent_category = \App\Models\ShopCategory::where('id', $parentId)->first();
+                    $parent_category = \App\Models\ShopCategory::select('id', 'parent')->where('id', $parentId)->first();
                     if ($parent_category) {
                         $parentId = $parent_category->parent;
-                        $parent_categories[] = $parent_category;
+                        $parent_categories[] = $parent_category->id;
                     }
                 }
             }
