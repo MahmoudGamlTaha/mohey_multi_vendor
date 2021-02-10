@@ -4,16 +4,16 @@
 @endphp
 @section('center')
     @php
-        $category = $product->category()->first();
+        /*$category = $product->category()->first();
         $cat_id = $category->id;
-        $lang = App\Models\Language::where('code', app()->getLocale())->first();
         $categories = DB::select(DB::raw("WITH RECURSIVE cte AS (SELECT id, parent FROM shop_category WHERE id = ?
             UNION ALL
             SELECT d.id, d.parent
             FROM shop_category d
             INNER JOIN cte
             ON  d.id = cte.parent
-        ) SELECT * FROM cte "), [$cat_id]);
+        ) SELECT * FROM cte "), [$cat_id]);*/
+        $lang = App\Models\Language::where('code', app()->getLocale())->first();
         $user =  Auth::guard()->user();
         $seller_check = $user->seller_type ?? null;
     @endphp
@@ -30,13 +30,8 @@
                     <div class="pd-breadcrumb u-s-m-b-30">
                         <ul class="pd-breadcrumb__list">
                             <li class="has-separator"><a href="{{route('home')}}">{{trans('language.home')}}</a></li>
-                            @foreach($categories as $value)
-                                @php
-                                    $productCategories = \App\Models\ShopCategoryDescription::where('shop_category_id', $value->id)->where('lang_id', $lang->id)->get();
-                                @endphp
-                                @foreach ($productCategories as $productCategory)
-                                    <li class="has-separator"><a href="{{env('APP_URL').'/category/'.strtolower($productCategory->name).'_'.$productCategory->shop_category_id}}">{{$productCategory->name}}</a> </li>
-                                @endforeach
+                            @foreach ($breadCrumb as $k => $v)
+                                <li class="has-separator"><a href="{{env('APP_URL').'/category/'.strtolower($v).'_'.$k}}">{{$v}}</a> </li>
                             @endforeach
                             <li class="is-marked"><a href="{{$product->getUrl()}}">{{$product->name}}</a></li>
                         </ul>
