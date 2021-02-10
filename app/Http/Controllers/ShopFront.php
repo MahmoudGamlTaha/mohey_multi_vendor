@@ -232,6 +232,19 @@ class ShopFront extends GeneralController
             $sortBy    = request('sortBy') ?? null;
             $sortOrder = request('sortOrder') ?? 'asc';
             $getRate   = (new ShopProductLike)->getRate($id);
+            $category = $product->category()->first();
+            $parent_categories[] = $category;
+            if($category) {
+                $cat_id = $category->id;
+                $parentId = $category->parent;
+                for ($i = 0; $i <= 1; $i++) {
+                    $parent_category = \App\Models\ShopCategory::where('id', $parentId)->first();
+                    if ($parent_category) {
+                        $parentId = $parent_category->parent;
+                        $parent_categories[] = $parent_category;
+                    }
+                }
+            }
             //Check product available
             return view($this->theme . '.shop_product_detail',
                 array(
@@ -249,6 +262,7 @@ class ShopFront extends GeneralController
                     'ratePercentage'     => $getRate['ratePercentage'] ?? 'لا يوجد تقييم',
                     'percent'            => $getRate['percent'] ?? 'لا يوجد تقييم',
                     'productLikes'       => $getRate['productLikes'] ?? array(),
+                    'breadCrumb'         => $parent_categories
 
                 )
             );

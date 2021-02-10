@@ -63,7 +63,7 @@
 
                                                     <div class="product-m__name">
 
-                                                        <a href="product-detail.html">{{ $item->name }}</a></div>
+                                                        <a href="{{$item->getUrl()}}">{{ $item->name }}</a></div>
                                                     <div class="product-o__rating gl-rating-style">
                                                         @php
                                                             $rate = (new \App\Models\ShopProductLike)->getRate($item->id);

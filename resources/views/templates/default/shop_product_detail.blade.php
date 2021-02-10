@@ -4,18 +4,8 @@
 @endphp
 @section('center')
     @php
-        $category = $product->category()->first();
-        $cat_id = $category->id;
-        $lang = App\Models\Language::where('code', app()->getLocale())->first();
-        $categories = DB::select(DB::raw("WITH RECURSIVE cte AS (SELECT id, parent FROM shop_category WHERE id = ?
-            UNION ALL
-            SELECT d.id, d.parent
-            FROM shop_category d
-            INNER JOIN cte
-            ON  d.id = cte.parent
-        ) SELECT * FROM cte "), [$cat_id]);
-        $user =  Auth::guard()->user();
-        $seller_check = $user->seller_type ?? null;
+       $lang = App\Models\Language::where('code', app()->getLocale())->first();
+       $seller_check = $user->seller_type ?? null;
     @endphp
 <!--====== App Content ======-->
 <div class="app-content">
@@ -30,7 +20,7 @@
                     <div class="pd-breadcrumb u-s-m-b-30">
                         <ul class="pd-breadcrumb__list">
                             <li class="has-separator"><a href="{{route('home')}}">{{trans('language.home')}}</a></li>
-                            @foreach($categories as $value)
+                            @foreach($breadCrumb  as $value)
                                 @php
                                     $productCategories = \App\Models\ShopCategoryDescription::where('shop_category_id', $value->id)->where('lang_id', $lang->id)->get();
                                 @endphp
