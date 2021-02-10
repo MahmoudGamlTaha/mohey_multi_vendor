@@ -54,7 +54,7 @@
                                                         <img class="aspect__img" src="{{ asset( $item->getThumb()) }}" alt=""></a>
                                                     <div class="product-m__quick-look">
 
-                                                        <a class="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
+                                                        <a class="fas fa-search quickLook" data-modal="modal" data-modal-id="#quick-look" data-index="{{ $item->id }}" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
                                                     <div class="product-m__add-cart">
 
                                                         <a class="btn--e-brand" onClick="addToCart('{{ $item->id }}','default',$(this))" data-modal="modal" data-modal-id="#add-to-cart">Add to Cart</a></div>

@@ -11,6 +11,7 @@ use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Gloudemans\Shoppingcart\Exceptions\UnknownModelException;
 use Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException;
 use Gloudemans\Shoppingcart\Exceptions\CartAlreadyStoredException;
+use Illuminate\Support\Facades\Auth;
 
 class Cart
 {
@@ -350,14 +351,16 @@ class Cart
     {
         $content = $this->getContent();
 
-        if ($this->storedCartWithIdentifierExists($identifier)) {
-            throw new CartAlreadyStoredException("A cart with identifier {$identifier} was already stored.");
-        }
+        //if ($this->storedCartWithIdentifierExists($identifier)) {
+        //    throw new CartAlreadyStoredException("A cart with identifier {$identifier} was already stored.");
+        //}
 
         $this->getConnection()->table($this->getTableName())->insert([
             'identifier' => $identifier,
             'instance' => $this->currentInstance(),
-            'content' => serialize($content)
+            'content' => serialize($content),
+            'user_id' => \auth()->user()->id,
+            'company_id' => \auth()->user()->company_id,
         ]);
 
         $this->events->fire('cart.stored');
@@ -375,27 +378,27 @@ class Cart
             return;
         }
 
-        $stored = $this->getConnection()->table($this->getTableName())
-            ->where('identifier', $identifier)->first();
+        $stored_cart = $this->getConnection()->table($this->getTableName())
+            ->where('identifier', $identifier)->get();
+        foreach ($stored_cart as $stored) {
+            $storedContent = unserialize($stored->content);
 
-        $storedContent = unserialize($stored->content);
+            $currentInstance = $this->currentInstance();
 
-        $currentInstance = $this->currentInstance();
+            $this->instance($stored->instance);
 
-        $this->instance($stored->instance);
+            $content = $this->getContent();
 
-        $content = $this->getContent();
+            foreach ($storedContent as $cartItem) {
+                $content->put($cartItem->rowId, $cartItem);
+            }
 
-        foreach ($storedContent as $cartItem) {
-            $content->put($cartItem->rowId, $cartItem);
+            $this->events->fire('cart.restored');
+
+            $this->session->put($this->instance, $content);
+
+            $this->instance($currentInstance);
         }
-
-        $this->events->fire('cart.restored');
-
-        $this->session->put($this->instance, $content);
-
-        $this->instance($currentInstance);
-
         $this->getConnection()->table($this->getTableName())
             ->where('identifier', $identifier)->delete();
     }
