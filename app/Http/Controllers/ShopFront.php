@@ -233,7 +233,6 @@ class ShopFront extends GeneralController
             $sortOrder = request('sortOrder') ?? 'asc';
             $getRate   = (new ShopProductLike)->getRate($id);
             $category = $product->category()->first();
-            $parent_categories[] = $category->id;
             if($category) {
                 $cat_id = $category->id;
                 $parentId = $category->parent;
@@ -241,10 +240,11 @@ class ShopFront extends GeneralController
                     $parent_category = \App\Models\ShopCategory::select('id', 'parent')->where('id', $parentId)->first();
                     if ($parent_category) {
                         $parentId = $parent_category->parent;
-                        $parent_categories[] = $parent_category->id;
+                        $parent_categories[$parent_category->id] = $parent_category->getName();
                     }
                 }
             }
+            $parent_categories[$category->id] = $category->getName();
             //Check product available
             return view($this->theme . '.shop_product_detail',
                 array(

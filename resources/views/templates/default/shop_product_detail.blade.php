@@ -30,11 +30,8 @@
                     <div class="pd-breadcrumb u-s-m-b-30">
                         <ul class="pd-breadcrumb__list">
                             <li class="has-separator"><a href="{{route('home')}}">{{trans('language.home')}}</a></li>
-                            @php
-                                $productCategories = \App\Models\ShopCategoryDescription::whereIn('shop_category_id', $breadCrumb)->where('lang_id', $lang->id)->get();
-                            @endphp
-                            @foreach ($productCategories as $productCategory)
-                                <li class="has-separator"><a href="{{env('APP_URL').'/category/'.strtolower($productCategory->name).'_'.$productCategory->shop_category_id}}">{{$productCategory->name}}</a> </li>
+                            @foreach ($breadCrumb as $k => $v)
+                                <li class="has-separator"><a href="{{env('APP_URL').'/category/'.strtolower($v).'_'.$k}}">{{$v}}</a> </li>
                             @endforeach
                             <li class="is-marked"><a href="{{$product->getUrl()}}">{{$product->name}}</a></li>
                         </ul>
