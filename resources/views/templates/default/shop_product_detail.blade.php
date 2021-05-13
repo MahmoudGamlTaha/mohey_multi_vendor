@@ -556,6 +556,9 @@
                             @foreach($lastViewed as $key => $value)
                                 @php
                                     $value = \App\Models\ShopProduct::find($key);
+                                    if($value == null){
+                                        continue;
+                                    }
                                 @endphp
                                 <div class="u-s-m-b-30">
                                     <div class="product-o product-o--hover-on">
