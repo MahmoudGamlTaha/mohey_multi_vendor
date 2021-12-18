@@ -550,7 +550,7 @@ class ShopCart extends GeneralController
             $options['att'] = $attribute;
             $options['opt'] = $opt_sku;
             $product        = ShopProduct::find($id);
-            $unit           = Uofms::where(['amount_in_base'=> 1, 'group_id' => $product->uofm_groups])->first()->id;
+            $unit           = Uofms::where(['amount_in_base'=> 1, 'group_id' => $product->uofm_groups])->first()->id??1;
             $html           = '';
             switch ($instance) {
                 case 'default':

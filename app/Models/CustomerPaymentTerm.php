@@ -4,7 +4,7 @@ namespace App\Models;
 use App\User;
 use Helper;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\PaymentTerm;
 class CustomerPaymentTerm extends Model
 {
    protected $table = 'customer_payment_term';

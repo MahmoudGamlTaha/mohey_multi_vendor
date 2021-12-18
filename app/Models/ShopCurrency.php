@@ -202,7 +202,7 @@ class ShopCurrency extends Model
                     $price = $targetUnit->price;
                 }
             }else{
-                $amount = Uofms::where(['id'=>$detail->uofm['uofm']])->first()->amount_in_base;
+                $amount = Uofms::where(['id'=>$detail->uofm['uofm']])->first()->amount_in_base??1;
                 $productPrice = ShopProduct::where('id', $detail->id)->first()->price;
                 $price = $amount * $productPrice;
             }

@@ -248,6 +248,7 @@ return [
         'in_stock'     => 'In stock',
         'overview'     => 'Quick Overview',
         'comment'      => 'Comment',
+        'unit'         => 'unit'
     ],
     'category'           => [
         'name'        => 'Name',
